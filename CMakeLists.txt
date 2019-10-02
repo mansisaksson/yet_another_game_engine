@@ -2,17 +2,12 @@ cmake_minimum_required(VERSION 3.8)
 
 project(GLFW_TEST CXX)
 
-include(CheckIncludeFile)
-include(CheckIncludeFileCXX)
-include(CheckIncludeFiles)
-include(ExternalProject)
+SET(CMAKE_BUILD_TYPE Debug)
+
 include(third_party/glfw.cmake)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-#add_subdirectory(include)
-add_subdirectory(src)
 add_subdirectory(third_party)
+add_subdirectory(src)
 
 set(SOURCE_LIST
     "src/main.cpp"
