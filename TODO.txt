@@ -1,0 +1,5 @@
+[ ] Draw something
+	[ ] Abstract the drawing
+	
+[ ] Add input
+	[ ] Abstract the input

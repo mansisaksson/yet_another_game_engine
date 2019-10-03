@@ -1,31 +1,54 @@
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
+//
+//#include <stdlib.h>
+//
+//void shut_down(int code)
+//{
+//	glfwTerminate();
+//	exit(code);
+//}
+//
+//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+//{
+//	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+//		glfwSetWindowShouldClose(window, GLFW_TRUE);
+//}
+//
+//int main()
+//{
+//	glfwInit();
+//	if (!glfwInit())
+//	{
+//		shut_down(1);
+//	}
+//
+//	GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
+//	if (!window)
+//	{
+//		shut_down(1);
+//	}
+//
+//	glfwMakeContextCurrent(window);
+//
+//	while (!glfwWindowShouldClose(window))
+//	{
+//		// Keep running
+//		glfwPollEvents();
+//	}
+//
+//    return 0;
+//}
 
-int exit(int ErrorCode)
-{
-	glfwTerminate();
-	return 1;
-}
+#include "tavla/tavla.h"
+#include "tavla/tavlaapplication.h"
+#include "tavla/twindow.h"
 
 int main()
 {
-	glfwInit();
-	if (!glfwInit())
+	TavlaApplication Application
 	{
-		return exit(1);
-	}
+		std::make_shared<TWindow>(TWindow(640, 480, {})),
+	};
 
-	GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
-	if (!window)
-	{
-		return exit(1);
-	}
-
-	glfwMakeContextCurrent(window);
-
-	while (!glfwWindowShouldClose(window))
-	{
-		// Keep running
-	}
-
-    return 0;
+    return Application.Run();
 }

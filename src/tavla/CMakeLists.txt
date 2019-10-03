@@ -1,0 +1,9 @@
+add_sources(
+	"tavla.h"
+    "tavla.cpp"
+    "tavlaapplication.h"
+    "tavlaapplication.cpp"
+    "twindow.h"
+    "twindow.cpp"
+    "CMakeLists.txt"
+)
