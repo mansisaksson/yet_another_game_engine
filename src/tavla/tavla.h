@@ -68,7 +68,7 @@ public:
 
 	inline const std::vector<std::shared_ptr<tavla::slot>> &get_child_slots() const { return m_child_slots; }
 
-	static void tick_tavla_tree(const std::shared_ptr<tavla> &Roottavla, const float DeltaTime)
+	static void tick_tavla_tree(const std::shared_ptr<tavla> &t_root_tavla, const float t_delta_time)
 	{
 		struct local
 		{
@@ -87,10 +87,12 @@ public:
 				}
 			}
 		};
+		
+		t_root_tavla->tick(t_delta_time);
 
-		for (const auto & slot : Roottavla->get_child_slots())
+		for (const auto & slot : t_root_tavla->get_child_slots())
 		{
-			local::tick_slots_recursive(slot, DeltaTime);
+			local::tick_slots_recursive(slot, t_delta_time);
 		}
 	}
 };

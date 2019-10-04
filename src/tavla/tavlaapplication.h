@@ -2,14 +2,12 @@
 
 #include "tavla.h"
 
-class tavla_application : public tavla, std::enable_shared_from_this<tavla_application>
+class tavla_application : public tavla
 {
 public:
-	tavla_application()
-	{
-	}
+	tavla_application() = default;
 
-	virtual void tick(float DeltaTime) override
+	virtual void tick(float t_delta_time) override
 	{
 		std::cout << "Hello World" << "\n";
 	}
