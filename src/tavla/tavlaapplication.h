@@ -2,27 +2,26 @@
 
 #include "tavla.h"
 
-class TavlaApplication : public Tavla, std::enable_shared_from_this<TavlaApplication>
+class tavla_application : public tavla, std::enable_shared_from_this<tavla_application>
 {
 public:
-	TavlaApplication(std::initializer_list<std::shared_ptr<Tavla::Slot>> l)
-		: Tavla(l)
+	tavla_application()
 	{
-
 	}
 
-	virtual void Tick(float DeltaTime) override
+	virtual void tick(float DeltaTime) override
 	{
 		std::cout << "Hello World" << "\n";
 	}
 
-	int Run()
+	int run()
 	{
-		const auto sharedThis = std::shared_ptr<TavlaApplication>(this);
+		//auto test = shared_from_this();
+		const auto sharedThis = std::shared_ptr<tavla_application>(this);
 		float time = 0;
 		while (true)
 		{
-			Tavla::TickTavlaTree(sharedThis, time);
+			tavla::tick_tavla_tree(sharedThis, time);
 			time += 1;
 		}
 	}

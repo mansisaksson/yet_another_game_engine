@@ -4,35 +4,35 @@
 #include <memory>
 #include <iostream>
 
-class Tavla
+class tavla
 {
 protected:
-	std::vector<std::shared_ptr<Tavla>> Children;
+	std::vector<std::shared_ptr<tavla>> Children;
 
 public:
-	Tavla(std::initializer_list<std::shared_ptr<Tavla>> l)
+	tavla(std::initializer_list<std::shared_ptr<tavla>> l)
 	{
 		Children = l;
 	}
 
 	virtual void Tick(float DeltaTime) {};
 
-	static void TickTavlaTree(const std::shared_ptr<Tavla> &Root, const float DeltaTime)
+	static void TicktavlaTree(const std::shared_ptr<tavla> &Root, const float DeltaTime)
 	{
 		Root->Tick(DeltaTime);
 
 		for (const auto& child : Root->Children)
 			if (child)
-				TickTavlaTree(child, DeltaTime);
+				TicktavlaTree(child, DeltaTime);
 	}
 };
 
-class TavlaWindow : public Tavla
+class tavlaWindow : public tavla
 {
 
 public:
-	TavlaWindow(int width, int height, std::initializer_list<std::shared_ptr<Tavla>> l)
-		: Tavla(l)
+	tavlaWindow(int width, int height, std::initializer_list<std::shared_ptr<tavla>> l)
+		: tavla(l)
 	{
 
 	}
@@ -43,11 +43,11 @@ public:
 	}
 };
 
-class TavlaApplication : public Tavla, std::enable_shared_from_this<TavlaApplication>
+class tavlaApplication : public tavla, std::enable_shared_from_this<tavlaApplication>
 {
 public:
-	TavlaApplication(std::initializer_list<std::shared_ptr<Tavla>> l)
-		: Tavla(l)
+	tavlaApplication(std::initializer_list<std::shared_ptr<tavla>> l)
+		: tavla(l)
 	{
 
 	}
@@ -59,11 +59,11 @@ public:
 
 	int Run()
 	{
-		const auto sharedThis = std::shared_ptr<TavlaApplication>(this);
+		const auto sharedThis = std::shared_ptr<tavlaApplication>(this);
 		float time = 0;
 		while (true)
 		{
-			Tavla::TickTavlaTree(sharedThis, time);
+			tavla::TicktavlaTree(sharedThis, time);
 			time += 1;
 		}
 	}

@@ -4,75 +4,93 @@
 #include <memory>
 #include <iostream>
 
-class Tavla : public std::enable_shared_from_this<Tavla>
+class tavla : public std::enable_shared_from_this<tavla>
 {
 public:
-	class Slot : public std::enable_shared_from_this<Tavla::Slot>
+	class slot : public std::enable_shared_from_this<slot>
 	{
-		friend Tavla;
-
-	protected:
-		std::shared_ptr<Tavla> Content;
+		friend tavla;
 
 	public:
-		int Width;
-
-	private:
-		Slot() = default;
-		Slot(const Slot& o) = default;
+		std::shared_ptr<tavla> content;
 
 	public:
-		inline virtual std::shared_ptr<Tavla> GetContent() const { return Content; };
+		int width;
+		int height;
 
-		std::shared_ptr<Tavla::Slot> SetContent(const std::shared_ptr<Tavla> InContent) { Content = InContent; return std::shared_ptr<Tavla::Slot>(this); }
+	public:
+		slot()
+			: width(100)
+			, height(100)
+		{}
+		slot(const slot& o) = default;
 
-		template<class T>
-		std::shared_ptr<Tavla::Slot> SetProperty(T Tavla::Slot::* MemPtr, const T &Value)
+		inline virtual std::shared_ptr<tavla> get_content() const { return content; };
+
+		std::shared_ptr<tavla::slot> set_content(std::shared_ptr<tavla> t_content)
 		{
-			(*this).*MemPtr = Value;
-			return std::shared_ptr<Tavla::Slot>(this);
+			content = t_content;
+			return std::static_pointer_cast<tavla::slot>(shared_from_this());
+		}
+
+		template<typename Type, class Class>
+		std::shared_ptr<Class> set_property(Type Class::* MemPtr, const Type& Value)
+		{
+			static_cast<Class* const>(this)->*MemPtr = Value;
+			return std::static_pointer_cast<Class>(shared_from_this());
 		}
 	};
 
-	static std::shared_ptr<Tavla::Slot> CreateSlot()
-	{
-		return std::shared_ptr<Tavla::Slot>(new Tavla::Slot);
-	}
-
 protected:
-	std::vector<std::shared_ptr<Tavla::Slot>> ChildSlots;
+	std::vector<std::shared_ptr<tavla::slot>> m_child_slots;
 
 public:
-	Tavla(std::initializer_list<std::shared_ptr<Tavla::Slot>> l)
+	tavla()
+		: m_child_slots({})
+	{}
+
+	template<typename Type>
+	std::shared_ptr<Type> add_slot()
 	{
-		ChildSlots = l;
+		const auto slot = std::shared_ptr<Type>(new Type);
+		m_child_slots.push_back(slot);
+		return slot;
 	}
 
-	virtual void Tick(float DeltaTime) {};
-
-	inline const std::vector<std::shared_ptr<Tavla::Slot>> &GetChildSlots() const { return ChildSlots; }
-
-	static void TickTavlaTree(const std::shared_ptr<Tavla> &RootTavla, const float DeltaTime)
+	template<class Class, typename Type>
+	std::shared_ptr<Class> set_property(Type Class::* MemPtr, Type Value)
 	{
-		struct Local
-		{
-			static void TickSlotsRecursive(const std::shared_ptr<Tavla::Slot> &Slot, const float DeltaTime)
-			{
-				const auto SlotContent = Slot ? Slot->GetContent() : nullptr;
-				if (SlotContent)
-				{
-					SlotContent->Tick(DeltaTime);
+		static_cast<Class*const>(this)->*MemPtr = Value;
+		return std::static_pointer_cast<Class>(shared_from_this());
+	}
 
-					for (const auto& ChildSlot : SlotContent->GetChildSlots())
-						if (ChildSlot)
-							TickSlotsRecursive(ChildSlot, DeltaTime);
+	virtual void tick(float t_delta_time) {};
+
+	inline const std::vector<std::shared_ptr<tavla::slot>> &get_child_slots() const { return m_child_slots; }
+
+	static void tick_tavla_tree(const std::shared_ptr<tavla> &Roottavla, const float DeltaTime)
+	{
+		struct local
+		{
+			static void tick_slots_recursive(const std::shared_ptr<tavla::slot> &t_slot, const float t_delta_time)
+			{
+				const auto slotContent = t_slot ? t_slot->get_content() : nullptr;
+				if (slotContent)
+				{
+					slotContent->tick(t_delta_time);
+
+					for (const auto& child_slot : slotContent->get_child_slots())
+					{
+						if (child_slot)
+							tick_slots_recursive(child_slot, t_delta_time);
+					}
 				}
 			}
 		};
 
-		for (const auto & Slot : RootTavla->GetChildSlots())
+		for (const auto & slot : Roottavla->get_child_slots())
 		{
-			Local::TickSlotsRecursive(Slot, DeltaTime);
+			local::tick_slots_recursive(slot, DeltaTime);
 		}
 	}
 };
