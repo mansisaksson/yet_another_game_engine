@@ -5,7 +5,7 @@
 class TavlaApplication : public Tavla, std::enable_shared_from_this<TavlaApplication>
 {
 public:
-	TavlaApplication(std::initializer_list<std::shared_ptr<Tavla>> l)
+	TavlaApplication(std::initializer_list<std::shared_ptr<Tavla::Slot>> l)
 		: Tavla(l)
 	{
 

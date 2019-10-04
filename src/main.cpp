@@ -47,8 +47,13 @@ int main()
 {
 	TavlaApplication Application
 	{
-		std::make_shared<TWindow>(TWindow(640, 480, {})),
+		Tavla::CreateSlot()
+		->SetProperty(&Tavla::Slot::Width, 10)
+		->SetContent(nullptr)
+		
 	};
 
     return Application.Run();
+
+	return 0;
 }
