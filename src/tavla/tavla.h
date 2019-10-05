@@ -8,7 +8,6 @@
 class tavla : public std::enable_shared_from_this<tavla>
 {
 protected:
-
 	class slot : public std::enable_shared_from_this<slot>
 	{
 	private:

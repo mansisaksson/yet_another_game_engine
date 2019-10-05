@@ -16,7 +16,7 @@ public:
 	// ~end platform_input interface
 
 	void add_window(const std::weak_ptr<glfw_window> &t_window);
-	void remove_window(glfw_window* const t_window);
+	void remove_window(const std::weak_ptr<glfw_window>& t_window);
 
 private:
 	static key glfw_key_to_key(int const t_glfw_key);

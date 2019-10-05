@@ -9,17 +9,21 @@ void glfw_input::update_input()
 {
 	glfwPollEvents();
 
-	auto it = m_windows.begin();
-	while (it != m_windows.end())
+	std::vector<std::weak_ptr<glfw_window>> windows_to_remove;
+
+	for (const auto & window : m_windows)
 	{
-		const auto window = it->lock();
-		if (glfwWindowShouldClose(window->get_glfw_window()))
+		if (window.expired() || glfwWindowShouldClose(window.lock()->get_glfw_window()))
+			windows_to_remove.push_back(window);
+	}
+
+	for (const auto& window : windows_to_remove)
+	{
+		if (!window.expired())
 		{
-			window->close_window();
-			it = m_windows.erase(it);
+			remove_window(window.lock());
+			window.lock()->close_window();
 		}
-		else
-			it++;
 	}
 }
 
@@ -62,15 +66,17 @@ void glfw_input::add_window(const std::weak_ptr<glfw_window> &t_window)
 	glfwSetMouseButtonCallback(glfw_window, local::mouse_button_callback);
 }
 
-void glfw_input::remove_window(glfw_window* const t_window)
+void glfw_input::remove_window(const std::weak_ptr<glfw_window>& t_window)
 {
-	const auto l_glfw_window = t_window->get_glfw_window();
-
-	std::remove_if(m_windows.begin(), m_windows.end(), 
-		[&](std::weak_ptr<glfw_window> glfw_window) { return glfw_window.lock()->get_glfw_window() == l_glfw_window; });
+	const auto l_glfw_window = t_window.lock()->get_glfw_window();
 
 	glfwSetKeyCallback(l_glfw_window, nullptr);
 	glfwSetMouseButtonCallback(l_glfw_window, nullptr);
+
+	m_windows.erase(
+		std::remove_if(m_windows.begin(), m_windows.end(), [&](const auto& glfw_window) { return glfw_window.lock() == t_window.lock(); }),
+		m_windows.end()
+	);
 }
 
 key glfw_input::glfw_key_to_key(int const t_glfw_key)

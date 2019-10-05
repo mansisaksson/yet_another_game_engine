@@ -27,8 +27,9 @@ void glfw_window::init(int t_width, int t_height, std::string t_title)
 
 void glfw_window::close_window()
 {
-	std::static_pointer_cast<glfw_input>(platform::get_platform_input())->remove_window(this);
+	//std::static_pointer_cast<glfw_input>(platform::get_platform_input())->remove_window(this);
 	glfwDestroyWindow(m_window);
+	m_window = nullptr;
 }
 
 GLFWwindow* glfw_window::get_glfw_window() const

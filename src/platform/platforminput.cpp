@@ -13,12 +13,18 @@ guid platform_input::add_input_listener(std::weak_ptr<void> t_owner, const std::
 
 void platform_input::remove_input_listener(const guid & t_guid)
 {
-	std::remove_if(input_listeners.begin(), input_listeners.end(), [&](const auto& listner)->bool { return listner.id == t_guid; });
+	input_listeners.erase(
+		std::remove_if(input_listeners.begin(), input_listeners.end(), [&](const auto& listner)->bool { return listner.id == t_guid; }),
+		input_listeners.end()
+	);
 }
 
 void platform_input::generate_input_event(const input_event & t_input_event)
 {
-	std::remove_if(input_listeners.begin(), input_listeners.end(), [&](const auto& listner)->bool { return listner.owner.expired(); });
+	input_listeners.erase(
+		std::remove_if(input_listeners.begin(), input_listeners.end(), [&](const auto& listner)->bool { return listner.owner.expired(); }),
+		input_listeners.end()
+	);
 
 	for (const auto & listener : input_listeners)
 	{

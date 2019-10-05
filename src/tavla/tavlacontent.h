@@ -29,7 +29,7 @@ public:
 		std::shared_ptr<tavla> set_content(std::shared_ptr<tavla> t_content)
 		{
 			m_content = t_content;
-			return m_parent.lock();
+			return m_parent.lock()->shared_from_this();
 		}
 
 		template<typename Type, class Class>
