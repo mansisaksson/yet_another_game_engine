@@ -6,22 +6,27 @@ int main()
 {
 	const auto application = std::make_shared<tavla_application>();
 	application
-		->add_slot<tavla::slot>()
-		->set_property(&tavla::slot::width, 10)
-		->set_content
+		->add_application_slot()
+		->set_application_content
 		(
 			std::make_shared<tavla_window>()
 			->set_property(&tavla_window::width, 1280)
 			->set_property(&tavla_window::height, 720)
+			->add_window_slot()
+			->set_window_content
+			(
+				nullptr
+			)
 		)
-		->add_slot<tavla::slot>()
-		->set_property(&tavla::slot::width, 10)
-		->set_content
+		->add_application_slot()
+		->set_application_content
 		(
 			std::make_shared<tavla_window>()
 			->set_property(&tavla_window::width, 1280)
 			->set_property(&tavla_window::height, 720)
 		);
+
+	tavla::build_tavla_tree(application);
 
     return application->run();
 }

@@ -1,11 +1,26 @@
 #include "glfwinput.h"
 #include <GLFW/glfw3.h>
 #include <algorithm>
+
 #include "../platform.h"
+#include "glfwwindow.h"
 
 void glfw_input::update_input()
 {
 	glfwPollEvents();
+
+	auto it = m_windows.begin();
+	while (it != m_windows.end())
+	{
+		const auto window = it->lock();
+		if (glfwWindowShouldClose(window->get_glfw_window()))
+		{
+			window->close_window();
+			it = m_windows.erase(it);
+		}
+		else
+			it++;
+	}
 }
 
 std::tuple<int, int> glfw_input::get_cursor_location()
@@ -13,9 +28,9 @@ std::tuple<int, int> glfw_input::get_cursor_location()
 	return { 0, 0 };
 }
 
-void glfw_input::add_window(GLFWwindow* const t_window)
+void glfw_input::add_window(const std::weak_ptr<glfw_window> &t_window)
 {
-	m_window.push_back(t_window);
+	m_windows.push_back(t_window);
 
 	struct local
 	{
@@ -34,7 +49,7 @@ void glfw_input::add_window(GLFWwindow* const t_window)
 		{
 			input_event input_event =
 			{
-				glfw_key_to_key(t_button),
+				glfw_mouse_button_to_key(t_button),
 				glfw_key_event_to_key_event(t_action)
 			};
 
@@ -42,16 +57,20 @@ void glfw_input::add_window(GLFWwindow* const t_window)
 		}
 	};
 
-	glfwSetKeyCallback(t_window, local::key_callback);
-	glfwSetMouseButtonCallback(t_window, local::mouse_button_callback);
+	const auto glfw_window = t_window.lock()->get_glfw_window();
+	glfwSetKeyCallback(glfw_window, local::key_callback);
+	glfwSetMouseButtonCallback(glfw_window, local::mouse_button_callback);
 }
 
-void glfw_input::remove_window(GLFWwindow* const t_window)
+void glfw_input::remove_window(glfw_window* const t_window)
 {
-	std::remove(m_window.begin(), m_window.end(), t_window);
+	const auto l_glfw_window = t_window->get_glfw_window();
 
-	glfwSetKeyCallback(t_window, nullptr);
-	glfwSetMouseButtonCallback(t_window, nullptr);
+	std::remove_if(m_windows.begin(), m_windows.end(), 
+		[&](std::weak_ptr<glfw_window> glfw_window) { return glfw_window.lock()->get_glfw_window() == l_glfw_window; });
+
+	glfwSetKeyCallback(l_glfw_window, nullptr);
+	glfwSetMouseButtonCallback(l_glfw_window, nullptr);
 }
 
 key glfw_input::glfw_key_to_key(int const t_glfw_key)

@@ -2,10 +2,12 @@
 #include "../platforminput.h"
 #include <GLFW/glfw3.h>
 
+class glfw_window;
+
 class glfw_input : public platform_input
 {
 private:
-	std::vector<GLFWwindow*> m_window;
+	std::vector<std::weak_ptr<glfw_window>> m_windows;
 
 public:
 	// ~begin platform_input interface
@@ -13,8 +15,8 @@ public:
 	virtual std::tuple<int, int> get_cursor_location() override;
 	// ~end platform_input interface
 
-	void add_window(GLFWwindow* const t_window);
-	void remove_window(GLFWwindow* const t_window);
+	void add_window(const std::weak_ptr<glfw_window> &t_window);
+	void remove_window(glfw_window* const t_window);
 
 private:
 	static key glfw_key_to_key(int const t_glfw_key);

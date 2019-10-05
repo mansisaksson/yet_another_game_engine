@@ -10,5 +10,6 @@ protected:
 	platform_window(platform_window* const) = delete;
 	
 public:
+	virtual void init(int t_width, int t_height, std::string t_title) = 0;
 	virtual void close_window() = 0;
 };

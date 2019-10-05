@@ -1,19 +1,29 @@
 #include "platforminput.h"
 #include <algorithm>
 
-guid platform_input::add_input_event(std::weak_ptr<void> t_owner, const std::function<void(const input_event&)> & t_callback)
+guid platform_input::add_input_listener(std::weak_ptr<void> t_owner, const std::function<void(const input_event&)> & t_callback)
 {
-	return guid::new_guid();
+	if (t_owner.expired())
+		return guid();
+
+	const guid guid = guid::new_guid();
+	input_listeners.push_back({ guid, t_owner, t_callback });
+	return guid;
 }
 
-void platform_input::remove_input_event(const guid & t_guid)
+void platform_input::remove_input_listener(const guid & t_guid)
 {
-
+	std::remove_if(input_listeners.begin(), input_listeners.end(), [&](const auto& listner)->bool { return listner.id == t_guid; });
 }
 
 void platform_input::generate_input_event(const input_event & t_input_event)
 {
+	std::remove_if(input_listeners.begin(), input_listeners.end(), [&](const auto& listner)->bool { return listner.owner.expired(); });
 
+	for (const auto & listener : input_listeners)
+	{
+		listener.callback(t_input_event);
+	}
 }
 
 bool platform_input::is_key_down(key const t_key) const

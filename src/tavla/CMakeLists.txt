@@ -1,6 +1,8 @@
 add_sources(
 	"tavla.h"
     "tavla.cpp"
+	"tavlacontent.h"
+	"tavlacontent.cpp"
     "tavlaapplication.h"
     "tavlaapplication.cpp"
     "tavlawindow.h"

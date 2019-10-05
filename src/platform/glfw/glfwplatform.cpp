@@ -57,9 +57,7 @@ glfw_platform::~glfw_platform()
 
 std::shared_ptr<platform_window> glfw_platform::create_platform_window()
 {
-	std::shared_ptr<glfw_window> window = std::make_shared<glfw_window>(640, 420, "Test");
-	//window->init
-	return window->shared_from_this();
+	return std::make_shared<glfw_window>();
 }
 
 std::shared_ptr<platform_input> glfw_platform::create_platform_input()
