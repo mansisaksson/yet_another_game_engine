@@ -1,70 +1,23 @@
-#pragma once
-#include <vector>
-#include <stdlib.h>
-#include <memory>
-#include <iostream>
+#include "tavlaapplication.h"
+#include "../platform/platform.h"
+#include "../platform/platforminput.h"
 
-class tavla
-{
-protected:
-	std::vector<std::shared_ptr<tavla>> Children;
-
-public:
-	tavla(std::initializer_list<std::shared_ptr<tavla>> l)
-	{
-		Children = l;
-	}
-
-	virtual void Tick(float DeltaTime) {};
-
-	static void TicktavlaTree(const std::shared_ptr<tavla> &Root, const float DeltaTime)
-	{
-		Root->Tick(DeltaTime);
-
-		for (const auto& child : Root->Children)
-			if (child)
-				TicktavlaTree(child, DeltaTime);
-	}
-};
-
-class tavlaWindow : public tavla
+tavla_application::tavla_application()
 {
 
-public:
-	tavlaWindow(int width, int height, std::initializer_list<std::shared_ptr<tavla>> l)
-		: tavla(l)
-	{
+}
 
-	}
-
-	virtual void Tick(float DeltaTime) override
-	{
-		
-	}
-};
-
-class tavlaApplication : public tavla, std::enable_shared_from_this<tavlaApplication>
+void tavla_application::tick(float t_delta_time)
 {
-public:
-	tavlaApplication(std::initializer_list<std::shared_ptr<tavla>> l)
-		: tavla(l)
-	{
+	platform::get_platform_input()->update_input();
+}
 
-	}
-
-	virtual void Tick(float DeltaTime) override
+int tavla_application::run()
+{
+	float time = 0;
+	while (true)
 	{
-		std::cout << "Hello World" << "\n";
+		tavla::tick_tavla_tree(shared_from_this(), time);
+		time += 1;
 	}
-
-	int Run()
-	{
-		const auto sharedThis = std::shared_ptr<tavlaApplication>(this);
-		float time = 0;
-		while (true)
-		{
-			tavla::TicktavlaTree(sharedThis, time);
-			time += 1;
-		}
-	}
-};
+}

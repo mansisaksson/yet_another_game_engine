@@ -11,26 +11,28 @@ public:
 	{
 		friend tavla;
 
-	public:
-		std::shared_ptr<tavla> content;
+	private:
+		std::shared_ptr<tavla> m_parent;
+		std::shared_ptr<tavla> m_content;
 
 	public:
 		int width;
 		int height;
 
 	public:
-		slot()
-			: width(100)
+		slot(std::shared_ptr<tavla> t_parent)
+			: m_parent(t_parent)
+			, width(100)
 			, height(100)
 		{}
 		slot(const slot& o) = default;
 
-		inline virtual std::shared_ptr<tavla> get_content() const { return content; };
+		inline virtual std::shared_ptr<tavla> get_content() const { return m_content; };
 
-		std::shared_ptr<tavla::slot> set_content(std::shared_ptr<tavla> t_content)
+		std::shared_ptr<tavla> set_content(std::shared_ptr<tavla> t_content)
 		{
-			content = t_content;
-			return std::static_pointer_cast<tavla::slot>(shared_from_this());
+			m_content = t_content;
+			return m_parent;
 		}
 
 		template<typename Type, class Class>
@@ -52,7 +54,7 @@ public:
 	template<typename Type>
 	std::shared_ptr<Type> add_slot()
 	{
-		const auto slot = std::shared_ptr<Type>(new Type);
+		const auto slot = std::make_shared<Type>(shared_from_this());
 		m_child_slots.push_back(slot);
 		return slot;
 	}

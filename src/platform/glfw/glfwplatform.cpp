@@ -1,7 +1,7 @@
-#pragma once
+#include "glfwplatform.h"
+#include "glfwinput.h"
+#include "glfwwindow.h"
 
-//#include <GLFW/glfw3.h>
-//
 //#include <stdlib.h>
 //
 //void shut_down(int code)
@@ -41,7 +41,28 @@
 //    return 0;
 //}
 
-class window
+glfw_platform::glfw_platform()
 {
+	glfwInit();
+	if (!glfwInit())
+	{
+		// TODO: error
+	}
+}
 
-};
+glfw_platform::~glfw_platform()
+{
+	glfwTerminate();
+}
+
+std::shared_ptr<platform_window> glfw_platform::create_platform_window()
+{
+	std::shared_ptr<glfw_window> window = std::make_shared<glfw_window>(640, 420, "Test");
+	//window->init
+	return window->shared_from_this();
+}
+
+std::shared_ptr<platform_input> glfw_platform::create_platform_input()
+{
+	return std::make_shared<glfw_input>();
+}

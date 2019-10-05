@@ -1,0 +1,9 @@
+add_sources(
+	"CMakeLists.txt"
+    "glfwinput.h"
+	"glfwinput.cpp"
+	"glfwwindow.h"
+	"glfwwindow.cpp"
+	"glfwplatform.h"
+	"glfwplatform.cpp"
+)

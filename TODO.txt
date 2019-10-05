@@ -1,3 +1,5 @@
+[ ] Implement tavla_window
+
 [ ] Draw something
 	[ ] Abstract the drawing
 	

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(GLFW_TEST CXX)
+set(PROJECT_NAME YETE)
+
+project(${PROJECT_NAME} CXX)
 
 SET(CMAKE_BUILD_TYPE Debug)
 
@@ -25,4 +27,4 @@ add_subdirectory(src)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_LIST}) # build source tree for some IDEs
 
-add_executable(GLFW_TEST ${SOURCE_LIST})
+add_executable(${PROJECT_NAME} ${SOURCE_LIST})
