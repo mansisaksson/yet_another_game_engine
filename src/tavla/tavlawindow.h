@@ -4,25 +4,20 @@
 
 class platform_window;
 
-class tavla_window : public tavla
+class tavla_window : public tavla_base<tavla_window>
 {
 public:
-	class slot : public tavla::slot
+	class slot : public tavla_base::slot<tavla_window::slot>
 	{
 	public:
-		slot(std::shared_ptr<tavla_window> t_application)
-			: tavla::slot(t_application)
+		slot(const std::shared_ptr<tavla_window> & t_parent)
+			: tavla_base::slot<tavla_window::slot>::slot(t_parent)
 		{}
-
-		std::shared_ptr<tavla_window> set_window_content(std::shared_ptr<tavla> t_content)
-		{
-			return set_content<tavla_window>(t_content);
-		}
 	};
 
-	std::shared_ptr<tavla_window::slot> add_window_slot()
+	std::shared_ptr<tavla_window::slot> add_slot()
 	{
-		return add_slot<tavla_window, tavla_window::slot>();
+		return add_slot_of_type<tavla_window::slot>();
 	}
 
 public:

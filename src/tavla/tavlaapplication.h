@@ -3,25 +3,20 @@
 #include "tavla.h"
 #include "../core/core.h"
 
-class tavla_application : public tavla
+class tavla_application : public tavla_base<tavla_application>
 {
 public:
-	class slot : public tavla::slot
+	class slot : public tavla_base::slot<tavla_application::slot>
 	{
 	public:
-		slot(std::shared_ptr<tavla_application> t_application)
-			: tavla::slot(t_application)
+		slot(const std::shared_ptr<tavla_application> &t_parent)
+			: tavla_base::slot<tavla_application::slot>(t_parent)
 		{}
-
-		std::shared_ptr<tavla_application> set_application_content(std::shared_ptr<tavla> t_content)
-		{
-			return set_content<tavla_application>(t_content);
-		}
 	};
 
-	std::shared_ptr<tavla_application::slot> add_application_slot()
+	std::shared_ptr<tavla_application::slot> add_slot()
 	{
-		return add_slot<tavla_application, tavla_application::slot>();
+		return add_slot_of_type<tavla_application::slot>();
 	}
 
 private:
