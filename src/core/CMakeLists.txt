@@ -3,5 +3,9 @@ add_sources(
 	"input.h"
 	"guid.h"
 	"math.h"
+	"math.cpp"
+	"quaternion.h"
+	"transform.h"
+	"vector3.h"
     "CMakeLists.txt"
 )
