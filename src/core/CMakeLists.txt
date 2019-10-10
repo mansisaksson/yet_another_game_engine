@@ -7,5 +7,6 @@ add_sources(
 	"quaternion.h"
 	"transform.h"
 	"vector3.h"
+	"delegate.h"
     "CMakeLists.txt"
 )

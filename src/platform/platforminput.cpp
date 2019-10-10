@@ -1,7 +1,7 @@
 #include "platforminput.h"
 #include <algorithm>
 
-guid platform_input::add_input_listener(std::weak_ptr<void> t_owner, const std::function<void(const input_event&)> & t_callback)
+guid platform_input::add_input_listener(const std::weak_ptr<void> & t_owner, const std::function<void(const input_event&)> & t_callback)
 {
 	if (t_owner.expired())
 		return guid();

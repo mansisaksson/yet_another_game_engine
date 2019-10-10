@@ -24,11 +24,11 @@ private:
 
 public:
 
-	guid add_input_listener(std::weak_ptr<void> t_owner, const std::function<void(const input_event&)>& t_callback);
+	guid add_input_listener(const std::weak_ptr<void> &t_owner, const std::function<void(const input_event&)>& t_callback);
 
-	void remove_input_listener(const guid& t_guid);
+	void remove_input_listener(const guid &t_guid);
 
-	void generate_input_event(const input_event& t_input_event);
+	void generate_input_event(const input_event &t_input_event);
 
 	bool is_key_down(key const t_key) const;
 

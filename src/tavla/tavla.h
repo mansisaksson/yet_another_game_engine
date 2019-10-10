@@ -79,7 +79,7 @@ protected:
 			return std::static_pointer_cast<slot_class>(shared_from_this());
 		}
 
-		std::shared_ptr<tavla_class> set_content(std::shared_ptr<tavla> t_content)
+		std::shared_ptr<tavla_class> set_content(const std::shared_ptr<tavla>& t_content)
 		{
 			m_content = t_content;
 			return std::static_pointer_cast<tavla_class>(m_parent.lock());
