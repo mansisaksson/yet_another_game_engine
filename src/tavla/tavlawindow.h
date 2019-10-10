@@ -11,7 +11,7 @@ public:
 	{
 	public:
 		slot(const std::shared_ptr<tavla_window> & t_parent)
-			: tavla_base::slot<tavla_window::slot>::slot(t_parent)
+			: tavla_base::slot<tavla_window::slot>(t_parent)
 		{}
 	};
 

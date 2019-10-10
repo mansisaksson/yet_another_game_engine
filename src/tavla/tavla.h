@@ -38,6 +38,10 @@ public:
 	{}
 	~tavla() { destruct(); }
 
+	tavla(const tavla&) = delete;
+	tavla(tavla&&) = delete;
+	void operator=(const tavla&) {}
+
 	// ~begin tavla interface
 	virtual void construct() {};
 	virtual void destruct() {};
