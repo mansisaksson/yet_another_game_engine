@@ -22,6 +22,7 @@ macro (add_sources)
 endmacro()
 
 include(third_party/glfw.cmake)
+include(third_party/glew.cmake)
 add_subdirectory(third_party)
 add_subdirectory(src)
 

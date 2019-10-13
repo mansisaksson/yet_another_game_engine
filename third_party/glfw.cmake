@@ -1,3 +1,6 @@
+message("\n")
+message(STATUS "Configuring GLFW")
+
 include(CheckIncludeFileCXX)
 include(ExternalProject)
 
