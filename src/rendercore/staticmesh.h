@@ -18,8 +18,10 @@ private:
 	bool operator=(const static_mesh&) = delete;
 
 protected:
+
 	static_mesh(const indexed_model& model);
 	virtual ~static_mesh();
+
 public:
 	static std::shared_ptr<static_mesh> create_mesh(const indexed_model& model);
 	static std::shared_ptr<static_mesh> load_mesh(const std::string &file_path);
@@ -29,6 +31,6 @@ public:
 protected:
 
 	virtual void init_mesh(const indexed_model& model) = 0;
-	virtual void destroy_mesh() = 0;
+	virtual void destroy_mesh() {};
 
 };
