@@ -1,7 +1,13 @@
 [ ] Implement tavla_window
 
 [ ] Draw something
+	[ ] Add static mesh
+		[ ] Load model
+	[ ] Add texture
+		[ ] Load texture
+	[ ] Add camea
+	[ ] Add materials/shaders
 	[ ] Abstract the drawing
 	
-[ ] Add input
-	[ ] Abstract the input
+[x] Add input
+	[x] Abstract the input
