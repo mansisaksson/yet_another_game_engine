@@ -1,15 +1,14 @@
-message("\n")
+message("")
+
 message(STATUS "Configuring GLEW")
 
-include(CheckIncludeFileCXX)
 include(ExternalProject)
 
-# list(APPEND CMAKE_ARGS "-DBUILD_SHARED_LIBS:BOOL=ON")
-# list(APPEND CMAKE_ARGS "-DGLFW_BUILD_EXAMPLES:BOOL=FALSE")
-# list(APPEND CMAKE_ARGS "-DGLFW_BUILD_TESTS:BOOL=FALSE")
-# list(APPEND CMAKE_ARGS "-DGLFW_BUILD_DOCS:BOOL=FALSE")
-# list(APPEND CMAKE_ARGS "-DGLFW_INSTALL:BOOL=FALSE")
-# list(APPEND CMAKE_ARGS "-DGLFW_VULKAN_STATIC:BOOL=FALSE")
+find_package(OpenGL REQUIRED)
+
+# list(APPEND CMAKE_ARGS "-DBUILD_UTILS:BOOL=ON")
+# list(APPEND CMAKE_ARGS "-DGLEW_REGAL:BOOL=FALSE")
+# list(APPEND CMAKE_ARGS "-DGLEW_OSMESA:BOOL=FALSE")
 
 set(GLEW_PREFIX glew)
 set(GLEW_URL ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew.zip)
@@ -46,53 +45,42 @@ ExternalProject_Add ( ${GLEW_PREFIX}
 # get the unpacked source/binary directory path
 ExternalProject_Get_Property(${GLEW_PREFIX} SOURCE_DIR)
 ExternalProject_Get_Property(${GLEW_PREFIX} BINARY_DIR)
-
 set (SOURCE_DIR ${SOURCE_DIR}/../..) # need to adjust for our CMakeLists.txt being in {SOURCE_DIR}/build/cmake
-
-message(STATUS "Source directory of ${GLEW_PREFIX} ${SOURCE_DIR}")
-message(STATUS "Binary directory of ${GLEW_PREFIX} ${BINARY_DIR}")
-
-# Set separate directories for building in Debug or Release mode
-set(GLEW_DEBUG_DIR ${BINARY_DIR}/lib/Debug)
-set(GLEW_RELEASE_DIR ${BINARY_DIR}/lib/Release)
-message(STATUS "GLEW Debug directory ${GLEW_DEBUG_DIR}")
-message(STATUS "GLEW Release directory ${GLEW_RELEASE_DIR}")
 
 # set the include directory variable and include it
 set(GLEW_INCLUDE_DIRS ${SOURCE_DIR}/include)
-message(STATUS "GLEW Include directory ${GLEW_INCLUDE_DIRS}")
-
-include_directories(${GLEW_INCLUDE_DIRS})
-
-# verify that the HAVE_GLEW header files can be included
-set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
-set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${GLEW_INCLUDE_DIRS})
-check_include_file_cxx("GL/glew.h" HAVE_GLEW)
-set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAVE})
-if (NOT HAVE_GLEW)
-    message(STATUS "Did not build GLEW correctly as cannot find GL/glew.h")
-    set(HAVE_GLEW 1)
-endif (NOT HAVE_GLEW)
-
 
 # link the correct GLEW directory when the project is in Debug or Release mode
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	# in Debug mode
-	set(GLEW_LIBS glew32d)
-	set(GLEW_LIBRARY_DIRS ${GLEW_DEBUG_DIR})
+	set(GLEW_LIBS glew32d libglew32d opengl32)
+    set(GLEW_LIBRARY_DIRS ${BINARY_DIR}/lib/Debug)
+    set(GLEW_BINARY_DIRS ${BINARY_DIR}/bin/Debug)
 else (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	# in Release mode
-	set(GLEW_LIBS glew32)
-	set(GLEW_LIBRARY_DIRS ${GLEW_RELEASE_DIR})
+	set(GLEW_LIBS glew32 libglew32 opengl32)
+    set(GLEW_LIBRARY_DIRS ${BINARY_DIR}/lib/Release)
+    set(GLEW_BINARY_DIRS ${BINARY_DIR}/bin/Release)
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+message(STATUS "GLEW Include directory ${GLFW_INCLUDE_DIRS}")
+message(STATUS "GLEW Library directory ${GLFW_LIBRARY_DIRS}")
+message(STATUS "GLEW Binary directory ${GLEW_BINARY_DIRS}")
+
+# set include dirs
+include_directories(${GLEW_INCLUDE_DIRS})
+
+# link libraries
 
 link_directories(${GLEW_LIBRARY_DIRS})
 link_libraries(${GLEW_LIBS})
 
+# install .dll/.so
 set(GLEW_INSTALL_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
-
 if (UNIX)
-	install(DIRECTORY ${GLEW_LIBRARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN "*.so*")
+	install(DIRECTORY ${GLEW_BINARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN "*.so*")
 else (UNIX)
-	install(DIRECTORY ${GLEW_LIBRARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} FILES_MATCHING PATTERN "*.dll*")
+	install(DIRECTORY ${GLEW_BINARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} FILES_MATCHING PATTERN "*.dll*")
 endif (UNIX)
+
+message("")

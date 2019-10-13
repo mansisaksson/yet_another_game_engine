@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 2.8)
+
+SET(CMAKE_BUILD_TYPE Debug)
+
+include(third_party/glfw.cmake)
+include(third_party/glew.cmake)
 
 set(PROJECT_NAME YETE)
 
 project(${PROJECT_NAME} CXX)
-
-SET(CMAKE_BUILD_TYPE Debug)
 
 macro (add_sources)
     file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -21,8 +24,7 @@ macro (add_sources)
     endif()
 endmacro()
 
-include(third_party/glfw.cmake)
-include(third_party/glew.cmake)
+
 add_subdirectory(third_party)
 add_subdirectory(src)
 

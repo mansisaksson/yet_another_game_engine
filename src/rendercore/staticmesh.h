@@ -6,6 +6,7 @@ struct indexed_model
 	std::vector<vector3> positions;
 	std::vector<vector2> tex_coords;
 	std::vector<vector3> normals;
+	std::vector<uint32_t> indices;
 };
 
 class static_mesh
