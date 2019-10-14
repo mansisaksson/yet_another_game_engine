@@ -1,6 +1,8 @@
 #include "tavla/tavla.h"
 #include "tavla/tavlaapplication.h"
 #include "tavla/tavlawindow.h"
+#include "assetmanager/assetptr.h"
+#include "rendercore/rendercore.h"
 
 void testfunc()
 {
@@ -40,6 +42,10 @@ int main()
 	multicast_delegates.bind(test);
 
 	multicast_delegates.broadcast();
+
+	asset_ptr<static_mesh> static_mesh_ptr("monkey3.obj");
+
+	//static_mesh* test = *static_mesh_ptr;
 
     return application->run();
 }

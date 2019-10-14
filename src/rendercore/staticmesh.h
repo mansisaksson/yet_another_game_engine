@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "vertex.h"
 
 struct indexed_model
@@ -9,7 +10,7 @@ struct indexed_model
 	std::vector<uint32_t> indices;
 };
 
-class static_mesh
+class static_mesh : public std::enable_shared_from_this<static_mesh>
 {
 private:
 	static_mesh() = delete;
@@ -24,7 +25,6 @@ protected:
 
 public:
 	static std::shared_ptr<static_mesh> create_mesh(const indexed_model& model);
-	static std::shared_ptr<static_mesh> load_mesh(const std::string &file_path);
 
 	virtual void draw() = 0;
 

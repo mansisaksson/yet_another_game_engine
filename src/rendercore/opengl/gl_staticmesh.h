@@ -28,6 +28,8 @@ private:
 	bool operator=(const gl_static_mesh&) = delete;
 
 public:
+	gl_static_mesh(const indexed_model& model);
+
 	virtual void draw() override;
 
 protected:

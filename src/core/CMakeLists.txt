@@ -9,5 +9,7 @@ add_sources(
 	"vector3.h"
 	"vector2.h"
 	"delegate.h"
+	"paths.h"
+	"paths.cpp"
     "CMakeLists.txt"
 )

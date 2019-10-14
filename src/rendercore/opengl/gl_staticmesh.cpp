@@ -1,5 +1,10 @@
 #include "gl_staticmesh.h"
 
+gl_static_mesh::gl_static_mesh(const indexed_model& model)
+	: static_mesh(model)
+{
+}
+
 void gl_static_mesh::draw()
 {
 	glBindVertexArray(m_vertexArrayObject);

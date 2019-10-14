@@ -1,0 +1,10 @@
+add_sources(
+	"assetmanager.h"
+	"assetmanager.cpp"
+	"assetptr.h"
+	"assetloaders.h"
+	"staticmeshloader.cpp"
+	"loaders/obj_loader.h"
+	"loaders/obj_loader.cpp"
+    "CMakeLists.txt"
+)

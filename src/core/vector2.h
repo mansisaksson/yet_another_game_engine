@@ -1,5 +1,5 @@
 #pragma once
-#include "glm/vec2.hpp"
+#include "glm/glm.hpp"
 
 class vector2
 {
@@ -33,6 +33,22 @@ public:
 		, y(glm_vec.y)
 	{}
 
+	static const vector2 zero;
+
+
+	void normalize()
+	{
+		*this = glm::normalize(glm_vec);
+	}
+
+	vector2 get_normalized() const
+	{
+		return glm::normalize(glm_vec);
+	}
+
+
+	/* ~Begin: Operators */
+
 	inline bool operator==(const vector2& o) const
 	{
 		return x == o.x && y == o.y;
@@ -43,5 +59,41 @@ public:
 		return o;
 	}
 
-	static const vector2 zero;
+	vector2 operator-(const vector2& o)
+	{
+		return vector2(x - o.x, y - o.y);
+	}
+
+	vector2 operator+(const vector2& o)
+	{
+		return vector2(x * o.x, y * o.y);
+	}
+
+	void operator-=(const vector2& o)
+	{
+		x -= o.x;
+		y -= o.y;
+	}
+
+	void operator+=(const vector2& o)
+	{
+		x += o.x;
+		y += o.y;
+	}
+
+	template<typename U>
+	vector2 operator*(const U& scalar)
+	{
+		return vector2(x * scalar, y * scalar);
+	}
+
+	template<typename U>
+	vector2 operator/(const U& scalar)
+	{
+		return vector2(x / scalar, y / scalar, z / scalar);
+	}
+
+	/* ~End: Operators */
+
+
 };
