@@ -31,6 +31,7 @@ public:
         const auto asset_ptr = m_asset_table.find(t_asset_path);
         if (asset_ptr != m_asset_table.end() && !(*asset_ptr).second.expired())
         {
+			// TODO: since we're not using polymorfism, we cannot ensure that we're returning the proper type here.
             return std::static_pointer_cast<T>((*asset_ptr).second.lock());
         }
 

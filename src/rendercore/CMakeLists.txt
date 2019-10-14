@@ -5,5 +5,7 @@ add_sources(
 	"vertex.h"
 	"staticmesh.h"
     "staticmesh.cpp"
+	"texture.h"
+	"texture.cpp"
     "CMakeLists.txt"
 )

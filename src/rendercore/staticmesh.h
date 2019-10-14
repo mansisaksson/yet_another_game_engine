@@ -24,13 +24,13 @@ protected:
 	virtual ~static_mesh();
 
 public:
-	static std::shared_ptr<static_mesh> create_mesh(const indexed_model& model);
+	static std::shared_ptr<static_mesh> create_mesh(const indexed_model& t_model);
 
 	virtual void draw() = 0;
 
 protected:
 
-	virtual void init_mesh(const indexed_model& model) = 0;
+	virtual void init_mesh(const indexed_model& t_model) {};
 	virtual void destroy_mesh() {};
 
 };

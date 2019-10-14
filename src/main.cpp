@@ -44,6 +44,7 @@ int main()
 	multicast_delegates.broadcast();
 
 	asset_ptr<static_mesh> static_mesh_ptr("monkey3.obj");
+	asset_ptr<texture> texture_ptr("bricks.jpg");
 
 	//static_mesh* test = *static_mesh_ptr;
 
