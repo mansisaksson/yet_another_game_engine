@@ -1,10 +1,10 @@
 [ ] Implement tavla_window
 
 [ ] Draw something
-	[ ] Add static mesh
-		[ ] Load model
-	[ ] Add texture
-		[ ] Load texture
+	[x] Add static mesh
+		[x] Load model
+	[x] Add texture
+		[x] Load texture
 	[ ] Add camea
 	[ ] Add materials/shaders
 	[ ] Abstract the drawing
