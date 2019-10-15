@@ -1,7 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "../staticmesh.h"
+#include "rendercore/staticmesh.h"
 
 class gl_static_mesh : public static_mesh
 {

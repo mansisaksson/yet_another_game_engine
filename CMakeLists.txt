@@ -26,6 +26,10 @@ macro (add_sources)
     endif()
 endmacro()
 
+include_directories(third_party/nlohmannjson)
+include_directories(third_party/glm)
+include_directories(third_party/loaders)
+include_directories(src)
 
 add_subdirectory(third_party)
 add_subdirectory(src)

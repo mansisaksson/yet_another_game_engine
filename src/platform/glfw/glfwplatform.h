@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "../platform.h"
+#include "platform/platform.h"
 
 class glfw_platform : public platform
 {

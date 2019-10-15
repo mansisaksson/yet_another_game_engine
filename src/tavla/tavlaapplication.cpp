@@ -1,6 +1,6 @@
 #include "tavlaapplication.h"
-#include "../platform/platform.h"
-#include "../platform/platforminput.h"
+#include "platform/platform.h"
+#include "platform/platforminput.h"
 
 void tavla_application::construct()
 {

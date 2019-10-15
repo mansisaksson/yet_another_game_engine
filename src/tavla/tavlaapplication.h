@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tavla.h"
-#include "../core/core.h"
+#include "core/core.h"
 
 class tavla_application : public tavla_base<tavla_application>
 {

@@ -1,5 +1,5 @@
 #include "assetloaders.h"
-#include "../core/paths.h"
+#include "core/paths.h"
 
 #include <iostream>
 #include <filesystem>

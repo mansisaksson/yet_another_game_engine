@@ -1,6 +1,6 @@
 #include "tavlawindow.h"
-#include "../platform/platform.h"
-#include "../platform/platformwindow.h"
+#include "platform/platform.h"
+#include "platform/platformwindow.h"
 
 void tavla_window::construct()
 {

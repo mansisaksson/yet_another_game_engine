@@ -1,7 +1,7 @@
 #pragma once
 #include "assetmanager.h"
-#include "../rendercore/staticmesh.h"
-#include "../rendercore/texture.h"
+#include "rendercore/staticmesh.h"
+#include "rendercore/texture.h"
 
 template<class T>
 class asset_loader

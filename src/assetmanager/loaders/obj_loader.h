@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../core/core.h"
-#include "../../rendercore/rendercore.h"
+#include "core/core.h"
+#include "rendercore/rendercore.h"
 #include <vector>
 #include <string>
 

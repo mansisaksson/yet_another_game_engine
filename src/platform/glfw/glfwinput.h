@@ -1,5 +1,5 @@
 #pragma once
-#include "../platforminput.h"
+#include "platform/platforminput.h"
 #include <GLFW/glfw3.h>
 
 class glfw_window;

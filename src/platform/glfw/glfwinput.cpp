@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
-#include "../platform.h"
+#include "platform/platform.h"
 #include "glfwwindow.h"
 
 void glfw_input::update_input()

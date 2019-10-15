@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "../platform.h"
+#include "platform/platform.h"
 #include "glfwinput.h"
 
 glfw_window::glfw_window()
