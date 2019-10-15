@@ -1,0 +1,5 @@
+{
+	"material": "static_mesh",
+	"fragment_shader": "/data/basicFragmentShader.glsl",
+	"vertex_shader": "/data/basicVertexShader.glsl"
+}

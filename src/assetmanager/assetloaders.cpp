@@ -4,6 +4,10 @@
 #include <iostream>
 #include <filesystem>
 
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
 #include "loaders/obj_loader.h"
 #include "loaders/stb_image.h"
 

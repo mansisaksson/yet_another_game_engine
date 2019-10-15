@@ -1,0 +1,6 @@
+{
+	"material": "texture",
+	"data_asset": "/data/bricks.jpg",
+	"data_format": "rgba",
+	"render_format": "rgb"
+}
