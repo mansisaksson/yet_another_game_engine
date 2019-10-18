@@ -2,7 +2,8 @@
 #include "core/paths.h"
 
 #include <iostream>
-#include <filesystem>
+#include <fstream>
+#include <streambuf>
 
 #include <nlohmann/json.hpp>
 
@@ -10,6 +11,19 @@ using json = nlohmann::json;
 
 #include "loaders/obj_loader.h"
 #include "loaders/stb_image.h"
+
+std::string load_file_as_string(const std::string &t_file_path)
+{
+	std::ifstream t(t_file_path);
+	std::string str;
+
+	t.seekg(0, std::ios::end);
+	str.reserve((size_t)t.tellg());
+	t.seekg(0, std::ios::beg);
+
+	str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+	return str;
+}
 
 std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::string& t_asset_path)
 {
@@ -19,7 +33,7 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 		Is missing a whole lot of error checking and other features
 	*/
 
-	const std::string full_path = paths::content_dir() + t_asset_path; // TODO: Combine paths
+	const std::string full_path = paths::combine_paths(paths::content_dir(), t_asset_path);
 	const obj_model obj_model(full_path);
 	const indexed_model indexed_model = obj_model.to_indexed_model();
 	return static_mesh::create_mesh(indexed_model)->shared_from_this();
@@ -27,11 +41,42 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 
 std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_asset_path)
 {
-	const std::string full_path = paths::content_dir() + t_asset_path; // TODO: Combine paths
+	struct local
+	{
+		static std::string parse_string(const json &json_object, const std::string &key)
+		{
+			const auto asset_type_field = json_object.find(key);
+			if (asset_type_field != json_object.end())
+			{
+				const auto asset_type_value = asset_type_field.value();
+				if (asset_type_value.is_string())
+					return asset_type_value.get<std::string>();
+			}
+			return std::string();
+		}
+	};
+
+	const std::string asset_path = paths::combine_paths(paths::content_asset_dir(), t_asset_path + ".json");
+	const std::string asset_data_string = load_file_as_string(asset_path);
+	auto json_asset = json::parse(asset_data_string);
+
+	std::string asset_type = local::parse_string(json_asset, "asset_type");
+	if (asset_type != "texture")
+	{
+		std::cout << "wrong asset_type: " << asset_type << std::endl;
+		return nullptr;
+	}
+
+	std::string data_asset = local::parse_string(json_asset, "data_asset");
+	std::string data_format = local::parse_string(json_asset, "data_format");
+	std::string render_format = local::parse_string(json_asset, "render_format");
+
+	const std::string data_asset_path = paths::combine_paths(paths::content_dir(), data_asset);
+	
 
 	texture_data tex_data;
 	int num_comp;
-	stbi_uc* image_data = stbi_load(full_path.c_str(), &tex_data.width, &tex_data.height, &num_comp, 4);
+	stbi_uc* image_data = stbi_load(data_asset_path.c_str(), &tex_data.width, &tex_data.height, &num_comp, 4);
 	
 	if (image_data == nullptr)
 	{
