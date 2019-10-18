@@ -2,6 +2,10 @@
 #ignore CMake dir
 build
 
+#ignore visual studio files
+.vs
+.vscode
+
 # Prerequisites
 *.d
 
