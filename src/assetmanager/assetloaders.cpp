@@ -48,7 +48,7 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 	
 	tex_data.render_format = tex_data.data_format;
 	
-	const int num_bytes = tex_data.width * tex_data.height * num_comp;
+	const uint32_t num_bytes = tex_data.width * tex_data.height * num_comp;
 	tex_data.color_data.reserve(num_bytes);
 	for (size_t i = 0; i < num_bytes; i++)
 	{
