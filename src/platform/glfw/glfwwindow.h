@@ -15,7 +15,10 @@ public:
 	glfw_window();
 
 	virtual void init(int t_width, int t_height, std::string t_title) override;
+	virtual void make_current() override;
+	virtual void clear(const color& clear_color) override;
 	virtual void close_window() override;
+	virtual void swap_buffers() override;
 
 	GLFWwindow* get_glfw_window() const;
 };

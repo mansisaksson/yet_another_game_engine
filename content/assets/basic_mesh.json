@@ -2,6 +2,6 @@
 	"asset_type": "static_mesh",
 	"data_asset": "/data/monkey3.obj",
 	"materials": [
-		"/assets/basic_mat"
+		"basic_mat"
 	]
 }

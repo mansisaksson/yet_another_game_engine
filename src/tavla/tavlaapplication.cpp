@@ -5,9 +5,9 @@
 void tavla_application::construct()
 {
 	input_event_listen_id = platform::get_platform_input()->add_input_listener(shared_from_this(), [](const input_event &t_input_event)
-		{
-			log::info("tavla_application", "%s : %s", key_to_string(t_input_event.key), key_event_to_string(t_input_event.key_event));
-		});
+	{
+		log::info("tavla_application", "%s : %s", key_to_string(t_input_event.key).c_str(), key_event_to_string(t_input_event.key_event).c_str());
+	});
 }
 
 void tavla_application::destruct()
@@ -27,6 +27,7 @@ int tavla_application::run()
 	{
 		tavla::tick_tavla_tree(shared_from_this(), time);
 		time += 1;
+		tavla::draw_tavla_tree(shared_from_this());
 	}
 
 	return 0;

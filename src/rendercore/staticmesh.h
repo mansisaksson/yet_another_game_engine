@@ -1,6 +1,8 @@
 #pragma once
-#include <memory>
-#include "vertex.h"
+#include "core/core.h"
+#include "assetmanager/assetptr.h"
+
+class material;
 
 struct indexed_model
 {
@@ -8,10 +10,14 @@ struct indexed_model
 	std::vector<vector2> tex_coords;
 	std::vector<vector3> normals;
 	std::vector<uint32_t> indices;
+	std::string material_ref;
 };
 
 class static_mesh : public std::enable_shared_from_this<static_mesh>
 {
+protected:
+	std::vector<asset_ptr<material>> m_materials;
+
 private:
 	static_mesh() = delete;
 	static_mesh(const static_mesh&) = delete;
@@ -19,18 +25,11 @@ private:
 	bool operator=(const static_mesh&) = delete;
 
 protected:
-
 	static_mesh(const indexed_model& model);
-	virtual ~static_mesh();
 
 public:
 	static std::shared_ptr<static_mesh> create_mesh(const indexed_model& t_model);
 
 	virtual void draw() = 0;
-
-protected:
-
-	virtual void init_mesh(const indexed_model& t_model) {};
-	virtual void destroy_mesh() {};
 
 };

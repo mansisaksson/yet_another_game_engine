@@ -1,9 +1,11 @@
 #pragma once
-#include <string>
-#include <memory>
+#include "core/core.h"
 
 class platform_window : public std::enable_shared_from_this<platform_window>
 {
+public:
+	multicast_delegate<platform_window&> on_window_closed;
+
 protected:
 	platform_window() = default;
 	platform_window(const platform_window&) = delete;
@@ -12,5 +14,13 @@ protected:
 	
 public:
 	virtual void init(int t_width, int t_height, std::string t_title) = 0;
+
+	virtual void make_current() = 0;
+
+	virtual void clear(const color &clear_color) = 0;
+
 	virtual void close_window() = 0;
+
+	virtual void swap_buffers() = 0;
+
 };

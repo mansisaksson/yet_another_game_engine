@@ -38,20 +38,15 @@ public:
 		, m_func(t_func)
 	{}
 
-	static delegate<RetV, Types ...> create_lambda(const std::function<RetV(Types ...)> &func)
+	static delegate<RetV, Types ...> create_function(const std::function<RetV(Types ...)> &func)
 	{
 		return delegate<RetV, Types ...>(func);
 	}
 
-	static delegate<RetV, Types ...> create_weak_lambda(const std::weak_ptr<void> &object_ptr, const std::function<RetV(Types ...)>& func)
+	static delegate<RetV, Types ...> create_weak_function(const std::weak_ptr<void> &object_ptr, const std::function<RetV(Types ...)>& func)
 	{
 		return delegate<RetV, Types ...>(object_ptr, func);
 	}
-
-	/*static delegate<RetV, Types ...> create_static(const std::function<RetV(Types ...)> &func)
-	{
-		return delegate<RetV, Types ...>();
-	}*/
 
 	bool is_bound() const
 	{
@@ -61,22 +56,16 @@ public:
 		return m_func ? true : false;
 	}
 
-	void execute()
+	RetV execute(Types ... args)
 	{
-		m_func();
-	}
-
-	void execute_if_bound()
-	{
-		if (is_bound())
-			m_func();
+		return m_func(args ...);
 	}
 };
 
-template<typename RetV, typename ... Types>
+template<typename ... Types>
 class multicast_delegate
 {
-	typedef delegate<RetV, Types ...> DelegateType;
+	typedef delegate<void, Types ...> DelegateType;
 
 private:
 	std::vector<DelegateType> delegates;
@@ -84,7 +73,7 @@ private:
 
 public:
 
-	guid bind(const DelegateType& delegate)
+	guid bind(const DelegateType &delegate)
 	{
 		delegates.push_back(delegate);
 		const auto guid = guid::new_guid();
@@ -102,7 +91,7 @@ public:
 		}
 	}
 
-	void broadcast()
+	void broadcast(Types ... args)
 	{
 		/*delegate_ids.erase(
 			std::remove_if(delegate_ids.begin(), delegate_ids.end(), [&](const auto& delegate)->bool { return !delegate.is_bound(); }),
@@ -111,7 +100,8 @@ public:
 
 		for (auto &delegate : delegates)
 		{
-			delegate.execute_if_bound();
+			if (delegate.is_bound())
+				delegate.execute(args ...);
 		}
 	}
 };

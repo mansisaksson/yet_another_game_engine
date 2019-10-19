@@ -16,11 +16,8 @@ private:
 
 public:
 	gl_texture(const texture_data& t_texture_data);
+	~gl_texture();
 
 	virtual void bind(uint32_t unit) override;
 
-protected:
-
-	virtual void init_texture(const texture_data& t_texture_data) override;
-	virtual void destroy_texture() override;
 };

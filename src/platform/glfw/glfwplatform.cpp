@@ -1,53 +1,22 @@
+
+#include <GL/glew.h>
+
 #include "glfwplatform.h"
 #include "glfwinput.h"
 #include "glfwwindow.h"
-
-//#include <stdlib.h>
-//
-//void shut_down(int code)
-//{
-//	glfwTerminate();
-//	exit(code);
-//}
-//
-//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-//{
-//	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-//		glfwSetWindowShouldClose(window, GLFW_TRUE);
-//}
-//
-//int main()
-//{
-//	glfwInit();
-//	if (!glfwInit())
-//	{
-//		shut_down(1);
-//	}
-//
-//	GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
-//	if (!window)
-//	{
-//		shut_down(1);
-//	}
-//
-//	glfwMakeContextCurrent(window);
-//
-//	while (!glfwWindowShouldClose(window))
-//	{
-//		// Keep running
-//		glfwPollEvents();
-//	}
-//
-//    return 0;
-//}
 
 glfw_platform::glfw_platform()
 {
 	glfwInit();
 	if (!glfwInit())
 	{
-		// TODO: error
+		log::error("glfw_platform", "Failed to initialize glfw");
+		exit(EXIT_FAILURE);
 	}
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 glfw_platform::~glfw_platform()

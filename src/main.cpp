@@ -1,3 +1,4 @@
+#include "core/core.h"
 #include "tavla/tavla.h"
 #include "tavla/tavlaapplication.h"
 #include "tavla/tavlawindow.h"
@@ -16,7 +17,7 @@ int main()
 {
 	const auto application = std::make_shared<tavla_application>();
 	application
-		/*->add_slot()
+		->add_slot()
 		->set_content
 		(
 			std::make_shared<tavla_window>()
@@ -28,7 +29,7 @@ int main()
 				nullptr
 			)
 		)
-		->add_slot()
+		/*->add_slot()
 		->set_content
 		(
 			std::make_shared<tavla_window>()
@@ -38,18 +39,15 @@ int main()
 
 	tavla::build_tavla_tree(application);
 
-	auto test = delegate<void>::create_lambda(testfunc);
-	test.execute_if_bound();
+	//auto test = delegate<void>::create_lambda(testfunc);
+	//test.execute_if_bound();
+	//multicast_delegate<void> multicast_delegates;
+	//multicast_delegates.bind(test);
+	//multicast_delegates.broadcast();
 
-	multicast_delegate<void> multicast_delegates;
-	multicast_delegates.bind(test);
-
-	multicast_delegates.broadcast();
-
-	//asset_ptr<static_mesh> static_mesh_ptr("monkey3.obj");
-	asset_ptr<texture> texture_ptr("basic_texture");
-
-	//static_mesh* test = *static_mesh_ptr;
+	//asset_ptr<static_mesh> static_mesh_ptr("basic_mesh");
+	//asset_ptr<texture> texture_ptr("basic_texture");
+	//asset_ptr<material> my_material("basic_mat");
 
     return application->run();
 }

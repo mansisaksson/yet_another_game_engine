@@ -4,46 +4,44 @@
 class vector2
 {
 private:
-	glm::vec2 glm_vec;
-
 	vector2(const glm::vec2 &t_glm_vec)
-		: glm_vec(t_glm_vec.x, t_glm_vec.y)
-		, x(glm_vec.x)
-		, y(glm_vec.y)
+		: x(t_glm_vec.x)
+		, y(t_glm_vec.y)
 	{}
 
+	glm::vec2 to_glm() const
+	{
+		return glm::vec2(x, y);
+	}
+
 public:
-	float& x, y;
+	float x, y;
 
 	vector2()
-		: glm_vec(0, 0)
-		, x(glm_vec.x)
-		, y(glm_vec.y)
+		: x(0)
+		, y(0)
 	{}
 
 	vector2(float t_x, float t_y)
-		: glm_vec(t_x, t_y)
-		, x(glm_vec.x)
-		, y(glm_vec.y)
+		: x(t_x)
+		, y(t_y)
 	{}
 
 	vector2(const vector2& o)
-		: glm_vec(o.x, o.y)
-		, x(glm_vec.x)
-		, y(glm_vec.y)
+		: x(o.x)
+		, y(o.y)
 	{}
 
 	static const vector2 zero;
 
-
 	void normalize()
 	{
-		*this = glm::normalize(glm_vec);
+		*this = glm::normalize(to_glm());
 	}
 
 	vector2 get_normalized() const
 	{
-		return glm::normalize(glm_vec);
+		return glm::normalize(to_glm());
 	}
 
 
@@ -54,43 +52,49 @@ public:
 		return x == o.x && y == o.y;
 	}
 
-	inline vector2 operator=(const vector2& o) const
+	inline vector2& operator=(const vector2& o)
 	{
-		return o;
+		x = o.x;
+		y = o.y;
+		return *this;
 	}
 
-	vector2 operator-(const vector2& o)
-	{
-		return vector2(x - o.x, y - o.y);
-	}
-
-	vector2 operator+(const vector2& o)
-	{
-		return vector2(x * o.x, y * o.y);
-	}
-
-	void operator-=(const vector2& o)
+	inline vector2& operator-(const vector2& o)
 	{
 		x -= o.x;
 		y -= o.y;
+		return *this;
 	}
 
-	void operator+=(const vector2& o)
+	inline vector2& operator+(const vector2& o)
 	{
 		x += o.x;
 		y += o.y;
+		return *this;
+	}
+
+	inline vector2& operator-=(const vector2& o)
+	{
+		*this = *this - o;
+		return *this;
+	}
+
+	inline vector2& operator+=(const vector2& o)
+	{
+		*this = *this + o;
+		return *this;
 	}
 
 	template<typename U>
-	vector2 operator*(const U& scalar)
+	inline vector2& operator*(const U& scalar)
 	{
 		return vector2(x * scalar, y * scalar);
 	}
 
 	template<typename U>
-	vector2 operator/(const U& scalar)
+	inline vector2& operator/(const U& scalar)
 	{
-		return vector2(x / scalar, y / scalar, z / scalar);
+		return vector2(x / scalar, y / scalar);
 	}
 
 	/* ~End: Operators */

@@ -3,12 +3,7 @@
 
 static_mesh::static_mesh(const indexed_model& t_model)
 {
-	init_mesh(t_model);
-}
-
-static_mesh::~static_mesh()
-{
-	destroy_mesh();
+	m_materials.push_back(asset_ptr<material>(t_model.material_ref));
 }
 
 std::shared_ptr<static_mesh> static_mesh::create_mesh(const indexed_model& t_model)

@@ -19,7 +19,7 @@ private:
 
 	GLuint m_vertexArrayObject;
 	GLuint m_vertexArrayBuffers[NUM_BUFFERES];
-	uint32_t m_drawCount;
+	uint32_t m_drawCount = 0;
 
 private:
 	gl_static_mesh() = delete;
@@ -28,12 +28,9 @@ private:
 	bool operator=(const gl_static_mesh&) = delete;
 
 public:
-	gl_static_mesh(const indexed_model& model);
+	gl_static_mesh(const indexed_model& t_model);
+	~gl_static_mesh();
 
 	virtual void draw() override;
-
-protected:
-	virtual void init_mesh(const indexed_model& model) override;
-	virtual void destroy_mesh() override;
 
 };

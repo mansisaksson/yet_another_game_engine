@@ -3,5 +3,7 @@ add_sources(
     "gl_staticmesh.cpp"
 	"gl_texture.h"
     "gl_texture.cpp"
+	"gl_material.h"
+    "gl_material.cpp"
 	"CMakeLists.txt"
 )

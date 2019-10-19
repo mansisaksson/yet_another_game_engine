@@ -4,46 +4,55 @@
 class quaternion
 {
 private:
-	glm::quat glm_quat;
-
 	quaternion(const glm::quat &t_glm_quat)
-		: glm_quat(t_glm_quat)
-		, x(glm_quat.x)
-		, y(glm_quat.y)
-		, z(glm_quat.z)
-		, w(glm_quat.w)
+		: x(t_glm_quat.x)
+		, y(t_glm_quat.y)
+		, z(t_glm_quat.z)
+		, w(t_glm_quat.w)
 	{}
 
+	glm::quat to_glm() const
+	{
+		return glm::quat(x, y, z, w);
+	}
+
 public:
-	float &x, y, z, w;
+	float x, y, z, w;
 
 	quaternion()
-		: glm_quat(glm::quat(1, 0, 0, 0))
-		, x(glm_quat.x)
-		, y(glm_quat.y)
-		, z(glm_quat.z)
-		, w(glm_quat.w)
+		: x(0)
+		, y(0)
+		, z(0)
+		, w(0)
 	{}
 
 	quaternion(float x, float y, float z, float w)
-		: glm_quat(glm::quat(x, y, z, w))
-		, x(glm_quat.x)
-		, y(glm_quat.y)
-		, z(glm_quat.z)
-		, w(glm_quat.w)
+		: x(x)
+		, y(y)
+		, z(z)
+		, w(w)
 	{}
 
 	quaternion(const quaternion &o)
-		: glm_quat(glm::quat(o.x, o.y, o.z, o.w))
-		, x(glm_quat.x)
-		, y(glm_quat.y)
-		, z(glm_quat.z)
-		, w(glm_quat.w)
+		: x(o.x)
+		, y(o.y)
+		, z(o.z)
+		, w(o.w)
 	{}
 
-	inline quaternion operator*(const quaternion& o) const
+	inline quaternion& operator*(const quaternion& o)
 	{
-		return glm_quat * o.glm_quat;
+		*this = quaternion(to_glm() * o.to_glm());
+		return *this;
+	}
+
+	inline quaternion& operator=(const quaternion& o)
+	{
+		x = o.x;
+		y = o.y;
+		z = o.z;
+		w = o.w;
+		return *this;
 	}
 
 	static const quaternion identity;

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "tavla.h"
+#include "assetmanager/assetptr.h"
 
+class static_mesh;
 class platform_window;
 
 class tavla_window : public tavla_base<tavla_window>
@@ -28,10 +30,13 @@ public:
 private:
 	std::shared_ptr<platform_window> m_window;
 
+	asset_ptr<static_mesh> static_mesh_ptr;
+
 public:
 	// ~begin tavla interface
 	virtual void construct() override;
 	virtual void destruct() override;
 	virtual void tick(float t_delta_time) override;
+	virtual void draw() override;
 	// ~end tavla interface
 };

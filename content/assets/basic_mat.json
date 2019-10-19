@@ -3,6 +3,6 @@
 	"fragment_shader": "/data/basicFragmentShader.glsl",
 	"vertex_shader": "/data/basicVertexShader.glsl",
 	"textures": [
-		"/assets/basic_texture"
+		"basic_texture"
 	]
 }

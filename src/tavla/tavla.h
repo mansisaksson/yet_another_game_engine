@@ -46,10 +46,11 @@ public:
 	virtual void construct() {};
 	virtual void destruct() {};
 	virtual void tick(float t_delta_time) {};
+	virtual void draw() {};
 	// ~end tavla interface
 
 	static void tick_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla, const float t_delta_time);
-
+	static void draw_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla);
 	static void build_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla);
 
 	static void traverse_tree(

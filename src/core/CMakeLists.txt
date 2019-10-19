@@ -1,5 +1,6 @@
 add_sources(
     "core.h"
+	"color.h"
 	"input.h"
 	"guid.h"
 	"math.h"

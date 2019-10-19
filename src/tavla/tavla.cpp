@@ -3,7 +3,16 @@
 void tavla::tick_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla, const float t_delta_time)
 {
 	traverse_tree(t_root_tavla, [t_delta_time](const std::shared_ptr<tavla>& t_tavla) {
-		t_tavla->tick(t_delta_time);
+		if (t_tavla->m_constructed)
+			t_tavla->tick(t_delta_time);
+	});
+}
+
+void tavla::draw_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla)
+{
+	traverse_tree(t_root_tavla, [](const std::shared_ptr<tavla>& t_tavla) {
+		if (t_tavla->m_constructed)
+			t_tavla->draw();
 	});
 }
 

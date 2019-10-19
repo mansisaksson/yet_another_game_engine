@@ -3,6 +3,7 @@
 #include "input.h"
 #include "guid.h"
 #include "math.h"
+#include "color.h"
 #include "vector3.h"
 #include "vector2.h"
 #include "quaternion.h"

@@ -2,19 +2,7 @@
 #include <cassert>
 
 gl_texture::gl_texture(const texture_data& t_texture_data)
-	: texture(t_texture_data)
-{
-}
-
-void gl_texture::bind(uint32_t unit)
-{
-	assert(unit >= 0 && unit <= 31);
-
-	glActiveTexture(GL_TEXTURE0 + unit);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-}
-
-void gl_texture::init_texture(const texture_data& t_texture_data)
+	: texture()
 {
 	glGenTextures(1, &m_texture);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -52,7 +40,15 @@ void gl_texture::init_texture(const texture_data& t_texture_data)
 	);
 }
 
-void gl_texture::destroy_texture()
+gl_texture::~gl_texture()
 {
 	glDeleteTextures(1, &m_texture);
+}
+
+void gl_texture::bind(uint32_t unit)
+{
+	assert(unit >= 0 && unit <= 31);
+
+	glActiveTexture(GL_TEXTURE0 + unit);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
 }

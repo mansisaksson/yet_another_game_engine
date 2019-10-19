@@ -318,7 +318,7 @@ vector2 obj_model::parse_obj_vec2(const std::string& line) const
 	unsigned int vertIndexEnd = FindNextChar(vertIndexStart, tokenString, tokenLength, ' ');
 
 	float x = ParseOBJFloatValue(line, vertIndexStart, vertIndexEnd);
-
+	
 	vertIndexStart = vertIndexEnd + 1;
 	vertIndexEnd = FindNextChar(vertIndexStart, tokenString, tokenLength, ' ');
 
