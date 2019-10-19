@@ -31,55 +31,136 @@ public:
 	static const color green;
 	static const color blue;
 
-	/* ~Begin: Operators */
+	/* Operators */
 
-	inline bool operator==(const color& o) const
+	inline color& operator=(const color& rhs)
 	{
-		return r == o.r && g == o.g && b == o.b && a == o.a;
+		r = rhs.r;
+		g = rhs.g;
+		b = rhs.b;
+		return *this;
 	}
 
-	inline color operator=(const color& o) const
+	inline color& operator-=(const color& rhs)
 	{
-		return o;
+		r -= rhs.r;
+		g -= rhs.g;
+		b -= rhs.b;
+		return *this;
 	}
 
-	color operator-(const color& o)
+	inline color& operator+=(const color& rhs)
 	{
-		return color(r - o.r, g - o.g, b - o.b, a - o.a);
+		r += rhs.r;
+		g += rhs.g;
+		b += rhs.b;
+		return *this;
 	}
 
-	color operator+(const color& o)
+	inline color& operator*=(const color& rhs)
 	{
-		return color(r + o.r, g + o.g, b + o.b, a + o.a);
+		r *= rhs.r;
+		g *= rhs.g;
+		b *= rhs.b;
+		return *this;
 	}
 
-	void operator-=(const color& o)
+	inline color& operator/=(const color& rhs)
 	{
-		r -= o.r;
-		g -= o.g;
-		b -= o.b;
-	}
-
-	void operator+=(const color& o)
-	{
-		r += o.b;
-		g += o.g;
-		b += o.b;
+		r *= rhs.r;
+		g *= rhs.g;
+		b *= rhs.b;
+		return *this;
 	}
 
 	template<typename U>
-	color operator*(const U& scalar)
+	inline color operator*=(const U& scalar)
 	{
-		return color(r * scalar, g * scalar, b * scalar, a * scalar);
+		return color(x * scalar, y * scalar, z * scalar);
 	}
 
 	template<typename U>
-	color operator/(const U& scalar)
+	inline color& operator/=(const U& scalar)
 	{
-		return color(r / scalar, g / scalar, b / scalar, a / scalar);
+		return color(x / scalar, y / scalar, z / scalar);
 	}
 
-	/* ~End: Operators */
+	uint8_t& operator[](int idx)
+	{
+		assert(idx > 0 && idx < 3 && "color - index out of range");
 
+		switch (idx)
+		{
+		case 0:
+			return r;
+		case 1:
+			return g;
+		case 2:
+			return b;
+		}
+	}
+
+	const uint8_t& operator[](int idx) const
+	{
+		assert(idx > 0 && idx < 3 && "color - index out of range");
+
+		switch (idx)
+		{
+		case 0:
+			return r;
+		case 1:
+			return g;
+		case 2:
+			return b;
+		}
+	}
 
 };
+
+
+
+/* Comparison operators */
+
+inline bool operator==(const color& lhs, const color& rhs) { return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b; }
+inline bool operator!=(const color& lhs, const color& rhs) { return !operator==(lhs, rhs); }
+
+
+/* Assignment operators */
+
+inline color operator+(color lhs, const color& rhs)
+{
+	lhs += rhs;
+	return lhs;
+}
+
+inline color operator-(color lhs, const color& rhs)
+{
+	lhs -= rhs;
+	return lhs;
+}
+
+inline color operator*(color lhs, const color& rhs)
+{
+	lhs *= rhs;
+	return lhs;
+}
+
+inline color operator/(color lhs, const color& rhs)
+{
+	lhs /= rhs;
+	return lhs;
+}
+
+template<typename U>
+inline color operator*(color lhs, const U& scalar)
+{
+	lhs *= scalar;
+	return lhs;
+}
+
+template<typename U>
+inline color& operator/(color lhs, const U& scalar)
+{
+	lhs /= scalar;
+	return lhs;
+}
