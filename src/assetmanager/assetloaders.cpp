@@ -118,8 +118,8 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 	}
 
 	const std::string data_asset = local::parse_string(json_asset, "data_asset");
-	const std::string data_format = local::parse_string(json_asset, "data_format");
-	const std::string render_format = local::parse_string(json_asset, "render_format");
+	//const std::string data_format = local::parse_string(json_asset, "data_format");
+	//const std::string render_format = local::parse_string(json_asset, "render_format");
 
 	const std::string data_asset_path = paths::combine_paths(paths::content_dir(), data_asset);
 	
@@ -133,11 +133,12 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 		return nullptr;
 	}
 
-	if (num_comp == 1)
-		tex_data.data_format = texture_format::GREYSCALE;
-	else if (num_comp == 3)
-		tex_data.data_format = texture_format::RGB;
-	else
+	// TODO: should allow for different texture formats
+	//if (num_comp == 1)
+	//	tex_data.data_format = texture_format::GREYSCALE;
+	//else if (num_comp == 3)
+	//	tex_data.data_format = texture_format::RGB;
+	//else
 		tex_data.data_format = texture_format::RGBA;
 	
 	tex_data.render_format = tex_data.data_format;
