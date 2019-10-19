@@ -40,20 +40,34 @@ public:
 		, w(o.w)
 	{}
 
-	inline quaternion& operator*(const quaternion& o)
+	inline quaternion& operator=(const quaternion &rhs)
+	{
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
+		w = rhs.w;
+		return *this;
+	}
+
+	inline quaternion& operator*=(const quaternion& o)
 	{
 		*this = quaternion(to_glm() * o.to_glm());
 		return *this;
 	}
 
-	inline quaternion& operator=(const quaternion& o)
-	{
-		x = o.x;
-		y = o.y;
-		z = o.z;
-		w = o.w;
-		return *this;
-	}
-
 	static const quaternion identity;
 };
+
+/* Comparison operators */
+
+inline bool operator==(const quaternion &lhs, const quaternion& rhs) { return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (rhs.z == lhs.z) && (lhs.w == rhs.w); }
+inline bool operator!=(const quaternion& lhs, const quaternion& rhs) { return !operator==(lhs, rhs); }
+
+
+/* Assignment operators */
+
+inline quaternion operator*(quaternion lhs, const quaternion& rhs)
+{
+	lhs *= rhs;
+	return lhs;
+}

@@ -36,10 +36,14 @@ public:
 		, z(o.z)
 	{}
 
+	/* statics */
+
 	static const vector3 zero;
 	static const vector3 up;
 	static const vector3 right;
 	static const vector3 forward;
+
+	/* vector math */
 
 	void normalize()
 	{
@@ -57,62 +61,134 @@ public:
 	}
 
 
-	/* ~Begin: Operators */
+	/* Operators */
 
-	inline bool operator==(const vector3& o) const
+	inline vector3& operator=(const vector3 &rhs)
 	{
-		return x == o.x && y == o.y;
-	}
-
-	inline vector3 operator=(const vector3& o)
-	{
-		x = o.x;
-		y = o.y;
-		z = o.z;
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
 		return *this;
 	}
 
-	inline vector3 operator-(const vector3& o)
+	inline vector3& operator-=(const vector3& rhs)
 	{
-		x -= o.x;
-		y -= o.y;
-		z -= o.z;
+		x -= rhs.x;
+		y -= rhs.y;
+		z -= rhs.z;
 		return *this;
 	}
 
-	inline vector3 operator+(const vector3& o)
+	inline vector3& operator+=(const vector3& rhs)
 	{
-		x += o.x;
-		y += o.y;
-		z += o.z;
+		x += rhs.x;
+		y += rhs.y;
+		z += rhs.z;
 		return *this;
 	}
 
-	inline vector3 operator-=(const vector3& o)
+	inline vector3& operator*=(const vector3& rhs)
 	{
-		*this = *this - o;
+		x *= rhs.x;
+		y *= rhs.y;
+		z *= rhs.z;
 		return *this;
 	}
 
-	inline vector3 operator+=(const vector3& o)
+	inline vector3& operator/=(const vector3& rhs)
 	{
-		*this = *this + o;
+		x *= rhs.x;
+		y *= rhs.y;
+		z *= rhs.z;
 		return *this;
 	}
 
 	template<typename U>
-	inline vector3 operator*(const U& scalar)
+	inline vector3 operator*=(const U& scalar)
 	{
 		return vector3(x * scalar, y * scalar, z * scalar);
 	}
 
 	template<typename U>
-	inline vector3& operator/(const U& scalar)
+	inline vector3& operator/=(const U& scalar)
 	{
 		return vector3(x / scalar, y / scalar, z / scalar);
 	}
 
-	/* ~End: Operators */
+	float& operator[](int idx)
+	{
+		assert(idx > 0 && idx < 3 && "vector3 - index out of range");
 
+		switch (idx)
+		{
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		}
+	}
 
+	const float& operator[](int idx) const
+	{
+		assert(idx > 0 && idx < 3 && "vector3 - index out of range");
+
+		switch (idx)
+		{
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		}
+	}
 };
+
+
+/* Comparison operators */
+
+inline bool operator==(const vector3& lhs, const vector3& rhs) { return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z; }
+inline bool operator!=(const vector3& lhs, const vector3& rhs) { return !operator==(lhs, rhs); }
+
+
+/* Assignment operators */
+
+inline vector3 operator+(vector3 lhs, const vector3& rhs)
+{
+	lhs += rhs;
+	return lhs;
+}
+
+inline vector3 operator-(vector3 lhs, const vector3& rhs)
+{
+	lhs -= rhs;
+	return lhs;
+}
+
+inline vector3 operator*(vector3 lhs, const vector3& rhs)
+{
+	lhs *= rhs;
+	return lhs;
+}
+
+inline vector3 operator/(vector3 lhs, const vector3& rhs)
+{
+	lhs /= rhs;
+	return lhs;
+}
+
+template<typename U>
+inline vector3 operator*(vector3 lhs, const U& scalar)
+{
+	lhs *= scalar;
+	return lhs;
+}
+
+template<typename U>
+inline vector3& operator/(vector3 lhs, const U& scalar)
+{
+	lhs /= scalar;
+	return lhs;
+}

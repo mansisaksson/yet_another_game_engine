@@ -31,15 +31,22 @@ public:
 		log::info("asset_ptr", "Asset Ptr Destroyed: %s", m_asset_path.c_str());
     }
 
+	/* Pointer-like Type operators */
+
 	T* get() const
 	{
 		return m_shared_asset_ptr.get();
 	}
 
-    T *operator->() const
-    {
-        return m_shared_asset_ptr.get();
-    }
+	T& operator*() const
+	{
+		return *m_shared_asset_ptr;
+	}
+
+	T* operator->() const
+	{
+		return get();
+	}
 
 	operator bool() const 
 	{
