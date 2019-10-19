@@ -11,5 +11,6 @@ add_sources(
 	"delegate.h"
 	"paths.h"
 	"paths.cpp"
+	"log.h"
     "CMakeLists.txt"
 )

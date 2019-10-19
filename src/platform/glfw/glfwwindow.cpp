@@ -17,7 +17,7 @@ void glfw_window::init(int t_width, int t_height, std::string t_title)
 	m_window = glfwCreateWindow(t_width, t_height, t_title.c_str(), NULL, NULL);
 	if (!m_window)
 	{
-		std::cout << "NO WINDOW!\n";
+		log::error("glfw_window", "NO WINDOW");
 		return;
 	}
 

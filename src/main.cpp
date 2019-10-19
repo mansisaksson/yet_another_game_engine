@@ -6,7 +6,10 @@
 
 void testfunc()
 {
-	std::cout << "Hello\n";
+	int i = 1337;
+	float f = 1.1234f;
+	std::string s = "this is a string";
+	log::info("test_log", "log int: %d, log float: %f, log string: %s", i, f, s.c_str());
 }
 
 int main()
