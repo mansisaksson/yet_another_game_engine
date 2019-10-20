@@ -3,6 +3,8 @@
 #include "tavla/tavlaapplication.h"
 #include "tavla/tavlawindow.h"
 #include "tavla/tavlaviewport.h"
+#include "tavla/primitives/verticalbox.h"
+#include "tavla/primitives/horizontalbox.h"
 #include "assetmanager/assetptr.h"
 #include "rendercore/rendercore.h"
 
@@ -24,13 +26,30 @@ int main()
 			std::make_shared<tavla_window>()
 			->set_property(&tavla_window::width, 1280)
 			->set_property(&tavla_window::height, 720)
-
 			->add_slot()
-			->set_property(&tavla_window::slot::h_alignment, slot_h_alignment::fill)
-			->set_property(&tavla_window::slot::v_alignment, slot_v_alignment::fill)
 			->set_content
 			(
-				std::make_shared<tavla_viewport>()
+				std::make_shared<vertical_box>()
+				->add_slot()
+				->set_content
+				(
+					std::make_shared<horizontal_box>()
+					->add_slot()
+					->set_content
+					(
+						std::make_shared<tavla_viewport>()
+					)
+					->add_slot()
+					->set_content
+					(
+						std::make_shared<tavla_viewport>()
+					)
+				)
+				->add_slot()
+				->set_content
+				(
+					std::make_shared<tavla_viewport>()
+				)
 			)
 		)
 		/*->add_slot()
@@ -41,7 +60,7 @@ int main()
 			->set_property(&tavla_window::height, 720)
 		)*/;
 
-	tavla::build_tavla_tree(application);
+	tavla::construct_tavla_tree(application);
 
 	//auto test = delegate<void>::create_lambda(testfunc);
 	//test.execute_if_bound();

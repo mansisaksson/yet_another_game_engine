@@ -5,14 +5,24 @@
 #include <iostream>
 #include <functional>
 
+struct dimensions
+{
+	int width	= 100;
+	int height	= 100;
+	int x_pos	= 0;
+	int y_pos	= 0;
+};
+
 class tavla : public std::enable_shared_from_this<tavla>
 {
 protected:
 	class slot : public std::enable_shared_from_this<slot>
 	{
+		friend class tavla;
 	protected:
 		std::weak_ptr<tavla> m_parent;
 		std::shared_ptr<tavla> m_content;
+		dimensions m_dimensions;
 
 	public:
 		slot(std::shared_ptr<tavla> t_parent)
@@ -23,6 +33,7 @@ protected:
 
 		inline const std::shared_ptr<tavla> &get_content() const { return m_content; };
 		inline const std::weak_ptr<tavla> &get_parent_tavla() const { return m_parent; };
+		inline const dimensions& get_dimensions() const { return m_dimensions; };
 
 		inline void set_parent_tavla(const std::weak_ptr<tavla>& t_parent) { m_parent = t_parent; };
 	};
@@ -53,21 +64,25 @@ public:
 	virtual void tick(float t_delta_time) {};
 	virtual void draw() {};
 	virtual void post_draw() {};
+	virtual dimensions calculate_slot_dimentions(const std::shared_ptr<tavla::slot>& t_slot) const { return get_tavla_dimentions(); };
 	// ~end tavla interface
+
+	inline const std::vector<std::shared_ptr<tavla::slot>>& get_child_slots() const { return m_child_slots; }
+	inline const std::weak_ptr<tavla::slot>& get_parent_slot() const { return m_parent_slot; }
+	
+	virtual dimensions get_tavla_dimentions() const;
+
+	inline void set_parent_slot(const std::weak_ptr<tavla::slot>& t_parent_slot) { m_parent_slot = t_parent_slot; };
 
 	static void tick_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla, const float t_delta_time);
 	static void draw_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla);
-	static void build_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla);
+	static void construct_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla);
+	static void calculate_tavla_tree_dimensions(const std::shared_ptr<tavla>& t_root_tavla);
 
 	static void traverse_tree(
 		const std::shared_ptr<tavla>& t_root_tavla,
 		const std::function<void(const std::shared_ptr<tavla>&)>& callback
 	);
-
-	inline const std::vector<std::shared_ptr<tavla::slot>>& get_child_slots() const { return m_child_slots; }
-	inline const std::weak_ptr<tavla::slot>& get_parent_slot() const { return m_parent_slot; }
-
-	inline void set_parent_slot(const std::weak_ptr<tavla::slot>& t_parent_slot) { m_parent_slot = t_parent_slot; };
 };
 
 template<class tavla_class>

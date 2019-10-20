@@ -5,31 +5,11 @@
 
 class platform_window;
 
-enum class slot_h_alignment
-{
-	fill,
-	left,
-	right,
-	center
-};
-
-enum class slot_v_alignment
-{
-	fill,
-	top,
-	bottom,
-	center
-};
-
 class tavla_window : public tavla_base<tavla_window>
 {
 public:
 	class slot : public tavla_base::slot<tavla_window::slot>
 	{
-	public:
-		slot_h_alignment h_alignment = slot_h_alignment::fill;
-		slot_v_alignment v_alignment = slot_v_alignment::fill;
-
 	public:
 		slot(const std::shared_ptr<tavla_window> & t_parent)
 			: tavla_base::slot<tavla_window::slot>(t_parent)
@@ -57,6 +37,8 @@ public:
 	virtual void draw() override;
 	virtual void post_draw() override;
 	// ~end tavla interface
+
+	virtual dimensions get_tavla_dimentions() const override;
 
 	std::tuple<int, int> get_window_size() const;
 

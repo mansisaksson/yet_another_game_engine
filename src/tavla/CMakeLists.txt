@@ -7,5 +7,9 @@ add_sources(
 	"tavlaviewport.cpp"
     "tavlawindow.h"
     "tavlawindow.cpp"
+	"primitives/verticalbox.h"
+	"primitives/verticalbox.cpp"
+	"primitives/horizontalbox.h"
+	"primitives/horizontalbox.cpp"
     "CMakeLists.txt"
 )

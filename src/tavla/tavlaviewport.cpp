@@ -28,10 +28,10 @@ void tavla_viewport::draw()
 		return;
 	}
 
-	const auto window_size = parent_window.lock()->get_window_size();
+	const dimensions viewport_dimensions = get_tavla_dimentions();
 	
-	m_viewport->update_viewport(vector3(-10, 0, 0), 70.f, (float)std::get<0>(window_size) / (float)std::get<1>(window_size), 0.01f, 10000.f);
-	m_viewport->make_current(0, 0, std::get<0>(window_size), std::get<1>(window_size));
+	m_viewport->update_viewport(vector3(-10, 0, 0), 70.f, (float)viewport_dimensions.width / (float)viewport_dimensions.height, 0.01f, 10000.f);
+	m_viewport->make_current(viewport_dimensions.x_pos, viewport_dimensions.y_pos, viewport_dimensions.width, viewport_dimensions.height);
 
 	if (static_mesh_ptr)
 		static_mesh_ptr->draw(transform::identity, *m_viewport);

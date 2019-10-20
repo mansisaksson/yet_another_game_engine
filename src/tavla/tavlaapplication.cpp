@@ -25,6 +25,7 @@ int tavla_application::run()
 	float time = 0;
 	while (true)
 	{
+		tavla::calculate_tavla_tree_dimensions(shared_from_this());
 		tavla::tick_tavla_tree(shared_from_this(), time);
 		time += 1;
 		tavla::draw_tavla_tree(shared_from_this());

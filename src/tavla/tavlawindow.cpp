@@ -39,6 +39,12 @@ void tavla_window::post_draw()
 	m_window->swap_buffers();
 }
 
+dimensions tavla_window::get_tavla_dimentions() const
+{
+	const auto window_size = get_window_size();
+	return { std::get<0>(window_size), std::get<1>(window_size), 0, 0 };
+}
+
 std::tuple<int, int> tavla_window::get_window_size() const
 {
 	return m_window ? m_window->get_window_size() : std::tuple<int, int>{ 0, 0 };
