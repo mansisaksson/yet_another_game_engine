@@ -11,4 +11,5 @@ public:
 private:
 	virtual std::shared_ptr<platform_window> create_platform_window() override;
 	virtual std::shared_ptr<platform_input> create_platform_input() override;
+	virtual float get_platform_time() const override;
 };

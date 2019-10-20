@@ -22,13 +22,17 @@ void tavla_application::tick(float t_delta_time)
 
 int tavla_application::run()
 {
-	float time = 0;
+	float old_time = platform::get_time();
 	while (true)
 	{
+		const float new_time = platform::get_time();
+		const float delta_time = new_time - old_time;
+
 		tavla::calculate_tavla_tree_dimensions(shared_from_this());
-		tavla::tick_tavla_tree(shared_from_this(), time);
-		time += 1;
+		tavla::tick_tavla_tree(shared_from_this(), delta_time);
 		tavla::draw_tavla_tree(shared_from_this());
+
+		old_time = new_time;
 	}
 
 	return 0;

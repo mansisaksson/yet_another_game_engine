@@ -21,3 +21,8 @@ std::shared_ptr<platform_input> platform::get_platform_input()
 	static const auto l_platform_input = get_platform()->create_platform_input();
 	return l_platform_input;
 }
+
+float platform::get_time()
+{
+	return get_platform()->get_platform_time();
+}

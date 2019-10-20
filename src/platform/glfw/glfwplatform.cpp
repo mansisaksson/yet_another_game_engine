@@ -33,3 +33,8 @@ std::shared_ptr<platform_input> glfw_platform::create_platform_input()
 {
 	return std::make_shared<glfw_input>();
 }
+
+float glfw_platform::get_platform_time() const
+{
+	return (float)glfwGetTime();
+}
