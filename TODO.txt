@@ -1,4 +1,17 @@
-[ ] Implement tavla_window
+[x] Implement tavla_window
+
+[ ] Implement tavla_viewport
+	[x] make gl_viewport
+	[ ] allow for multiple viewports
+
+
+[ ] Setup UI sizing system
+	[ ] Set fill mode on slots
+	[ ] Create primitive UI types
+		[ ] Vertical box
+		[ ] Horizontal box
+		[ ] Grid
+		[ ] Overlay
 
 [ ] Draw something
 	[x] Add static mesh
@@ -6,8 +19,8 @@
 	[x] Add texture
 		[x] Load texture
 	[ ] Add camea
-	[ ] Add materials/shaders
-	[ ] Abstract the drawing
+	[x] Add materials/shaders
+	[x] Abstract the drawing
 	
 [x] Add input
 	[x] Abstract the input

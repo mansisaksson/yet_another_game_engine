@@ -5,5 +5,7 @@ add_sources(
     "gl_texture.cpp"
 	"gl_material.h"
     "gl_material.cpp"
+	"gl_viewport.h"
+	"gl_viewport.cpp"
 	"CMakeLists.txt"
 )
