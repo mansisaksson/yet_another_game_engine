@@ -2,14 +2,14 @@
 
 [ ] Implement tavla_viewport
 	[x] make gl_viewport
-	[ ] allow for multiple viewports
+	[x] allow for multiple viewports
 
 
 [ ] Setup UI sizing system
 	[ ] Set fill mode on slots
 	[ ] Create primitive UI types
-		[ ] Vertical box
-		[ ] Horizontal box
+		[x] Vertical box
+		[x] Horizontal box
 		[ ] Grid
 		[ ] Overlay
 
@@ -21,6 +21,9 @@
 	[ ] Add camea
 	[x] Add materials/shaders
 	[x] Abstract the drawing
+	
+[ ] Core types
+	[ ] Rectangle // Used for aligning ui elements, such as the viewport
 	
 [x] Add input
 	[x] Abstract the input

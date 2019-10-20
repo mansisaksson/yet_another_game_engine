@@ -10,5 +10,6 @@ add_sources(
 	"material.h"
 	"material.cpp"
 	"viewport.h"
+	"viewport.cpp"
     "CMakeLists.txt"
 )

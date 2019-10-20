@@ -1,12 +1,13 @@
 #include "gl_viewport.h"
 #include <GL/glew.h>
 
-gl_viewport::gl_viewport(const vector3& t_location, float t_fov, float t_aspect, float t_z_near, float t_z_far)
-	: viewport(t_location, t_fov, t_aspect, t_z_near, t_z_far)
+std::tuple<int, int> yete_to_gl_coordinates(int x, int y, int width, int height, int window_width, int window_height)
 {
+	return { x, window_height - y - height };
 }
 
-void gl_viewport::make_current(int x, int y, int width, int height)
+void gl_viewport::make_current(int x, int y, int width, int height, int window_width, int widow_height)
 {
-	glViewport(x, y, width, height);
+	const auto gl_coordinates = yete_to_gl_coordinates(x, y, width, height, window_width, widow_height);
+	glViewport(std::get<0>(gl_coordinates), std::get<1>(gl_coordinates), width, height);
 }

@@ -28,6 +28,13 @@ private:
 	std::shared_ptr<viewport> m_viewport;
 
 public:
+	float fov;
+	float near_plane;
+	float far_plane;
+
+public:
+	tavla_viewport();
+
 	// ~begin tavla interface
 	virtual void construct() override;
 	virtual void destruct() override;

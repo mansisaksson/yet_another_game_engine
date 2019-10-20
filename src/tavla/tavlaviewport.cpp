@@ -1,11 +1,19 @@
 #include "tavlaviewport.h"
 #include "tavlawindow.h"
 #include "rendercore/staticmesh.h"
-#include "rendercore/opengl/gl_viewport.h"
+#include "rendercore/viewport.h"
+
+tavla_viewport::tavla_viewport()
+	: fov(70.f)
+	, near_plane(0.01f)
+	, far_plane(10000.f)
+{
+
+}
 
 void tavla_viewport::construct()
 {
-	m_viewport = std::make_shared<gl_viewport>(vector3::zero, 70.f, 1280.f / 720.f, 0.01f, 10000.f);
+	m_viewport = viewport::create_viewport();
 	static_mesh_ptr = asset_ptr<static_mesh>("basic_mesh");
 }
 
@@ -28,10 +36,27 @@ void tavla_viewport::draw()
 		return;
 	}
 
+	const auto window_dimensions = parent_window.lock()->get_window_size();
 	const dimensions viewport_dimensions = get_tavla_dimentions();
 	
-	m_viewport->update_viewport(vector3(-10, 0, 0), 70.f, (float)viewport_dimensions.width / (float)viewport_dimensions.height, 0.01f, 10000.f);
-	m_viewport->make_current(viewport_dimensions.x_pos, viewport_dimensions.y_pos, viewport_dimensions.width, viewport_dimensions.height);
+	m_viewport->set_view_location(vector3(-10, 0, 0));
+	m_viewport->set_view_rotation(quaternion::identity);
+
+	m_viewport->set_view_perspective(
+		70.f, 
+		(float)viewport_dimensions.width / (float)viewport_dimensions.height,
+		near_plane,
+		far_plane
+	);
+
+	m_viewport->make_current(
+		viewport_dimensions.x_pos, 
+		viewport_dimensions.y_pos, 
+		viewport_dimensions.width, 
+		viewport_dimensions.height,
+		std::get<0>(window_dimensions),
+		std::get<1>(window_dimensions)
+	);
 
 	if (static_mesh_ptr)
 		static_mesh_ptr->draw(transform::identity, *m_viewport);
