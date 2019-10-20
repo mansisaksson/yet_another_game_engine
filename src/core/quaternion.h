@@ -40,6 +40,45 @@ public:
 		, w(o.w)
 	{}
 
+	/* statics */
+
+	static const quaternion identity;
+
+	/* quaternion math */
+
+	inline vector3 rotate_vector(vector3 v) const
+	{
+		const vector3 q(x, y, z);
+		const vector3 t = 2.f * vector3::cross(q, v);
+		const vector3 Result = v + (w * t) + vector3::cross(q, t);
+		return Result;
+	}
+
+	inline vector3 unrotate_vector(vector3 v) const
+	{
+		const vector3 q(-x, -y, -z);
+		const vector3 t = 2.f * vector3::cross(q, v);
+		const vector3 Result = v + (w * t) + vector3::cross(q, t);
+		return Result;
+	}
+
+	vector3 get_up() const
+	{
+		return rotate_vector(vector3::up);
+	}
+
+	vector3 get_right() const
+	{
+		return rotate_vector(vector3::right);
+	}
+
+	vector3 get_forward() const
+	{
+		return rotate_vector(vector3::forward);
+	}
+
+	/* Operators */
+
 	inline quaternion& operator=(const quaternion &rhs)
 	{
 		x = rhs.x;
@@ -55,7 +94,6 @@ public:
 		return *this;
 	}
 
-	static const quaternion identity;
 };
 
 /* Comparison operators */

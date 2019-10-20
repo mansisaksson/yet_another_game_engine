@@ -15,6 +15,8 @@ private:
 		return glm::vec3(x, y, z);
 	}
 
+	friend class matrix4x4;
+
 public:
 	float x, y, z;
 
@@ -39,6 +41,7 @@ public:
 	/* statics */
 
 	static const vector3 zero;
+	static const vector3 one;
 	static const vector3 up;
 	static const vector3 right;
 	static const vector3 forward;
@@ -117,25 +120,25 @@ public:
 
 	float& operator[](int idx)
 	{
-		assert(idx > 0 && idx < 3 && "vector3 - index out of range");
+		assert(idx >= 0 && idx < 3 && "vector3 - index out of range");
 
 		switch (idx)
 		{
 		case 0: return x;
 		case 1: return y;
-		case 2: return z;
+		default: return z;
 		}
 	}
 
 	const float& operator[](int idx) const
 	{
-		assert(idx > 0 && idx < 3 && "vector3 - index out of range");
+		assert(idx >= 0 && idx < 3 && "vector3 - index out of range");
 
 		switch (idx)
 		{
 		case 0: return x;
 		case 1: return y;
-		case 2: return z;
+		default: return z;
 		}
 	}
 };
@@ -178,6 +181,13 @@ inline vector3 operator*(vector3 lhs, const U& scalar)
 {
 	lhs *= scalar;
 	return lhs;
+}
+
+template<typename U>
+inline vector3 operator*(const U& scalar, vector3 rhs)
+{
+	rhs *= scalar;
+	return rhs;
 }
 
 template<typename U>

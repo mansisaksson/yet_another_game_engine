@@ -49,7 +49,7 @@ void gl_material::bind()
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <GLFW/glfw3.h>
-void gl_material::update(const transform& t_mesh_transform, const transform& t_view_transform)
+void gl_material::update(const transform& t_mesh_transform, const matrix4x4& t_view_matrix)
 {
 	struct local
 	{
@@ -73,7 +73,7 @@ void gl_material::update(const transform& t_mesh_transform, const transform& t_v
 	glm::mat4 m_perspective = glm::perspective(70.f, 1280.f / 720.f, 0.01f, 10000.f)
 		* glm::lookAt(pos, pos + forward, up);
 
-	const glm::mat4 model = m_perspective * local::GetModelMatrix();
+	const matrix4x4 model = t_view_matrix * t_mesh_transform.to_matrix();
 	glUniformMatrix4fv(
 		m_uniforms[TRANSFORM_U],
 		1,

@@ -36,6 +36,7 @@ public:
 	/* statics */
 
 	static const vector2 zero;
+	static const vector2 one;
 
 
 	/* vector math */
@@ -102,23 +103,23 @@ public:
 
 	float& operator[](int idx)
 	{
-		assert(idx > 0 && idx < 2 && "vector2 - index out of range");
+		assert(idx >= 0 && idx < 2 && "vector2 - index out of range");
 
 		switch (idx)
 		{
 		case 0: return x;
-		case 1: return y;
+		default: return y;
 		}
 	}
 
 	const float& operator[](int idx) const
 	{
-		assert(idx > 0 && idx < 2 && "vector2 - index out of range");
+		assert(idx >= 0 && idx < 2 && "vector2 - index out of range");
 
 		switch (idx)
 		{
 		case 0: return x;
-		case 1: return y;
+		default: return y;
 		}
 	}
 
@@ -162,6 +163,13 @@ inline vector2 operator*(vector2 lhs, const U& scalar)
 {
 	lhs *= scalar;
 	return lhs;
+}
+
+template<typename U>
+inline vector2 operator*(const U& scalar, vector2 rhs)
+{
+	rhs *= scalar;
+	return rhs;
 }
 
 template<typename U>

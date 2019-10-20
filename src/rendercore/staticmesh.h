@@ -2,6 +2,7 @@
 #include "core/core.h"
 #include "assetmanager/assetptr.h"
 
+class viewport;
 class material;
 
 struct indexed_model
@@ -30,6 +31,6 @@ protected:
 public:
 	static std::shared_ptr<static_mesh> create_mesh(const indexed_model& t_model);
 
-	virtual void draw() = 0;
+	virtual void draw(const transform &t_mesh_transform, viewport &t_viewport) = 0;
 
 };

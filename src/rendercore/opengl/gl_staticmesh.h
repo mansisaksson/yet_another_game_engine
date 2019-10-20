@@ -31,6 +31,6 @@ public:
 	gl_static_mesh(const indexed_model& t_model);
 	~gl_static_mesh();
 
-	virtual void draw() override;
+	virtual void draw(const transform& t_mesh_transform, viewport &t_viewport) override;
 
 };

@@ -14,6 +14,14 @@ public:
 		, scale(0.f)
 	{}
 
+	transform(const vector3& t_location, const quaternion &rotation, float scale)
+		: location(t_location)
+		, rotation(rotation)
+		, scale(scale)
+	{}
+
+	static const transform identity;
+
 	inline matrix4x4 to_matrix() const
 	{
 		matrix4x4 out_matrix;

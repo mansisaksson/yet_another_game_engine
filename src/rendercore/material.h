@@ -30,6 +30,6 @@ public:
 	static std::shared_ptr<material> create_material(const material_data& t_material_data);
 
 	virtual void bind() = 0;
-	virtual void update(const transform &t_mesh_transform, const transform &t_view_transform) = 0;
+	virtual void update(const transform &t_mesh_transform, const matrix4x4& t_view_matrix) = 0;
 
 };

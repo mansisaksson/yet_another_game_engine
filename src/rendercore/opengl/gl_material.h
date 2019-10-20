@@ -32,7 +32,7 @@ public:
 	~gl_material();
 
 	virtual void bind() override;
-	virtual void update(const transform &t_mesh_transform, const transform &t_view_transform) override;
+	virtual void update(const transform &t_mesh_transform, const matrix4x4& t_view_matrix) override;
 
 private:
 

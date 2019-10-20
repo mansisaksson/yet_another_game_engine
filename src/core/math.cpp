@@ -1,8 +1,10 @@
 #include "core.h"
 
 vector2 const vector2::zero = vector2(0.f, 0.f);
+vector2 const vector2::one = vector2(1.f, 1.f);
 
 vector3 const vector3::zero		= vector3(0.f, 0.f, 0.f);
+vector3 const vector3::one		= vector3(1.f, 1.f, 1.f);
 vector3 const vector3::up		= vector3(0.f, 0.f, 1.f);
 vector3 const vector3::right	= vector3(0.f, 1.f, 0.f);
 vector3 const vector3::forward	= vector3(1.f, 0.f, 0.f);
@@ -10,6 +12,12 @@ vector3 const vector3::forward	= vector3(1.f, 0.f, 0.f);
 vector4 const vector4::zero		= vector4(0.f, 0.f, 0.f, 0.f);
 
 quaternion const quaternion::identity = quaternion(1.f, 0.f, 0.f, 0.f);
+
+transform const transform::identity = transform(
+	vector3(0, 0, 0),
+	quaternion::identity,
+	1.f
+);
 
 matrix4x4 const matrix4x4::identity = matrix4x4(
 	vector4(1, 0, 0, 0),

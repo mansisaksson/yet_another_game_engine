@@ -124,27 +124,28 @@ public:
 
 	float& operator[](int idx)
 	{
-		assert(idx > 0 && idx < 4 && "vector4 - index out of range");
+		assert(idx >= 0 && idx < 4 && "vector4 - index out of range");
 
 		switch (idx)
 		{
 		case 0: return x;
 		case 1: return y;
 		case 2: return z;
-		case 3: return w;
+		default: return w;
 		}
+		return x;
 	}
 
 	const float& operator[](int idx) const
 	{
-		assert(idx > 0 && idx < 4 && "vector4 - index out of range");
+		assert(idx >= 0 && idx < 4 && "vector4 - index out of range");
 
 		switch (idx)
 		{
 		case 0: return x;
 		case 1: return y;
 		case 2: return z;
-		case 3: return w;
+		default: return w;
 		}
 	}
 };
@@ -187,6 +188,13 @@ inline vector4 operator*(vector4 lhs, const U& scalar)
 {
 	lhs *= scalar;
 	return lhs;
+}
+
+template<typename U>
+inline vector4 operator*(const U& scalar, vector4 rhs)
+{
+	rhs *= scalar;
+	return rhs;
 }
 
 template<typename U>

@@ -60,5 +60,7 @@ public:
 
 	std::tuple<int, int> get_window_size() const;
 
+	bool has_valid_context() const;
+
 	static std::weak_ptr<tavla_window> find_parent_window(const std::weak_ptr<tavla>& t_tavla);
 };

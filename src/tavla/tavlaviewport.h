@@ -4,6 +4,7 @@
 #include "assetmanager/assetptr.h"
 #include "gameframework/scene.h"
 
+class viewport;
 class static_mesh;
 
 class tavla_viewport : public tavla_base<tavla_viewport>
@@ -21,6 +22,10 @@ public:
 	{
 		return add_slot_of_type<tavla_viewport::slot>();
 	}
+
+private:
+
+	std::shared_ptr<viewport> m_viewport;
 
 public:
 	// ~begin tavla interface

@@ -44,6 +44,11 @@ std::tuple<int, int> tavla_window::get_window_size() const
 	return m_window ? m_window->get_window_size() : std::tuple<int, int>{ 0, 0 };
 }
 
+bool tavla_window::has_valid_context() const
+{
+	return m_window ? true : false;
+}
+
 std::weak_ptr<tavla_window> tavla_window::find_parent_window(const std::weak_ptr<tavla> &t_tavla)
 {
 	struct local

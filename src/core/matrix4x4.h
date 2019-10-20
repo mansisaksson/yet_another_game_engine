@@ -1,5 +1,6 @@
 #pragma once
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include "vector4.h"
 #include <array>
 
@@ -41,6 +42,16 @@ public:
 	/* statics */
 
 	static const matrix4x4 identity;
+
+	static matrix4x4 perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far)
+	{
+		return matrix4x4(glm::perspective(t_fov, t_aspect, t_z_near, t_z_far));
+	}
+
+	static matrix4x4 look_at(const vector3 &t_from, const vector3& t_to, const vector3& t_up)
+	{
+		return matrix4x4(glm::lookAt(t_from.to_glm(), t_to.to_glm(), t_up.to_glm()));
+	}
 
 	/* Operators */
 
@@ -97,13 +108,13 @@ public:
 
 	vector4& operator[](int idx)
 	{
-		assert(idx > 0 && idx < 4 && "matrix4x4 - index out of range");
+		assert(idx >= 0 && idx < 4 && "matrix4x4 - index out of range");
 		return matrix[idx];
 	}
 
 	const vector4& operator[](int idx) const
 	{
-		assert(idx > 0 && idx < 4 && "matrix4x4 - index out of range");
+		assert(idx >= 0 && idx < 4 && "matrix4x4 - index out of range");
 		return matrix[idx];
 	}
 };
