@@ -47,12 +47,12 @@ public:
 
 	void normalize()
 	{
-		*this = glm::normalize(to_glm());
+		*this = vector3(glm::normalize(to_glm()));
 	}
 
 	vector3 get_normalized() const
 	{
-		return glm::normalize(to_glm());
+		return vector3(glm::normalize(to_glm()));
 	}
 
 	static vector3 cross(const vector3& v1, const vector3& v2)
@@ -121,12 +121,9 @@ public:
 
 		switch (idx)
 		{
-		case 0:
-			return x;
-		case 1:
-			return y;
-		case 2:
-			return z;
+		case 0: return x;
+		case 1: return y;
+		case 2: return z;
 		}
 	}
 
@@ -136,12 +133,9 @@ public:
 
 		switch (idx)
 		{
-		case 0:
-			return x;
-		case 1:
-			return y;
-		case 2:
-			return z;
+		case 0: return x;
+		case 1: return y;
+		case 2: return z;
 		}
 	}
 };

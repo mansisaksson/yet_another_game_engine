@@ -42,12 +42,12 @@ public:
 
 	void normalize()
 	{
-		*this = glm::normalize(to_glm());
+		*this = vector2(glm::normalize(to_glm()));
 	}
 
 	vector2 get_normalized() const
 	{
-		return glm::normalize(to_glm());
+		return vector2(glm::normalize(to_glm()));
 	}
 
 
@@ -106,10 +106,8 @@ public:
 
 		switch (idx)
 		{
-		case 0:
-			return x;
-		case 1:
-			return y;
+		case 0: return x;
+		case 1: return y;
 		}
 	}
 
@@ -119,10 +117,8 @@ public:
 
 		switch (idx)
 		{
-		case 0:
-			return x;
-		case 1:
-			return y;
+		case 0: return x;
+		case 1: return y;
 		}
 	}
 

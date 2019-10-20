@@ -1,11 +1,22 @@
 #include "core.h"
 
+vector2 const vector2::zero = vector2(0.f, 0.f);
+
 vector3 const vector3::zero		= vector3(0.f, 0.f, 0.f);
 vector3 const vector3::up		= vector3(0.f, 0.f, 1.f);
 vector3 const vector3::right	= vector3(0.f, 1.f, 0.f);
 vector3 const vector3::forward	= vector3(1.f, 0.f, 0.f);
 
+vector4 const vector4::zero		= vector4(0.f, 0.f, 0.f, 0.f);
+
 quaternion const quaternion::identity = quaternion(1.f, 0.f, 0.f, 0.f);
+
+matrix4x4 const matrix4x4::identity = matrix4x4(
+	vector4(1, 0, 0, 0),
+	vector4(0, 1, 0, 0),
+	vector4(0, 0, 1, 0),
+	vector4(0, 0, 0, 1)
+);
 
 color const color::red		= color(255, 0, 0, 255);
 color const color::green	= color(0, 255, 0, 255);
