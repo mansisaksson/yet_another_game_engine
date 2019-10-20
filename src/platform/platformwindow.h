@@ -23,4 +23,6 @@ public:
 
 	virtual void swap_buffers() = 0;
 
+	virtual std::tuple<int, int> get_window_size() const = 0;
+
 };

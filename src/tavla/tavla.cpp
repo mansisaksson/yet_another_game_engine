@@ -14,6 +14,11 @@ void tavla::draw_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla)
 		if (t_tavla->m_constructed)
 			t_tavla->draw();
 	});
+
+	traverse_tree(t_root_tavla, [](const std::shared_ptr<tavla>& t_tavla) {
+		if (t_tavla->m_constructed)
+			t_tavla->post_draw();
+	});
 }
 
 void tavla::build_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla)

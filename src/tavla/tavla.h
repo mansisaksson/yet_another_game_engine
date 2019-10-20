@@ -21,10 +21,15 @@ protected:
 		slot(const slot& o) = delete;
 		slot(slot* const o) = delete;
 
-		inline virtual std::shared_ptr<tavla> get_content() const { return m_content; };
+		inline const std::shared_ptr<tavla> &get_content() const { return m_content; };
+		inline const std::weak_ptr<tavla> &get_parent_tavla() const { return m_parent; };
+
+		inline void set_parent_tavla(const std::weak_ptr<tavla>& t_parent) { m_parent = t_parent; };
 	};
 
 protected:
+
+	std::weak_ptr<tavla::slot> m_parent_slot;
 
 	std::vector<std::shared_ptr<tavla::slot>> m_child_slots;
 
@@ -47,6 +52,7 @@ public:
 	virtual void destruct() {};
 	virtual void tick(float t_delta_time) {};
 	virtual void draw() {};
+	virtual void post_draw() {};
 	// ~end tavla interface
 
 	static void tick_tavla_tree(const std::shared_ptr<tavla>& t_root_tavla, const float t_delta_time);
@@ -59,6 +65,9 @@ public:
 	);
 
 	inline const std::vector<std::shared_ptr<tavla::slot>>& get_child_slots() const { return m_child_slots; }
+	inline const std::weak_ptr<tavla::slot>& get_parent_slot() const { return m_parent_slot; }
+
+	inline void set_parent_slot(const std::weak_ptr<tavla::slot>& t_parent_slot) { m_parent_slot = t_parent_slot; };
 };
 
 template<class tavla_class>
@@ -83,6 +92,7 @@ protected:
 		std::shared_ptr<tavla_class> set_content(const std::shared_ptr<tavla>& t_content)
 		{
 			m_content = t_content;
+			t_content->set_parent_slot(weak_from_this());
 			return std::static_pointer_cast<tavla_class>(m_parent.lock());
 		}
 	};
@@ -91,6 +101,7 @@ protected:
 	std::shared_ptr<slot_class> add_slot_of_type()
 	{
 		const auto slot = std::make_shared<slot_class>(std::static_pointer_cast<tavla_class>(shared_from_this()));
+		slot->set_parent_tavla(weak_from_this());
 		m_child_slots.push_back(slot);
 		return slot;
 	}

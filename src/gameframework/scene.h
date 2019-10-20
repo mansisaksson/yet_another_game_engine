@@ -5,4 +5,6 @@
 class scene
 {
 	std::vector<std::shared_ptr<entity>> entities;
+
+	void draw_scene();
 };

@@ -3,6 +3,8 @@ add_sources(
     "tavla.cpp"
     "tavlaapplication.h"
     "tavlaapplication.cpp"
+	"tavlaviewport.h"
+	"tavlaviewport.cpp"
     "tavlawindow.h"
     "tavlawindow.cpp"
     "CMakeLists.txt"

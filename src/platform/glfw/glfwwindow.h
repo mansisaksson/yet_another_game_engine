@@ -19,6 +19,7 @@ public:
 	virtual void clear(const color& clear_color) override;
 	virtual void close_window() override;
 	virtual void swap_buffers() override;
+	virtual std::tuple<int, int> get_window_size() const override;
 
 	GLFWwindow* get_glfw_window() const;
 };

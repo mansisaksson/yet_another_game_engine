@@ -71,6 +71,13 @@ void glfw_window::swap_buffers()
 	glfwSwapBuffers(m_window);
 }
 
+std::tuple<int, int> glfw_window::get_window_size() const
+{
+	int width, height;
+	glfwGetWindowSize(m_window, &width, &height);
+	return { width, height };
+}
+
 GLFWwindow* glfw_window::get_glfw_window() const
 {
 	return m_window;
