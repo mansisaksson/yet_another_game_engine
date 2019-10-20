@@ -43,7 +43,7 @@ void tavla_viewport::draw()
 	m_viewport->set_view_rotation(quaternion::identity);
 
 	m_viewport->set_view_perspective(
-		70.f, 
+		fov,
 		(float)viewport_dimensions.width / (float)viewport_dimensions.height,
 		near_plane,
 		far_plane
