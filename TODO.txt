@@ -1,29 +1,35 @@
-[x] Implement tavla_window
-
-[ ] Implement tavla_viewport
-	[x] make gl_viewport
-	[x] allow for multiple viewports
-
+[ ] draw a scene of objects
+	[ ] create a scene with multiple entities
+	[ ] draw the entities
+	
+[ ] control the camera
+	[ ] pipe the input from  the application to the camera so it can move
 
 [ ] Setup UI sizing system
-	[ ] Set fill mode on slots
 	[ ] Create primitive UI types
 		[x] Vertical box
 		[x] Horizontal box
 		[ ] Grid
 		[ ] Overlay
+	[ ] Set fill mode on slots
 
-[ ] Draw something
+[ ] Core types
+	[ ] Rectangle // Used for aligning ui elements, such as the viewport
+
+[x] Implement tavla_window
+
+[x] Implement tavla_viewport
+	[x] make gl_viewport
+	[x] allow for multiple viewports
+
+[x] Draw something
 	[x] Add static mesh
 		[x] Load model
 	[x] Add texture
 		[x] Load texture
-	[ ] Add camea
+	[x] Add camera
 	[x] Add materials/shaders
 	[x] Abstract the drawing
-	
-[ ] Core types
-	[ ] Rectangle // Used for aligning ui elements, such as the viewport
 	
 [x] Add input
 	[x] Abstract the input
