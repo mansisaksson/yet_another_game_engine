@@ -50,16 +50,16 @@ public:
 	{
 		const vector3 q(x, y, z);
 		const vector3 t = 2.f * vector3::cross(q, v);
-		const vector3 Result = v + (w * t) + vector3::cross(q, t);
-		return Result;
+		const vector3 result = v + (w * t) + vector3::cross(q, t);
+		return result;
 	}
 
 	inline vector3 unrotate_vector(vector3 v) const
 	{
 		const vector3 q(-x, -y, -z);
 		const vector3 t = 2.f * vector3::cross(q, v);
-		const vector3 Result = v + (w * t) + vector3::cross(q, t);
-		return Result;
+		const vector3 result = v + (w * t) + vector3::cross(q, t);
+		return result;
 	}
 
 	vector3 get_up() const
