@@ -48,7 +48,17 @@ int main()
 				->add_slot()
 				->set_content
 				(
-					std::make_shared<tavla_viewport>()
+					std::make_shared<horizontal_box>()
+					->add_slot()
+					->set_content
+					(
+						std::make_shared<tavla_viewport>()
+					)
+					->add_slot()
+					->set_content
+					(
+						std::make_shared<tavla_viewport>()
+					)
 				)
 			)
 		)

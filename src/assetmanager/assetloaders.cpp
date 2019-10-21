@@ -125,7 +125,7 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 	
 	texture_data tex_data;
 	int num_comp;
-	stbi_uc* const image_data = stbi_load(data_asset_path.c_str(), &tex_data.width, &tex_data.height, &num_comp, 4);
+	stbi_uc* const image_data = stbi_load(data_asset_path.c_str(), &tex_data.width, &tex_data.height, &num_comp, 0);
 	
 	if (image_data == nullptr)
 	{
@@ -133,13 +133,23 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 		return nullptr;
 	}
 
-	// TODO: should allow for different texture formats
-	//if (num_comp == 1)
-	//	tex_data.data_format = texture_format::GREYSCALE;
-	//else if (num_comp == 3)
-	//	tex_data.data_format = texture_format::RGB;
-	//else
+	if (num_comp == 0)
+	{
+		log::error("asset_loader", "failed to load image, no valid color data: (%s) %s", asset_type.c_str(), t_asset_path.c_str());
+		return nullptr;
+	}
+	if (num_comp == 1)
+	{
+		tex_data.data_format = texture_format::GREYSCALE;
+	}
+	else if (num_comp == 3)
+	{
+		tex_data.data_format = texture_format::RGB;
+	}
+	else
+	{
 		tex_data.data_format = texture_format::RGBA;
+	}
 	
 	tex_data.render_format = tex_data.data_format;
 	
