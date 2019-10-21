@@ -11,7 +11,7 @@ vector3 const vector3::forward	= vector3(1.f, 0.f, 0.f);
 
 vector4 const vector4::zero		= vector4(0.f, 0.f, 0.f, 0.f);
 
-quaternion const quaternion::identity = quaternion(1.f, 0.f, 0.f, 0.f);
+quaternion const quaternion::identity = quaternion(0.f, 0.f, 0.f, 1.f);
 
 transform const transform::identity = transform(
 	vector3(0, 0, 0),
