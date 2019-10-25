@@ -13,5 +13,5 @@ material::material(const material_data& t_material_data)
 
 std::shared_ptr<material> material::create_material(const material_data& t_material_data)
 {
-	return std::make_shared<gl_material>(t_material_data)->shared_from_this();
+	return std::make_shared<gl_material>(t_material_data);
 }

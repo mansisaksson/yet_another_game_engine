@@ -4,7 +4,7 @@
 
 std::shared_ptr<viewport> viewport::create_viewport()
 {
-	return std::make_shared<gl_viewport>()->shared_from_this();
+	return std::make_shared<gl_viewport>();
 }
 
 void viewport::set_view_location(const vector3& t_location)

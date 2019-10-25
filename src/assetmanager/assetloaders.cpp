@@ -96,7 +96,7 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 	const std::vector<std::string> materials = local::parse_string_array(json_asset, "materials");
 	indexed_model.material_ref = materials.size() > 0 ? materials[0] : "basic_mat";
 
-	return static_mesh::create_mesh(indexed_model)->shared_from_this();
+	return static_mesh::create_mesh(indexed_model);
 }
 
 std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_asset_path)
@@ -162,7 +162,7 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 
 	stbi_image_free(image_data);
 
-	return texture::create_texture(tex_data)->shared_from_this();
+	return texture::create_texture(tex_data);
 }
 
 std::shared_ptr<material> asset_loader<material>::load_asset(const std::string& t_asset_path)
