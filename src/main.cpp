@@ -8,16 +8,16 @@
 #include "assetmanager/assetptr.h"
 #include "rendercore/rendercore.h"
 
-void testfunc()
-{
-	int i = 1337;
-	float f = 1.1234f;
-	std::string s = "this is a string";
-	log::info("test_log", "log int: %d, log float: %f, log string: %s", i, f, s.c_str());
-}
+#include "gameframework/scene.h"
+#include "gameframework/entity.h"
 
 int main()
 {
+	std::shared_ptr<scene> test_scene = std::make_shared<scene>();
+	test_scene->spawn_entity<entity>(transform::identity);
+	test_scene->spawn_entity<entity>(transform(vector3(0, 5, 0), quaternion::identity, 1.f));
+	test_scene->spawn_entity<entity>(transform(vector3(0, -5, 0), quaternion::identity, 2.f));
+
 	const auto application = std::make_shared<tavla_application>();
 	application
 		->add_slot()
@@ -38,11 +38,13 @@ int main()
 					->set_content
 					(
 						std::make_shared<tavla_viewport>()
+						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
 					)
 					->add_slot()
 					->set_content
 					(
 						std::make_shared<tavla_viewport>()
+						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
 					)
 				)
 				->add_slot()
@@ -53,11 +55,13 @@ int main()
 					->set_content
 					(
 						std::make_shared<tavla_viewport>()
+						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
 					)
 					->add_slot()
 					->set_content
 					(
 						std::make_shared<tavla_viewport>()
+						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
 					)
 				)
 			)
@@ -71,16 +75,6 @@ int main()
 		)*/;
 
 	tavla::construct_tavla_tree(application);
-
-	//auto test = delegate<void>::create_lambda(testfunc);
-	//test.execute_if_bound();
-	//multicast_delegate<void> multicast_delegates;
-	//multicast_delegates.bind(test);
-	//multicast_delegates.broadcast();
-
-	//asset_ptr<static_mesh> static_mesh_ptr("basic_mesh");
-	//asset_ptr<texture> texture_ptr("basic_texture");
-	//asset_ptr<material> my_material("basic_mat");
 
     return application->run();
 }

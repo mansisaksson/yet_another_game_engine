@@ -2,6 +2,7 @@
 #include "tavlawindow.h"
 #include "rendercore/staticmesh.h"
 #include "rendercore/viewport.h"
+#include "gameframework/scene.h"
 
 tavla_viewport::tavla_viewport()
 	: fov(70.f)
@@ -14,7 +15,6 @@ tavla_viewport::tavla_viewport()
 void tavla_viewport::construct()
 {
 	m_viewport = viewport::create_viewport();
-	static_mesh_ptr = asset_ptr<static_mesh>("basic_mesh");
 }
 
 void tavla_viewport::destruct()
@@ -58,6 +58,6 @@ void tavla_viewport::draw()
 		std::get<1>(window_dimensions)
 	);
 
-	if (static_mesh_ptr)
-		static_mesh_ptr->draw(transform::identity, *m_viewport);
+	if (!scene.expired())
+		scene.lock()->draw_scene(m_viewport.get());
 }

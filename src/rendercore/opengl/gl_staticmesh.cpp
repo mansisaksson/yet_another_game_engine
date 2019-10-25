@@ -53,14 +53,14 @@ gl_static_mesh::~gl_static_mesh()
 	glDeleteVertexArrays(1, &m_vertexArrayObject);
 }
 
-void gl_static_mesh::draw(const transform& t_mesh_transform, viewport& t_viewport)
+void gl_static_mesh::draw(const transform& t_mesh_transform, const viewport* t_viewport)
 {
 	for (const auto &mat : m_materials)
 	{
 		if (mat)
 		{
 			mat->bind();
-			mat->update(t_mesh_transform, t_viewport.get_view_projection());
+			mat->update(t_mesh_transform, t_viewport->get_view_projection());
 		}
 	}
 

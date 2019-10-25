@@ -1,11 +1,10 @@
 #pragma once
 
 #include "tavla.h"
-#include "assetmanager/assetptr.h"
-#include "gameframework/scene.h"
 
 class viewport;
 class static_mesh;
+class scene;
 
 class tavla_viewport : public tavla_base<tavla_viewport>
 {
@@ -31,6 +30,7 @@ public:
 	float fov;
 	float near_plane;
 	float far_plane;
+	std::weak_ptr<scene> scene;
 
 public:
 	tavla_viewport();
@@ -42,6 +42,4 @@ public:
 	virtual void draw() override;
 	// ~end tavla interface
 
-	// TODO: TEMP, Remove!
-	asset_ptr<static_mesh> static_mesh_ptr;
 };

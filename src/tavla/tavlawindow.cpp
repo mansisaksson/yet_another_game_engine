@@ -13,8 +13,11 @@ void tavla_window::construct()
 
 void tavla_window::destruct()
 {
-	m_window->close_window();
-	m_window.reset();
+	if (m_window)
+	{
+		m_window->close_window();
+		m_window.reset();
+	}
 }
 
 void tavla_window::tick(float t_delta_time)
@@ -24,19 +27,17 @@ void tavla_window::tick(float t_delta_time)
 
 void tavla_window::draw()
 {
-	if (!m_window)
-		return;
-
-	m_window->make_current();
-	m_window->clear(color::blue);
+	if (m_window)
+	{
+		m_window->make_current();
+		m_window->clear(color::blue);
+	}
 }
 
 void tavla_window::post_draw()
 {
-	if (!m_window)
-		return;
-
-	m_window->swap_buffers();
+	if (m_window)
+		m_window->swap_buffers();
 }
 
 dimensions tavla_window::get_tavla_dimentions() const
