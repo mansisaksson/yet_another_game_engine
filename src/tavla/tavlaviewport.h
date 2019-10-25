@@ -42,4 +42,6 @@ public:
 	virtual void draw() override;
 	// ~end tavla interface
 
+	viewport* get_viewport() const;
+
 };

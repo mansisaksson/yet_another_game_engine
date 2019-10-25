@@ -84,248 +84,248 @@ key glfw_input::glfw_key_to_key(int const t_glfw_key)
 	switch (t_glfw_key)
 	{
 	case GLFW_KEY_SPACE:
-		return key::e_space;
+		return key::space;
 	case GLFW_KEY_APOSTROPHE:
-		return key::e_apostrophe;
+		return key::apostrophe;
 	case GLFW_KEY_COMMA:
-		return key::e_comma;
+		return key::comma;
 	case GLFW_KEY_MINUS:
-		return key::e_minus;
+		return key::minus;
 	case GLFW_KEY_PERIOD:
-		return key::e_period;
+		return key::period;
 	case GLFW_KEY_SLASH:
-		return key::e_slash;
+		return key::slash;
 	case GLFW_KEY_0:
-		return key::e_0;
+		return key::zero;
 	case GLFW_KEY_1:
-		return key::e_1;
+		return key::one;
 	case GLFW_KEY_2:
-		return key::e_2;
+		return key::two;
 	case GLFW_KEY_3:
-		return key::e_3;
+		return key::three;
 	case GLFW_KEY_4:
-		return key::e_4;
+		return key::four;
 	case GLFW_KEY_5:
-		return key::e_5;
+		return key::five;
 	case GLFW_KEY_6:
-		return key::e_6;
+		return key::six;
 	case GLFW_KEY_7:
-		return key::e_7;
+		return key::seven;
 	case GLFW_KEY_8:
-		return key::e_8;
+		return key::eight;
 	case GLFW_KEY_9:
-		return key::e_9;
+		return key::nine;
 	case GLFW_KEY_SEMICOLON:
-		return key::e_semicolon;
+		return key::semicolon;
 	case GLFW_KEY_EQUAL:
-		return key::e_equal;
+		return key::equal;
 	case GLFW_KEY_A:
-		return key::e_a;
+		return key::a;
 	case GLFW_KEY_B:
-		return key::e_b;
+		return key::b;
 	case GLFW_KEY_C:
-		return key::e_c;
+		return key::c;
 	case GLFW_KEY_D:
-		return key::e_d;
+		return key::d;
 	case GLFW_KEY_E:
-		return key::e_e;
+		return key::e;
 	case GLFW_KEY_F:
-		return key::e_f;
+		return key::f;
 	case GLFW_KEY_G:
-		return key::e_g;
+		return key::g;
 	case GLFW_KEY_H:
-		return key::e_h;
+		return key::h;
 	case GLFW_KEY_I:
-		return key::e_i;
+		return key::i;
 	case GLFW_KEY_J:
-		return key::e_j;
+		return key::j;
 	case GLFW_KEY_K:
-		return key::e_k;
+		return key::k;
 	case GLFW_KEY_L:
-		return key::e_l;
+		return key::l;
 	case GLFW_KEY_M:
-		return key::e_m;
+		return key::m;
 	case GLFW_KEY_N:
-		return key::e_n;
+		return key::n;
 	case GLFW_KEY_O:
-		return key::e_o;
+		return key::o;
 	case GLFW_KEY_P:
-		return key::e_p;
+		return key::p;
 	case GLFW_KEY_Q:
-		return key::e_q;
+		return key::q;
 	case GLFW_KEY_R:
-		return key::e_r;
+		return key::r;
 	case GLFW_KEY_S:
-		return key::e_s;
+		return key::s;
 	case GLFW_KEY_T:
-		return key::e_t;
+		return key::t;
 	case GLFW_KEY_U:
-		return key::e_u;
+		return key::u;
 	case GLFW_KEY_V:
-		return key::e_v;
+		return key::v;
 	case GLFW_KEY_W:
-		return key::e_w;
+		return key::w;
 	case GLFW_KEY_X:
-		return key::e_x;
+		return key::x;
 	case GLFW_KEY_Y:
-		return key::e_y;
+		return key::y;
 	case GLFW_KEY_Z:
-		return key::e_z;
+		return key::z;
 	case GLFW_KEY_LEFT_BRACKET:
-		return key::e_left_bracket;
+		return key::left_bracket;
 	case GLFW_KEY_BACKSLASH:
-		return key::e_backslash;
+		return key::backslash;
 	case GLFW_KEY_RIGHT_BRACKET:
-		return key::e_right_bracket;
+		return key::right_bracket;
 	case GLFW_KEY_GRAVE_ACCENT:
-		return key::e_grave_accent;
+		return key::grave_accent;
 	case GLFW_KEY_WORLD_1:
-		return key::e_world_1;
+		return key::world_1;
 	case GLFW_KEY_WORLD_2:
-		return key::e_world_2;
+		return key::world_2;
 	case GLFW_KEY_ESCAPE:
-		return key::e_escape;
+		return key::escape;
 	case GLFW_KEY_ENTER:
-		return key::e_enter;
+		return key::enter;
 	case GLFW_KEY_TAB:
-		return key::e_tab;
+		return key::tab;
 	case GLFW_KEY_BACKSPACE:
-		return key::e_backspace;
+		return key::backspace;
 	case GLFW_KEY_INSERT:
-		return key::e_insert;
+		return key::insert;
 	case GLFW_KEY_DELETE:
-		return key::e_delete;
+		return key::del;
 	case GLFW_KEY_RIGHT:
-		return key::e_right;
+		return key::right;
 	case GLFW_KEY_LEFT:
-		return key::e_left;
+		return key::left;
 	case GLFW_KEY_DOWN:
-		return key::e_down;
+		return key::down;
 	case GLFW_KEY_UP:
-		return key::e_up;
+		return key::up;
 	case GLFW_KEY_PAGE_UP:
-		return key::e_page_up;
+		return key::page_up;
 	case GLFW_KEY_PAGE_DOWN:
-		return key::e_page_down;
+		return key::page_down;
 	case GLFW_KEY_HOME:
-		return key::e_home;
+		return key::home;
 	case GLFW_KEY_END:
-		return key::e_end;
+		return key::end;
 	case GLFW_KEY_CAPS_LOCK:
-		return key::e_caps_lock;
+		return key::caps_lock;
 	case GLFW_KEY_SCROLL_LOCK:
-		return key::e_scroll_lock;
+		return key::scroll_lock;
 	case GLFW_KEY_NUM_LOCK:
-		return key::e_num_lock;
+		return key::num_lock;
 	case GLFW_KEY_PRINT_SCREEN:
-		return key::e_print_screen;
+		return key::print_screen;
 	case GLFW_KEY_PAUSE:
-		return key::e_pause;
+		return key::pause;
 	case GLFW_KEY_F1:
-		return key::e_f1;
+		return key::f1;
 	case GLFW_KEY_F2:
-		return key::e_f2;
+		return key::f2;
 	case GLFW_KEY_F3:
-		return key::e_f3;
+		return key::f3;
 	case GLFW_KEY_F4:
-		return key::e_f4;
+		return key::f4;
 	case GLFW_KEY_F5:
-		return key::e_f5;
+		return key::f5;
 	case GLFW_KEY_F6:
-		return key::e_f6;
+		return key::f6;
 	case GLFW_KEY_F7:
-		return key::e_f7;
+		return key::f7;
 	case GLFW_KEY_F8:
-		return key::e_f8;
+		return key::f8;
 	case GLFW_KEY_F9:
-		return key::e_f9;
+		return key::f9;
 	case GLFW_KEY_F10:
-		return key::e_f10;
+		return key::f10;
 	case GLFW_KEY_F11:
-		return key::e_f11;
+		return key::f11;
 	case GLFW_KEY_F12:
-		return key::e_f12;
+		return key::f12;
 	case GLFW_KEY_F13:
-		return key::e_f13;
+		return key::f13;
 	case GLFW_KEY_F14:
-		return key::e_f14;
+		return key::f14;
 	case GLFW_KEY_F15:
-		return key::e_f15;
+		return key::f15;
 	case GLFW_KEY_F16:
-		return key::e_f16;
+		return key::f16;
 	case GLFW_KEY_F17:
-		return key::e_f17;
+		return key::f17;
 	case GLFW_KEY_F18:
-		return key::e_f18;
+		return key::f18;
 	case GLFW_KEY_F19:
-		return key::e_f19;
+		return key::f19;
 	case GLFW_KEY_F20:
-		return key::e_f20;
+		return key::f20;
 	case GLFW_KEY_F21:
-		return key::e_f21;
+		return key::f21;
 	case GLFW_KEY_F22:
-		return key::e_f22;
+		return key::f22;
 	case GLFW_KEY_F23:
-		return key::e_f23;
+		return key::f23;
 	case GLFW_KEY_F24:
-		return key::e_f24;
+		return key::f24;
 	case GLFW_KEY_F25:
-		return key::e_f25;
+		return key::f25;
 	case GLFW_KEY_KP_0:
-		return key::e_kp_0;
+		return key::kp_0;
 	case GLFW_KEY_KP_1:
-		return key::e_kp_1;
+		return key::kp_1;
 	case GLFW_KEY_KP_2:
-		return key::e_kp_2;
+		return key::kp_2;
 	case GLFW_KEY_KP_3:
-		return key::e_kp_3;
+		return key::kp_3;
 	case GLFW_KEY_KP_4:
-		return key::e_kp_4;
+		return key::kp_4;
 	case GLFW_KEY_KP_5:
-		return key::e_kp_5;
+		return key::kp_5;
 	case GLFW_KEY_KP_6:
-		return key::e_kp_6;
+		return key::kp_6;
 	case GLFW_KEY_KP_7:
-		return key::e_kp_7;
+		return key::kp_7;
 	case GLFW_KEY_KP_8:
-		return key::e_kp_8;
+		return key::kp_8;
 	case GLFW_KEY_KP_9:
-		return key::e_kp_9;
+		return key::kp_9;
 	case GLFW_KEY_KP_DECIMAL:
-		return key::e_kp_decimal;
+		return key::kp_decimal;
 	case GLFW_KEY_KP_DIVIDE:
-		return key::e_kp_divide;
+		return key::kp_divide;
 	case GLFW_KEY_KP_MULTIPLY:
-		return key::e_kp_multiply;
+		return key::kp_multiply;
 	case GLFW_KEY_KP_SUBTRACT:
-		return key::e_kp_subtract;
+		return key::kp_subtract;
 	case GLFW_KEY_KP_ADD:
-		return key::e_kp_add;
+		return key::kp_add;
 	case GLFW_KEY_KP_ENTER:
-		return key::e_kp_enter;
+		return key::kp_enter;
 	case GLFW_KEY_KP_EQUAL:
-		return key::e_kp_equal;
+		return key::kp_equal;
 	case GLFW_KEY_LEFT_SHIFT:
-		return key::e_left_shift;
+		return key::left_shift;
 	case GLFW_KEY_LEFT_CONTROL:
-		return key::e_left_control;
+		return key::left_control;
 	case GLFW_KEY_LEFT_ALT:
-		return key::e_left_alt;
+		return key::left_alt;
 	case GLFW_KEY_LEFT_SUPER:
-		return key::e_left_super;
+		return key::left_super;
 	case GLFW_KEY_RIGHT_SHIFT:
-		return key::e_right_shift;
+		return key::right_shift;
 	case GLFW_KEY_RIGHT_CONTROL:
-		return key::e_right_control;
+		return key::right_control;
 	case GLFW_KEY_RIGHT_ALT:
-		return key::e_right_alt;
+		return key::right_alt;
 	case GLFW_KEY_RIGHT_SUPER:
-		return key::e_right_super;
+		return key::right_super;
 	case GLFW_KEY_MENU:
-		return key::e_menu;
+		return key::menu;
 
 	default:
-		return key::e_unknown;
+		return key::unknown;
 	}
 }
 
@@ -334,24 +334,24 @@ key glfw_input::glfw_mouse_button_to_key(int const t_glfw_button)
 	switch (t_glfw_button)
 	{
 		case GLFW_MOUSE_BUTTON_1:
-			return key::e_mouse_button_1;
+			return key::mouse_button_1;
 		case GLFW_MOUSE_BUTTON_2:
-			return key::e_mouse_button_2;
+			return key::mouse_button_2;
 		case GLFW_MOUSE_BUTTON_3:
-			return key::e_mouse_button_middle;
+			return key::mouse_button_middle;
 		case GLFW_MOUSE_BUTTON_4:
-			return key::e_mouse_button_4;
+			return key::mouse_button_4;
 		case GLFW_MOUSE_BUTTON_5:
-			return key::e_mouse_button_5;
+			return key::mouse_button_5;
 		case GLFW_MOUSE_BUTTON_6:
-			return key::e_mouse_button_6;
+			return key::mouse_button_6;
 		case GLFW_MOUSE_BUTTON_7:
-			return key::e_mouse_button_7;
+			return key::mouse_button_7;
 		case GLFW_MOUSE_BUTTON_8:
-			return key::e_mouse_button_8;
+			return key::mouse_button_8;
 	}
 
-	return key::e_mouse_button_1;
+	return key::mouse_button_1;
 }
 
 key_event glfw_input::glfw_key_event_to_key_event(int t_glfw_key_event)
@@ -359,12 +359,12 @@ key_event glfw_input::glfw_key_event_to_key_event(int t_glfw_key_event)
 	switch (t_glfw_key_event)
 	{
 	case GLFW_PRESS:
-		return key_event::e_pressed;
+		return key_event::pressed;
 	case GLFW_RELEASE:
-		return key_event::e_released;
+		return key_event::released;
 	case GLFW_REPEAT:
-		return key_event::e_repeat;
+		return key_event::repeat;
 	}
 
-	return key_event::e_released;
+	return key_event::released;
 }

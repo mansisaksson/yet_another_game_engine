@@ -31,7 +31,7 @@ protected:
 		slot(const slot& o) = delete;
 		slot(slot* const o) = delete;
 
-		inline const std::shared_ptr<tavla> &get_content() const { return m_content; };
+		inline const std::shared_ptr<tavla> &get_content() const { return m_content; }; // TODO: should this really return a shared_ptr?
 		inline const std::weak_ptr<tavla> &get_parent_tavla() const { return m_parent; };
 		inline const dimensions& get_dimensions() const { return m_dimensions; };
 

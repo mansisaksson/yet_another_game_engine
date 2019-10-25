@@ -11,60 +11,30 @@
 #include "gameframework/scene.h"
 #include "gameframework/entity.h"
 
+#include "game/game.hpp"
+
 int main()
 {
-	std::shared_ptr<scene> test_scene = std::make_shared<scene>();
-	test_scene->spawn_entity<entity>(transform::identity);
-	test_scene->spawn_entity<entity>(transform(vector3(0, 5, 0), quaternion::identity, 1.f));
-	test_scene->spawn_entity<entity>(transform(vector3(0, -5, 0), quaternion::identity, 2.f));
+	std::shared_ptr<scene> game_scene = std::make_shared<scene>();
+
+	const auto game_viewport = std::make_shared<tavla_viewport>()
+		->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(game_scene));
+
+	const auto game_window = std::make_shared<tavla_window>()
+		->set_property(&tavla_window::width, 1280)
+		->set_property(&tavla_window::height, 720)
+		->add_slot()
+		->set_content
+		(
+			game_viewport
+		);
 
 	const auto application = std::make_shared<tavla_application>();
 	application
 		->add_slot()
 		->set_content
 		(
-			std::make_shared<tavla_window>()
-			->set_property(&tavla_window::width, 1280)
-			->set_property(&tavla_window::height, 720)
-			->add_slot()
-			->set_content
-			(
-				std::make_shared<vertical_box>()
-				->add_slot()
-				->set_content
-				(
-					std::make_shared<horizontal_box>()
-					->add_slot()
-					->set_content
-					(
-						std::make_shared<tavla_viewport>()
-						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
-					)
-					->add_slot()
-					->set_content
-					(
-						std::make_shared<tavla_viewport>()
-						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
-					)
-				)
-				->add_slot()
-				->set_content
-				(
-					std::make_shared<horizontal_box>()
-					->add_slot()
-					->set_content
-					(
-						std::make_shared<tavla_viewport>()
-						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
-					)
-					->add_slot()
-					->set_content
-					(
-						std::make_shared<tavla_viewport>()
-						->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(test_scene))
-					)
-				)
-			)
+			game_window
 		)
 		/*->add_slot()
 		->set_content
@@ -75,6 +45,18 @@ int main()
 		)*/;
 
 	tavla::construct_tavla_tree(application);
+
+	game game;
+	game.start_game(game_scene.get(), game_viewport.get());
+
+	application->on_tick_application.bind(delegate<void, float>::create_function([&](float t_delta_time) {
+		game.tick_game(t_delta_time);
+	}));
+
+	// TODO: Input should probably be received by the game_viewport
+	application->on_receive_input.bind(delegate<void, const input_event&>::create_function([&](const input_event& t_input_event) {
+		game.on_input_event(t_input_event);
+	}));
 
     return application->run();
 }

@@ -39,9 +39,6 @@ void tavla_viewport::draw()
 	const auto window_dimensions = parent_window.lock()->get_window_size();
 	const dimensions viewport_dimensions = get_tavla_dimentions();
 	
-	m_viewport->set_view_location(vector3(-10, 0, 0));
-	m_viewport->set_view_rotation(quaternion::identity);
-
 	m_viewport->set_view_perspective(
 		fov,
 		(float)viewport_dimensions.width / (float)viewport_dimensions.height,
@@ -60,4 +57,9 @@ void tavla_viewport::draw()
 
 	if (!scene.expired())
 		scene.lock()->draw_scene(m_viewport.get());
+}
+
+viewport* tavla_viewport::get_viewport() const
+{
+	return m_viewport.get();
 }

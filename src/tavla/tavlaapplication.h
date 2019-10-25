@@ -3,6 +3,8 @@
 #include "tavla.h"
 #include "core/core.h"
 
+struct input_event;
+
 class tavla_application : public tavla_base<tavla_application>
 {
 public:
@@ -21,6 +23,11 @@ public:
 
 private:
 	guid input_event_listen_id;
+
+public:
+	multicast_delegate<float> on_tick_application;
+
+	multicast_delegate<const input_event&> on_receive_input;
 
 public:
 	// ~begin tavla interface

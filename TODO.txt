@@ -1,7 +1,3 @@
-[ ] draw a scene of objects
-	[ ] create a scene with multiple entities
-	[ ] draw the entities
-	
 [ ] control the camera
 	[ ] pipe the input from  the application to the camera so it can move
 
@@ -16,6 +12,10 @@
 [ ] Core types
 	[ ] Rectangle // Used for aligning ui elements, such as the viewport
 
+[x] draw a scene of objects
+	[x] create a scene with multiple entities
+	[x] draw the entities
+	
 [x] Implement tavla_window
 
 [x] Implement tavla_viewport

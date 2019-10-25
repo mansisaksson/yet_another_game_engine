@@ -1,5 +1,8 @@
 #include "gl_material.h"
 #include "rendercore/texture.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <GLFW/glfw3.h>
 
 gl_material::gl_material(const material_data& t_material_data)
 	: material(t_material_data)
@@ -46,34 +49,21 @@ void gl_material::bind()
 	}
 }
 
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <GLFW/glfw3.h>
+
 void gl_material::update(const transform& t_mesh_transform, const matrix4x4& t_view_matrix)
 {
-	struct local
+	const matrix4x4 gl_to_yete_matrix =
 	{
-		static glm::mat4 GetModelMatrix()
-		{
-			const glm::mat4 posMatrix = glm::translate(glm::vec3(0, 0 ,0));
-			const glm::mat4 rotXMatrix = glm::rotate(0.f, glm::vec3(1, 0, 0));
-			const glm::mat4 rotYMatrix = glm::rotate(0.f, glm::vec3(0, 1, 0));
-			const glm::mat4 rotZMatrix = glm::rotate(0.f, glm::vec3(0, 0, 1));
-			const glm::mat4 scaleMatrix = glm::scale(glm::vec3(1, 1, 1));
-
-			const glm::mat4 rotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
-
-			return posMatrix * rotMatrix * scaleMatrix;
-		}
+		{ 1, 0, 0, 0 },
+		{ 0, -1, 0, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 0, 0, 1 }
 	};
 
-	const glm::vec3 pos(-10.f, 0, 0);
-	const glm::vec3 forward = glm::vec3(1, 0, 0);
-	const glm::vec3 up = glm::vec3(0, 0, 1);
-	glm::mat4 m_perspective = glm::perspective(70.f, 1280.f / 720.f, 0.01f, 10000.f)
-		* glm::lookAt(pos, pos + forward, up);
-
-	const matrix4x4 model = t_view_matrix * t_mesh_transform.to_matrix();
+	const auto gl_mesh_matrix = gl_to_yete_matrix * t_mesh_transform.to_matrix() * gl_to_yete_matrix;
+	const auto gl_view_matrix = t_view_matrix;// * gl_to_yete_matrix;
+	const matrix4x4 model = gl_view_matrix * gl_mesh_matrix;
+	
 	glUniformMatrix4fv(
 		m_uniforms[TRANSFORM_U],
 		1,
