@@ -75,7 +75,7 @@ void gl_material::update(const transform& t_mesh_transform, const matrix4x4& t_v
 
 	const auto gl_mesh_matrix = /*gl_to_yete_matrix * */t_mesh_transform.to_matrix()/* * gl_to_yete_matrix*/;
 	//const auto gl_view_matrix = t_view_matrix;// * gl_to_yete_matrix;
-	const matrix4x4 model = gl_view_matrix * gl_mesh_matrix;
+	const matrix4x4 model = (t_view_matrix * gl_mesh_matrix); // Convert from column-major -> row-major
 	
 	glUniformMatrix4fv(
 		m_uniforms[TRANSFORM_U],

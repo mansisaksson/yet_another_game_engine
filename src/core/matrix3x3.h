@@ -75,17 +75,24 @@ public:
 
 	inline matrix3x3& operator*=(const matrix3x3& rhs)
 	{
-		matrix3x3 tmp_matrix;
-		for (int row = 0; row < 3; row++)
+		*this =
 		{
-			const vector3 row_values = { matrix[row][0], matrix[row][1], matrix[row][2] };
-			for (int col = 0; col < 3; col++)
 			{
-				const vector3 col_values = { matrix[0][col], matrix[1][col], matrix[2][col] };
-				tmp_matrix[row][col] = vector3::dot(row_values, col_values);
+				{ matrix[0][0] * rhs[0][0] + matrix[0][1] * rhs[1][0] + matrix[0][2] * rhs[2][0] },
+				{ matrix[1][0] * rhs[0][0] + matrix[1][1] * rhs[1][0] + matrix[1][2] * rhs[2][0] },
+				{ matrix[2][0] * rhs[0][0] + matrix[2][1] * rhs[1][0] + matrix[2][2] * rhs[2][0] },
+			},
+			{
+				{ matrix[0][0] * rhs[0][1] + matrix[0][1] * rhs[1][1] + matrix[0][2] * rhs[2][1] },
+				{ matrix[1][0] * rhs[0][1] + matrix[1][1] * rhs[1][1] + matrix[1][2] * rhs[2][1] },
+				{ matrix[2][0] * rhs[0][1] + matrix[2][1] * rhs[1][1] + matrix[2][2] * rhs[2][1] },
+			},
+			{
+				{ matrix[0][0] * rhs[0][2] + matrix[0][1] * rhs[1][2] + matrix[0][2] * rhs[2][2] },
+				{ matrix[1][0] * rhs[0][2] + matrix[1][1] * rhs[1][2] + matrix[1][2] * rhs[2][2] },
+				{ matrix[2][0] * rhs[0][2] + matrix[2][1] * rhs[1][2] + matrix[2][2] * rhs[2][2] },
 			}
-		}
-		*this = tmp_matrix;
+		};
 		return *this;
 	}
 

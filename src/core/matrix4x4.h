@@ -37,7 +37,7 @@ public:
 
 	static matrix4x4 perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far);
 
-	static matrix4x4 look_at(const vector3& t_from, const vector3& t_to, const vector3& t_up);
+	static matrix4x4 look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up);
 
 	inline matrix4x4 transpose() const;
 
@@ -81,6 +81,8 @@ public:
 
 	inline matrix4x4& operator*=(const matrix4x4& rhs)
 	{
+		/*
+		TODO: Remove, kept for reference
 		matrix4x4 tmp_matrix;
 		for (int row = 0; row < 3; row++)
 		{
@@ -91,7 +93,35 @@ public:
 				tmp_matrix[row][col] = vector4::dot(row_values, col_values);
 			}
 		}
-		*this = tmp_matrix;
+		*this = tmp_matrix;*/
+
+		*this = 
+		{
+			{
+				{ matrix[0][0] * rhs[0][0] + matrix[0][1] * rhs[1][0] + matrix[0][2] * rhs[2][0] + matrix[0][3] * rhs[3][0] },
+				{ matrix[1][0] * rhs[0][0] + matrix[1][1] * rhs[1][0] + matrix[1][2] * rhs[2][0] + matrix[1][3] * rhs[3][0] },
+				{ matrix[2][0] * rhs[0][0] + matrix[2][1] * rhs[1][0] + matrix[2][2] * rhs[2][0] + matrix[2][3] * rhs[3][0] },
+				{ matrix[3][0] * rhs[0][0] + matrix[3][1] * rhs[1][0] + matrix[3][2] * rhs[2][0] + matrix[3][3] * rhs[3][0] },
+			},
+			{
+				{ matrix[0][0] * rhs[0][1] + matrix[0][1] * rhs[1][1] + matrix[0][2] * rhs[2][1] + matrix[0][3] * rhs[3][1] },
+				{ matrix[1][0] * rhs[0][1] + matrix[1][1] * rhs[1][1] + matrix[1][2] * rhs[2][1] + matrix[1][3] * rhs[3][1] },
+				{ matrix[2][0] * rhs[0][1] + matrix[2][1] * rhs[1][1] + matrix[2][2] * rhs[2][1] + matrix[2][3] * rhs[3][1] },
+				{ matrix[3][0] * rhs[0][1] + matrix[3][1] * rhs[1][1] + matrix[3][2] * rhs[2][1] + matrix[3][3] * rhs[3][1] },
+			},
+			{
+				{ matrix[0][0] * rhs[0][2] + matrix[0][1] * rhs[1][2] + matrix[0][2] * rhs[2][2] + matrix[0][3] * rhs[3][2] },
+				{ matrix[1][0] * rhs[0][2] + matrix[1][1] * rhs[1][2] + matrix[1][2] * rhs[2][2] + matrix[1][3] * rhs[3][2] },
+				{ matrix[2][0] * rhs[0][2] + matrix[2][1] * rhs[1][2] + matrix[2][2] * rhs[2][2] + matrix[2][3] * rhs[3][2] },
+				{ matrix[3][0] * rhs[0][2] + matrix[3][1] * rhs[1][2] + matrix[3][2] * rhs[2][2] + matrix[3][3] * rhs[3][2] }
+			},
+			{
+				{ matrix[0][0] * rhs[0][3] + matrix[0][1] * rhs[1][3] + matrix[0][2] * rhs[2][3] + matrix[0][3] * rhs[3][3] },
+				{ matrix[1][0] * rhs[0][3] + matrix[1][1] * rhs[1][3] + matrix[1][2] * rhs[2][3] + matrix[1][3] * rhs[3][3] },
+				{ matrix[2][0] * rhs[0][3] + matrix[2][1] * rhs[1][3] + matrix[2][2] * rhs[2][3] + matrix[2][3] * rhs[3][3] },
+				{ matrix[3][0] * rhs[0][3] + matrix[3][1] * rhs[1][3] + matrix[3][2] * rhs[2][3] + matrix[3][3] * rhs[3][3] }
+			}
+		};
 		return *this;
 	}
 
@@ -117,13 +147,7 @@ public:
 	template<typename U>
 	inline matrix4x4& operator/=(const U& scalar)
 	{
-		*this =
-		{
-			{ matrix[0][0] / scalar, matrix[0][1] / scalar, matrix[0][2] / scalar, matrix[0][3] / scalar },
-			{ matrix[1][0] / scalar, matrix[1][1] / scalar, matrix[1][2] / scalar, matrix[1][3] / scalar },
-			{ matrix[2][0] / scalar, matrix[2][1] / scalar, matrix[2][2] / scalar, matrix[2][3] / scalar },
-			{ matrix[3][0] / scalar, matrix[3][1] / scalar, matrix[3][2] / scalar, matrix[3][3] / scalar },
-		};
+		*this *= 1.f / scalar;
 		return *this;
 	}
 
@@ -192,4 +216,27 @@ inline matrix4x4 operator/(matrix4x4 lhs, const U& scalar)
 {
 	lhs /= scalar;
 	return lhs;
+}
+
+
+/* vector4 operators */
+
+inline vector4 operator*(const vector4 &lhs, const matrix4x4& rhs)
+{
+	return vector4(
+		rhs.matrix[0][0] * lhs[0] + rhs.matrix[0][1] * lhs[1] + rhs.matrix[0][2] * lhs[2] + rhs.matrix[0][3] * lhs[3],
+		rhs.matrix[1][0] * lhs[0] + rhs.matrix[1][1] * lhs[1] + rhs.matrix[1][2] * lhs[2] + rhs.matrix[1][3] * lhs[3],
+		rhs.matrix[2][0] * lhs[0] + rhs.matrix[2][1] * lhs[1] + rhs.matrix[2][2] * lhs[2] + rhs.matrix[2][3] * lhs[3],
+		rhs.matrix[3][0] * lhs[0] + rhs.matrix[3][1] * lhs[1] + rhs.matrix[3][2] * lhs[2] + rhs.matrix[3][3] * lhs[3]
+	);
+}
+
+inline vector4 operator*(const matrix4x4& rhs, const vector4& lhs)
+{
+	return vector4(
+		lhs[0] * rhs.matrix[0][0] + lhs[1] * rhs.matrix[1][0] + lhs[2] * rhs.matrix[2][0] + lhs[3] * rhs.matrix[3][0],
+		lhs[0] * rhs.matrix[0][1] + lhs[1] * rhs.matrix[1][1] + lhs[2] * rhs.matrix[2][1] + lhs[3] * rhs.matrix[3][1],
+		lhs[0] * rhs.matrix[0][2] + lhs[1] * rhs.matrix[1][2] + lhs[2] * rhs.matrix[2][2] + lhs[3] * rhs.matrix[3][2],
+		lhs[0] * rhs.matrix[0][3] + lhs[1] * rhs.matrix[1][3] + lhs[2] * rhs.matrix[2][3] + lhs[3] * rhs.matrix[3][3]
+	);
 }
