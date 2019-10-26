@@ -11,9 +11,13 @@ add_sources(
 	"vector3.h"
 	"vector2.h"
 	"matrix4x4.h"
+	"matrix3x3.h"
+	"matrix.h"
+	"matrix.cpp"
 	"delegate.h"
 	"paths.h"
 	"paths.cpp"
 	"log.h"
+	"string.h"
     "CMakeLists.txt"
 )

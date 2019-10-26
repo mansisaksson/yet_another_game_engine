@@ -90,15 +90,17 @@ public:
 	}
 
 	template<typename U>
-	inline vector2 operator*=(const U& scalar)
+	inline vector2& operator*=(const U& scalar)
 	{
-		return vector2(x * scalar, y * scalar, z * scalar);
+		*this = { x * scalar, y * scalar };
+		return *this;
 	}
 
 	template<typename U>
 	inline vector2& operator/=(const U& scalar)
 	{
-		return vector2(x / scalar, y / scalar, z / scalar);
+		*this = { x / scalar, y / scalar };
+		return *this;
 	}
 
 	float& operator[](int idx)
@@ -173,7 +175,7 @@ inline vector2 operator*(const U& scalar, vector2 rhs)
 }
 
 template<typename U>
-inline vector2& operator/(vector2 lhs, const U& scalar)
+inline vector2 operator/(vector2 lhs, const U& scalar)
 {
 	lhs /= scalar;
 	return lhs;

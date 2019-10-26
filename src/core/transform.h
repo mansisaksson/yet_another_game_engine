@@ -1,5 +1,7 @@
 #pragma once
-#include "core.h"
+#include "vector3.h"
+#include "quaternion.h"
+#include "matrix4x4.h"
 
 class transform
 {
@@ -69,7 +71,15 @@ public:
 		out_matrix[2][3] = 0.0f;
 		out_matrix[3][3] = 1.0f;
 
-		return out_matrix;
+		//return out_matrix;
+
+		return 
+		{
+			{ 0, 0, 0, location.x },
+			{ 0, 0, 0, location.y },
+			{ 0, 0, 0, location.z },
+			{ 0, 0, 0, 1.f }
+		};
 	}
 
 };

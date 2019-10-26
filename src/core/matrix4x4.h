@@ -1,26 +1,14 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 #include "vector4.h"
+#include "matrix3x3.h"
 #include <array>
 
+/*
+	matrix 3x3
+	acessed by [row][col]
+*/
 class matrix4x4
 {
-private:
-	matrix4x4(const glm::mat4& t_glm_mat4)
-		: matrix({ t_glm_mat4[0], t_glm_mat4[1], t_glm_mat4[2], t_glm_mat4[3] })
-	{}
-
-	glm::mat4x4 to_glm() const
-	{
-		return glm::mat4x4(
-			matrix[0].to_glm(),
-			matrix[1].to_glm(),
-			matrix[2].to_glm(),
-			matrix[3].to_glm()
-		);
-	}
-
 public:
 	std::array<vector4, 4> matrix = { vector4::zero, vector4::zero, vector4::zero, vector4::zero };
 
@@ -39,20 +27,29 @@ public:
 		: matrix({ v1, v2, v3, v4 })
 	{}
 
+	
 	/* statics */
 
 	static const matrix4x4 identity;
 
-	static matrix4x4 perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far)
-	{
-		return matrix4x4(glm::perspective(t_fov, t_aspect, t_z_near, t_z_far));
-	}
 
-	static matrix4x4 look_at(const vector3 &t_from, const vector3& t_to, const vector3& t_up)
-	{
-		return matrix4x4(glm::lookAt(t_from.to_glm(), t_to.to_glm(), t_up.to_glm()));
-	}
+	/* Helper functions */
 
+	static matrix4x4 perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far);
+
+	static matrix4x4 look_at(const vector3& t_from, const vector3& t_to, const vector3& t_up);
+
+	inline matrix4x4 transpose() const;
+
+	inline float determinant() const;
+
+	std::array<matrix3x3, 16> minor_matrices() const;
+
+	matrix4x4 inverse() const;
+
+	std::string to_string() const;
+
+	
 	/* Operators */
 
 	inline matrix4x4& operator=(const matrix4x4&rhs)
@@ -84,26 +81,50 @@ public:
 
 	inline matrix4x4& operator*=(const matrix4x4& rhs)
 	{
-		*this = matrix4x4(to_glm() * rhs.to_glm());
+		matrix4x4 tmp_matrix;
+		for (int row = 0; row < 3; row++)
+		{
+			const vector4 row_values = { matrix[row][0], matrix[row][1], matrix[row][2], matrix[row][3] };
+			for (int col = 0; col < 3; col++)
+			{
+				const vector4 col_values = { matrix[0][col], matrix[1][col], matrix[2][col], matrix[3][col] };
+				tmp_matrix[row][col] = vector4::dot(row_values, col_values);
+			}
+		}
+		*this = tmp_matrix;
 		return *this;
 	}
 
 	inline matrix4x4& operator/=(const matrix4x4& rhs)
 	{
-		*this = matrix4x4(to_glm() / rhs.to_glm());
+		*this *= rhs.inverse();
 		return *this;
 	}
 
 	template<typename U>
-	inline matrix4x4 operator*=(const U& scalar)
+	inline matrix4x4 &operator*=(const U& scalar)
 	{
-		return matrix4x4(matrix[0] * scalar, matrix[1] * scalar, matrix[2] * scalar, matrix[3] * scalar);
+		*this =
+		{
+			{ matrix[0][0] * scalar, matrix[0][1] * scalar, matrix[0][2] * scalar, matrix[0][3] * scalar },
+			{ matrix[1][0] * scalar, matrix[1][1] * scalar, matrix[1][2] * scalar, matrix[1][3] * scalar },
+			{ matrix[2][0] * scalar, matrix[2][1] * scalar, matrix[2][2] * scalar, matrix[2][3] * scalar },
+			{ matrix[3][0] * scalar, matrix[3][1] * scalar, matrix[3][2] * scalar, matrix[3][3] * scalar },
+		};
+		return *this;
 	}
 
 	template<typename U>
 	inline matrix4x4& operator/=(const U& scalar)
 	{
-		return matrix4x4(matrix[0] / scalar, matrix[1] / scalar, matrix[2] / scalar, matrix[3] / scalar);
+		*this =
+		{
+			{ matrix[0][0] / scalar, matrix[0][1] / scalar, matrix[0][2] / scalar, matrix[0][3] / scalar },
+			{ matrix[1][0] / scalar, matrix[1][1] / scalar, matrix[1][2] / scalar, matrix[1][3] / scalar },
+			{ matrix[2][0] / scalar, matrix[2][1] / scalar, matrix[2][2] / scalar, matrix[2][3] / scalar },
+			{ matrix[3][0] / scalar, matrix[3][1] / scalar, matrix[3][2] / scalar, matrix[3][3] / scalar },
+		};
+		return *this;
 	}
 
 	vector4& operator[](int idx)
@@ -160,7 +181,14 @@ inline matrix4x4 operator*(matrix4x4 lhs, const U& scalar)
 }
 
 template<typename U>
-inline matrix4x4& operator/(matrix4x4 lhs, const U& scalar)
+inline matrix4x4 operator*(const U& scalar, matrix4x4 rhs)
+{
+	rhs *= scalar;
+	return rhs;
+}
+
+template<typename U>
+inline matrix4x4 operator/(matrix4x4 lhs, const U& scalar)
 {
 	lhs /= scalar;
 	return lhs;

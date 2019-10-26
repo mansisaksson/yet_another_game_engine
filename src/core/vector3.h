@@ -1,5 +1,6 @@
 #pragma once
 #include "glm/glm.hpp"
+#include "string.h"
 
 class vector3
 {
@@ -32,6 +33,12 @@ public:
 		, z(t_z)
 	{}
 
+	vector3(const float v[3])
+		: x(v[0])
+		, y(v[1])
+		, z(v[2])
+	{}
+
 	vector3(const vector3 &o)
 		: x(o.x)
 		, y(o.y)
@@ -50,19 +57,38 @@ public:
 
 	void normalize()
 	{
-		*this = vector3(glm::normalize(to_glm()));
+		*this = get_normalized();
 	}
 
-	vector3 get_normalized() const
+	inline vector3 get_normalized() const
 	{
-		return vector3(glm::normalize(to_glm()));
+		const auto v_length = length();
+		return { x / v_length, y / v_length, z / v_length };
+	}
+
+	inline float length() const
+	{
+		return sqrt(x * x + y * y + z * z);
 	}
 
 	static vector3 cross(const vector3& v1, const vector3& v2)
 	{
-		return glm::cross(v1.to_glm(), v2.to_glm());
+		return {
+			v1.y * v2.z - v1.z * v2.y,
+			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x
+		};
 	}
 
+	static float dot(const vector3& v1, const vector3& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	}
+
+	std::string to_string() const
+	{
+		return string_format::format_string("x: %f, y: %f, z: %f", x, y, z);
+	}
 
 	/* Operators */
 
@@ -107,15 +133,17 @@ public:
 	}
 
 	template<typename U>
-	inline vector3 operator*=(const U& scalar)
+	inline vector3& operator*=(const U& scalar)
 	{
-		return vector3(x * scalar, y * scalar, z * scalar);
+		*this = { x * scalar, y * scalar, z * scalar };
+		return *this;
 	}
 
 	template<typename U>
 	inline vector3& operator/=(const U& scalar)
 	{
-		return vector3(x / scalar, y / scalar, z / scalar);
+		*this = { x / scalar, y / scalar, z / scalar };
+		return *this;
 	}
 
 	float& operator[](int idx)
@@ -191,7 +219,7 @@ inline vector3 operator*(const U& scalar, vector3 rhs)
 }
 
 template<typename U>
-inline vector3& operator/(vector3 lhs, const U& scalar)
+inline vector3 operator/(vector3 lhs, const U& scalar)
 {
 	lhs /= scalar;
 	return lhs;

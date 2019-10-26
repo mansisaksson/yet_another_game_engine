@@ -35,11 +35,11 @@ public:
 		, w(t_w)
 	{}
 
-	vector4(const float m[4])
-		: x(m[0])
-		, y(m[1])
-		, z(m[2])
-		, w(m[3])
+	vector4(const float v[4])
+		: x(v[0])
+		, y(v[1])
+		, z(v[2])
+		, w(v[3])
 	{}
 
 	vector4(const vector4&o)
@@ -61,6 +61,11 @@ public:
 	vector4 get_normalized() const
 	{
 		return vector4(glm::normalize(to_glm()));
+	}
+
+	static float dot(const vector4& v1, const vector4& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
 	}
 
 	/* Operators */
@@ -111,15 +116,17 @@ public:
 	}
 
 	template<typename U>
-	inline vector4 operator*=(const U& scalar)
+	inline vector4 &operator*=(const U& scalar)
 	{
-		return vector4(x * scalar, y * scalar, z * scalar, w * scalar);
+		*this = { x * scalar, y * scalar, z * scalar, w * scalar };
+		return *this;
 	}
 
 	template<typename U>
 	inline vector4& operator/=(const U& scalar)
 	{
-		return vector4(x / scalar, y / scalar, z / scalar, w / scalar);
+		*this = { x / scalar, y / scalar, z / scalar, w / scalar };
+		return *this;
 	}
 
 	float& operator[](int idx)
@@ -198,7 +205,7 @@ inline vector4 operator*(const U& scalar, vector4 rhs)
 }
 
 template<typename U>
-inline vector4& operator/(vector4 lhs, const U& scalar)
+inline vector4 operator/(vector4 lhs, const U& scalar)
 {
 	lhs /= scalar;
 	return lhs;
