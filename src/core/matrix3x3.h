@@ -4,7 +4,7 @@
 #include <array>
 
 /*
-	matrix 3x3
+	row-major matrix 3x3
 	acessed by [row][col]
 */
 class matrix3x3

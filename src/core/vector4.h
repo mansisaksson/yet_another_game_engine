@@ -3,21 +3,6 @@
 
 class vector4
 {
-private:
-	vector4(const glm::vec4& t_glm_vec)
-		: x(t_glm_vec.x)
-		, y(t_glm_vec.y)
-		, z(t_glm_vec.z)
-		, w(t_glm_vec.w)
-	{}
-
-	glm::vec4 to_glm() const
-	{
-		return glm::vec4(x, y, z, w);
-	}
-
-	friend class matrix4x4; // Allow matrix4x4 to access our glm helper functions
-
 public:
 	float x, y, z, w;
 
@@ -53,14 +38,20 @@ public:
 	
 	/* vector math */
 
-	void normalize()
+	inline void normalize()
 	{
-		*this = vector4(glm::normalize(to_glm()));
+		*this = get_normalized();
 	}
 
-	vector4 get_normalized() const
+	inline vector4 get_normalized() const
 	{
-		return vector4(glm::normalize(to_glm()));
+		const auto v_length = length();
+		return { x / v_length, y / v_length, z / v_length, w / v_length };
+	}
+
+	inline float length() const
+	{
+		return sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	static float dot(const vector4& v1, const vector4& v2)

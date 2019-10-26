@@ -24,7 +24,7 @@ public:
 	{
 		m_viewport = game_viewport->get_viewport();
 
-		game_scene->spawn_entity<entity>(transform(vector3(0, 0, -5), quaternion(), 1.f));
+		game_scene->spawn_entity<entity>(transform(vector3(0, 0, 0), quaternion(), 1.f));
 	}
 
 	void tick_game(float t_delta_time)

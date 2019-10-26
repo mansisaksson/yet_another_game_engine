@@ -6,6 +6,12 @@
 /* *********** matrix3x3 *********** */
 /* ********************************* */
 
+matrix3x3 const matrix3x3::identity = matrix3x3(
+	vector3(1, 0, 0),
+	vector3(0, 1, 0),
+	vector3(0, 0, 1)
+);
+
 matrix3x3 matrix3x3::transpose() const
 {
 	return
@@ -126,6 +132,13 @@ std::string matrix3x3::to_string() const
 /* *********** matrix4x4 *********** */
 /* ********************************* */
 
+matrix4x4 const matrix4x4::identity = matrix4x4(
+	vector4(1, 0, 0, 0),
+	vector4(0, 1, 0, 0),
+	vector4(0, 0, 1, 0),
+	vector4(0, 0, 0, 1)
+);
+
 matrix4x4 matrix4x4::perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far)
 {
 	/*Result[0][0] = 1.f / (t_aspect * tanHalfFovy);
@@ -142,15 +155,17 @@ matrix4x4 matrix4x4::look_at(const vector3& t_from, const vector3& t_to, const v
 	const vector3 forward = (t_to - t_from).get_normalized();
 	const vector3 right = vector3::cross(t_up, forward);
 
-	/*log::info("matrix4x4", "forward: %s", forward.to_string().c_str());
-	log::info("matrix4x4", "right: %s", right.to_string().c_str());
-	log::info("matrix4x4", "t_up: %s", t_up.to_string().c_str());*/
-
-	return {
+	/*return {
 		{ forward.x, right.x, t_up.x, t_from.x },
 		{ forward.y, right.y, t_up.y, t_from.y },
 		{ forward.z, right.z, t_up.z, t_from.z },
 		{ 0,		 0,		  0,	  1		   }
+	};*/
+	return {
+		{ forward.x, forward.y, forward.z,	0.f },
+		{ right.x,	 right.y,	right.z,	0.f },
+		{ t_up.x,	 t_up.y,	t_up.z,		0.f },
+		{ t_from.x,  t_from.y,	t_from.z,	1.f },
 	};
 }
 

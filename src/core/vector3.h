@@ -4,20 +4,6 @@
 
 class vector3
 {
-private:
-	vector3(const glm::vec3& t_glm_vec)
-		: x(t_glm_vec.x)
-		, y(t_glm_vec.y)
-		, z(t_glm_vec.z)
-	{}
-
-	glm::vec3 to_glm() const
-	{
-		return glm::vec3(x, y, z);
-	}
-
-	friend class matrix4x4;
-
 public:
 	float x, y, z;
 

@@ -19,13 +19,6 @@ transform const transform::identity = transform(
 	1.f
 );
 
-matrix4x4 const matrix4x4::identity = matrix4x4(
-	vector4(1, 0, 0, 0),
-	vector4(0, 1, 0, 0),
-	vector4(0, 0, 1, 0),
-	vector4(0, 0, 0, 1)
-);
-
 color const color::red		= color(255, 0, 0, 255);
 color const color::green	= color(0, 255, 0, 255);
 color const color::blue		= color(0, 0, 255, 255);
