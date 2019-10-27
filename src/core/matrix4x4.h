@@ -195,19 +195,19 @@ inline matrix4x4 operator/(matrix4x4 lhs, const U& scalar)
 inline vector4 operator*(const vector4 &lhs, const matrix4x4& rhs)
 {
 	return vector4(
-		rhs.matrix[0][0] * lhs[0] + rhs.matrix[0][1] * lhs[1] + rhs.matrix[0][2] * lhs[2] + rhs.matrix[0][3] * lhs[3],
-		rhs.matrix[1][0] * lhs[0] + rhs.matrix[1][1] * lhs[1] + rhs.matrix[1][2] * lhs[2] + rhs.matrix[1][3] * lhs[3],
-		rhs.matrix[2][0] * lhs[0] + rhs.matrix[2][1] * lhs[1] + rhs.matrix[2][2] * lhs[2] + rhs.matrix[2][3] * lhs[3],
-		rhs.matrix[3][0] * lhs[0] + rhs.matrix[3][1] * lhs[1] + rhs.matrix[3][2] * lhs[2] + rhs.matrix[3][3] * lhs[3]
+		lhs[0] * rhs[0][0] + lhs[1] * rhs[1][0] + lhs[2] * rhs[2][0] + lhs[3] * rhs[3][0],
+		lhs[0] * rhs[0][1] + lhs[1] * rhs[1][1] + lhs[2] * rhs[2][1] + lhs[3] * rhs[3][1],
+		lhs[0] * rhs[0][2] + lhs[1] * rhs[1][2] + lhs[2] * rhs[2][2] + lhs[3] * rhs[3][2],
+		lhs[0] * rhs[0][3] + lhs[1] * rhs[1][3] + lhs[2] * rhs[2][3] + lhs[3] * rhs[3][3]
 	);
 }
 
 inline vector4 operator*(const matrix4x4& rhs, const vector4& lhs)
 {
 	return vector4(
-		lhs[0] * rhs.matrix[0][0] + lhs[1] * rhs.matrix[1][0] + lhs[2] * rhs.matrix[2][0] + lhs[3] * rhs.matrix[3][0],
-		lhs[0] * rhs.matrix[0][1] + lhs[1] * rhs.matrix[1][1] + lhs[2] * rhs.matrix[2][1] + lhs[3] * rhs.matrix[3][1],
-		lhs[0] * rhs.matrix[0][2] + lhs[1] * rhs.matrix[1][2] + lhs[2] * rhs.matrix[2][2] + lhs[3] * rhs.matrix[3][2],
-		lhs[0] * rhs.matrix[0][3] + lhs[1] * rhs.matrix[1][3] + lhs[2] * rhs.matrix[2][3] + lhs[3] * rhs.matrix[3][3]
+		lhs[0] * rhs[0][0] + lhs[1] * rhs[0][1] + lhs[2] * rhs[0][2] + lhs[3] * rhs[0][3],
+		lhs[0] * rhs[1][0] + lhs[1] * rhs[1][1] + lhs[2] * rhs[1][2] + lhs[3] * rhs[1][3],
+		lhs[0] * rhs[2][0] + lhs[1] * rhs[2][1] + lhs[2] * rhs[2][2] + lhs[3] * rhs[2][3],
+		lhs[0] * rhs[3][0] + lhs[1] * rhs[3][1] + lhs[2] * rhs[3][2] + lhs[3] * rhs[3][3]
 	);
 }
