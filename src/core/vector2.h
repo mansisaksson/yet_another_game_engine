@@ -180,3 +180,8 @@ inline vector2 operator/(vector2 lhs, const U& scalar)
 	lhs /= scalar;
 	return lhs;
 }
+
+inline vector2 operator-(const vector2& rhs)
+{
+	return rhs * -1.f;
+}
