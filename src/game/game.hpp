@@ -19,7 +19,7 @@ private:
 
 	viewport* m_viewport;
 	vector3 m_view_location;
-	quaternion m_view_rotation;
+	vector2 m_view_rotation;
 
 public:
 
@@ -32,14 +32,14 @@ public:
 
 	void tick_game(float t_delta_time)
 	{
-		m_view_rotation = quaternion(vector3(0, 1, 0), m_camera_rot.x) * m_view_rotation;
-		//m_view_rotation = quaternion(vector3(1, 0, 0), m_camera_rot.y) * m_view_rotation;
+		m_view_rotation += m_camera_rot;
 
-		//log::info("test", "forward: %s", m_view_rotation.get_forward().to_string().c_str());
-		m_view_location += m_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
+		const quaternion new_view_rotation = quaternion(vector3(0, 1, 0), m_view_rotation.x) * quaternion(vector3(1, 0, 0), m_view_rotation.y);
+
+		m_view_location += new_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
 
 		m_viewport->set_view_location(m_view_location);
-		m_viewport->set_view_rotation(m_view_rotation);
+		m_viewport->set_view_rotation(new_view_rotation);
 	}
 
 	void on_input_event(const input_event& t_input_event)
