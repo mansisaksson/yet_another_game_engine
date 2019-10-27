@@ -8,7 +8,7 @@ namespace math
 		return rand() % INT_MAX;
 	}
 
-	inline float pi()
+	inline constexpr float pi()
 	{
 		return 3.14159265359f;
 	}
@@ -16,7 +16,7 @@ namespace math
 	template<typename U>
 	inline U deg_to_rad(const U& deg)
 	{
-		return deg * 0.0174532925f;
+		return deg * (pi() / 180.f);
 	}
 
 	/*bool nearly_equals(float a, float b, float epsilon = 0.001)

@@ -1,0 +1,7 @@
+{
+	"asset_type": "static_mesh",
+	"data_asset": "/data/arrows.obj",
+	"materials": [
+		"basic_mat"
+	]
+}

@@ -140,32 +140,58 @@ matrix4x4 const matrix4x4::identity = matrix4x4(
 	vector4(0, 0, 0, 1)
 );
 
-matrix4x4 matrix4x4::perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far)
-{
-	const float ar = t_aspect;
-	const float n = t_z_near;
-	const float f = t_z_far;
-	const float r = n - f;
-	const float h_f = tanf(math::deg_to_rad(t_fov / 2.0f));
+matrix4x4 const matrix4x4::zero = matrix4x4(
+	vector4(0, 0, 0, 0),
+	vector4(0, 0, 0, 0),
+	vector4(0, 0, 0, 0),
+	vector4(0, 0, 0, 0)
+);
 
-	return {
-		{ 1.0f / (h_f * ar), 0,			 0,				0				 },
-		{ 0,				 1.0f / h_f, 0,				0				 },
-		{ 0,				 0,			 (-n - f) / r,  2.0f * f * n / r },
-		{ 0,				 0,			 1.f,			0				 },
-	};
+matrix4x4 matrix4x4::perspective(float t_fov, float t_aspect_ratio, float t_z_near, float t_z_far)
+{
+	// http://in2gpu.com/2015/05/23/enter-the-matrix-and-projection/
+	
+	matrix4x4 m = matrix4x4::zero; //all values are 0
+	const float ar = t_aspect_ratio;
+	const float half_angle = tan(math::deg_to_rad(t_fov) / 2.f);
+
+	const float near = t_z_near;
+	const float far = t_z_far;
+
+	m[0][0] = 1.f / (ar * half_angle);
+	m[1][1] = 1.f / half_angle;
+	m[2][2] = (-near - far) / (near - far);
+	m[3][2] = 1.f;
+	m[2][3] = 2.f * near * far / (near - far);
+
+	return m;
+
+	//const float ar = t_aspect;
+	//const float n = t_z_near;
+	//const float f = t_z_far;
+	//const float r = n - f;
+	//const float h_f = tanf(math::deg_to_rad(t_fov / 2.0f));
+
+	//return {
+	//	{ 1.0f / (h_f * ar), 0,			 0,				0				 },
+	//	{ 0,				 1.0f / h_f, 0,				0				 },
+	//	{ 0,				 0,			 (-n - f) / r,  2.0f * f * n / r },
+	//	{ 0,				 0,			 1.f,			0				 },
+	//};
 }
 
 matrix4x4 matrix4x4::look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up)
 {
-	const vector3 z_axis = (t_target - t_eye).get_normalized();				// -Z Forward
-	const vector3 x_axis = vector3::cross(t_up, z_axis).get_normalized();	// +X Right
-	const vector3 y_axis = vector3::cross(z_axis, x_axis);					// +Y Up
+	const vector3 p_z_axis = (t_eye - t_target).get_normalized();				// -Z Forward
+	const vector3 x_axis = vector3::cross(p_z_axis, t_up).get_normalized();		// +X Right
+	const vector3 y_axis = vector3::cross(x_axis, p_z_axis);					// +Y Up
 	
+	const vector3 z_axis = -p_z_axis; // Camera is looking in -Z
+
 	const matrix4x4 view_matrix = {
 		{ x_axis.x, x_axis.y, x_axis.z, -vector3::dot(x_axis, t_eye) },
 		{ y_axis.x, y_axis.y, y_axis.z, -vector3::dot(y_axis, t_eye) },
-		{ z_axis.x, z_axis.y, z_axis.z, -vector3::dot(z_axis, t_eye) },
+		{ z_axis.x, z_axis.y, z_axis.z,  vector3::dot(z_axis, t_eye) },
 		{ 0.f,		0.f,	  0.f,		1.f							 },
 	};
 

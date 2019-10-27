@@ -31,11 +31,12 @@ public:
 	/* statics */
 
 	static const matrix4x4 identity;
+	static const matrix4x4 zero;
 
 
 	/* Helper functions */
 
-	static matrix4x4 perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far);
+	static matrix4x4 perspective(float t_fov, float t_aspect_ratio, float t_z_near, float t_z_far);
 
 	static matrix4x4 look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up);
 
