@@ -81,47 +81,18 @@ public:
 
 	inline matrix4x4& operator*=(const matrix4x4& rhs)
 	{
-		/*
-		TODO: Remove, kept for reference
+		//TODO: Unroll
 		matrix4x4 tmp_matrix;
-		for (int row = 0; row < 3; row++)
+		for (int row = 0; row < 4; row++)
 		{
 			const vector4 row_values = { matrix[row][0], matrix[row][1], matrix[row][2], matrix[row][3] };
-			for (int col = 0; col < 3; col++)
+			for (int col = 0; col < 4; col++)
 			{
-				const vector4 col_values = { matrix[0][col], matrix[1][col], matrix[2][col], matrix[3][col] };
+				const vector4 col_values = { rhs[0][col], rhs[1][col], rhs[2][col], rhs[3][col] };
 				tmp_matrix[row][col] = vector4::dot(row_values, col_values);
 			}
 		}
-		*this = tmp_matrix;*/
-
-		*this = 
-		{
-			{
-				{ matrix[0][0] * rhs[0][0] + matrix[0][1] * rhs[1][0] + matrix[0][2] * rhs[2][0] + matrix[0][3] * rhs[3][0] },
-				{ matrix[1][0] * rhs[0][0] + matrix[1][1] * rhs[1][0] + matrix[1][2] * rhs[2][0] + matrix[1][3] * rhs[3][0] },
-				{ matrix[2][0] * rhs[0][0] + matrix[2][1] * rhs[1][0] + matrix[2][2] * rhs[2][0] + matrix[2][3] * rhs[3][0] },
-				{ matrix[3][0] * rhs[0][0] + matrix[3][1] * rhs[1][0] + matrix[3][2] * rhs[2][0] + matrix[3][3] * rhs[3][0] },
-			},
-			{
-				{ matrix[0][0] * rhs[0][1] + matrix[0][1] * rhs[1][1] + matrix[0][2] * rhs[2][1] + matrix[0][3] * rhs[3][1] },
-				{ matrix[1][0] * rhs[0][1] + matrix[1][1] * rhs[1][1] + matrix[1][2] * rhs[2][1] + matrix[1][3] * rhs[3][1] },
-				{ matrix[2][0] * rhs[0][1] + matrix[2][1] * rhs[1][1] + matrix[2][2] * rhs[2][1] + matrix[2][3] * rhs[3][1] },
-				{ matrix[3][0] * rhs[0][1] + matrix[3][1] * rhs[1][1] + matrix[3][2] * rhs[2][1] + matrix[3][3] * rhs[3][1] },
-			},
-			{
-				{ matrix[0][0] * rhs[0][2] + matrix[0][1] * rhs[1][2] + matrix[0][2] * rhs[2][2] + matrix[0][3] * rhs[3][2] },
-				{ matrix[1][0] * rhs[0][2] + matrix[1][1] * rhs[1][2] + matrix[1][2] * rhs[2][2] + matrix[1][3] * rhs[3][2] },
-				{ matrix[2][0] * rhs[0][2] + matrix[2][1] * rhs[1][2] + matrix[2][2] * rhs[2][2] + matrix[2][3] * rhs[3][2] },
-				{ matrix[3][0] * rhs[0][2] + matrix[3][1] * rhs[1][2] + matrix[3][2] * rhs[2][2] + matrix[3][3] * rhs[3][2] }
-			},
-			{
-				{ matrix[0][0] * rhs[0][3] + matrix[0][1] * rhs[1][3] + matrix[0][2] * rhs[2][3] + matrix[0][3] * rhs[3][3] },
-				{ matrix[1][0] * rhs[0][3] + matrix[1][1] * rhs[1][3] + matrix[1][2] * rhs[2][3] + matrix[1][3] * rhs[3][3] },
-				{ matrix[2][0] * rhs[0][3] + matrix[2][1] * rhs[1][3] + matrix[2][2] * rhs[2][3] + matrix[2][3] * rhs[3][3] },
-				{ matrix[3][0] * rhs[0][3] + matrix[3][1] * rhs[1][3] + matrix[3][2] * rhs[2][3] + matrix[3][3] * rhs[3][3] }
-			}
-		};
+		*this = tmp_matrix;
 		return *this;
 	}
 
