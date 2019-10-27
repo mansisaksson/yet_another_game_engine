@@ -118,6 +118,14 @@ public:
 		return *this;
 	}
 
+	inline vector3& operator-() 
+	{ 
+		x *= -1.f;
+		y *= -1.f;
+		z *= -1.f;
+		return *this;
+	}
+
 	template<typename U>
 	inline vector3& operator*=(const U& scalar)
 	{
