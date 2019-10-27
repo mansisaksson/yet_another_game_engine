@@ -1,21 +1,8 @@
 #pragma once
-#include "glm/gtx/quaternion.hpp"
+#include "string.h"
 
 class quaternion
 {
-private:
-	quaternion(const glm::quat &t_glm_quat)
-		: x(t_glm_quat.x)
-		, y(t_glm_quat.y)
-		, z(t_glm_quat.z)
-		, w(t_glm_quat.w)
-	{}
-
-	glm::quat to_glm() const
-	{
-		return glm::quat(x, y, z, w);
-	}
-
 public:
 	float x, y, z, w;
 
@@ -23,7 +10,7 @@ public:
 		: x(0)
 		, y(0)
 		, z(0)
-		, w(0)
+		, w(1)
 	{}
 
 	quaternion(float x, float y, float z, float w)
@@ -39,6 +26,15 @@ public:
 		, z(o.z)
 		, w(o.w)
 	{}
+
+	quaternion(const vector3 &axis, float t_rad)
+	{
+		const float s = sin(t_rad / 2.f);
+		x = axis.x * s;
+		y = axis.y * s;
+		z = axis.z * s;
+		w = cos(t_rad / 2.f);
+	}
 
 	/* statics */
 
@@ -77,6 +73,11 @@ public:
 		return rotate_vector(vector3::forward);
 	}
 
+	std::string to_string() const
+	{
+		return string_format::format_string("x: %f, y: %f, z: %f, w: %f", z, y, z, w);
+	}
+
 	/* Operators */
 
 	inline quaternion& operator=(const quaternion &rhs)
@@ -88,9 +89,14 @@ public:
 		return *this;
 	}
 
-	inline quaternion& operator*=(const quaternion& o)
+	inline quaternion& operator*=(const quaternion& rhs)
 	{
-		*this = quaternion(to_glm() * o.to_glm());
+		quaternion result;
+		result.x = x * rhs.w + y * rhs.z - z * rhs.y + w * rhs.x;
+		result.y = -x * rhs.z + y * rhs.w + z * rhs.x + w * rhs.y;
+		result.z = x * rhs.y - y * rhs.x + z * rhs.w + w * rhs.z;
+		result.w = -x * rhs.x - y * rhs.y - z * rhs.z + w * rhs.w;
+		*this = result;
 		return *this;
 	}
 
