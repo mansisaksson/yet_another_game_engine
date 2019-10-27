@@ -52,35 +52,12 @@ void gl_material::bind()
 
 void gl_material::update(const transform& t_mesh_transform, const matrix4x4& t_view_matrix)
 {
-	/*
-		YETE: 
-		+X: Forward
-		+Y: Right
-		+Z: Up
-
-		OpenGL:
-		-Z: Forward
-		+Y: Up
-		+X: Right
-	*/
-	const matrix4x4 gl_view_matrix = // TODO: Should only have to do this once per view
-	{
-		/*	Swap +X to -Z		  Swap +Y to +X		  Swap +Z to +Y			Anything here? */
-		{  t_view_matrix[0][0], t_view_matrix[0][1], t_view_matrix[0][2], t_view_matrix[0][3] },
-		{  t_view_matrix[1][0], t_view_matrix[1][1], t_view_matrix[1][2], t_view_matrix[1][3] },
-		{  t_view_matrix[2][0], t_view_matrix[2][1], t_view_matrix[2][2], t_view_matrix[2][3] },
-		
-		{  t_view_matrix[3][0], t_view_matrix[3][1], t_view_matrix[3][2], t_view_matrix[3][3] },
-	};
-
-	const auto gl_mesh_matrix = /*gl_to_yete_matrix * */t_mesh_transform.to_matrix()/* * gl_to_yete_matrix*/;
-	//const auto gl_view_matrix = t_view_matrix;// * gl_to_yete_matrix;
-	const matrix4x4 model = (t_view_matrix * gl_mesh_matrix); // Convert from column-major -> row-major
+	const matrix4x4 model = t_view_matrix * t_mesh_transform.to_matrix();
 	
 	glUniformMatrix4fv(
 		m_uniforms[TRANSFORM_U],
 		1,
-		/*If you write your own matrix class, you might need to transpose this to be in the order OpenGL expects*/GL_FALSE,
+		GL_TRUE, // Transpose from row-major -> column-major
 		&model[0][0]
 	);
 }

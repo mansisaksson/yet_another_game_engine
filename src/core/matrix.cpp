@@ -142,55 +142,42 @@ matrix4x4 const matrix4x4::identity = matrix4x4(
 
 matrix4x4 matrix4x4::perspective(float t_fov, float t_aspect, float t_z_near, float t_z_far)
 {
-	//https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix
+	const float ar = t_aspect;
 	const float n = t_z_near;
 	const float f = t_z_far;
-
-	const float scale = tan(t_fov * 0.5f * math::pi() / 180.f) * n;
-	const float r = t_aspect * scale;
-	const float l = -r;
-	const float t = scale;
-	const float b = -t;
-	
+	const float r = n - f;
+	const float h_f = tanf(math::deg_to_rad(t_fov / 2.0f));
 
 	return {
-		{ 2 * n / (r - l),		0,					0,						 0	 },
-		{ 0,					2 * n / (t - b),	0,						 0	 },
-		{ (r + l) / (r - l),	(t + b) / (t - b),	-(f + n) / (f - n),		-1.f },
-		{ 0,					0,					-2 * f * n / (f - n),	 0	 },
+		{ 1.0f / (h_f * ar), 0,			 0,				0				 },
+		{ 0,				 1.0f / h_f, 0,				0				 },
+		{ 0,				 0,			 (-n - f) / r,  2.0f * f * n / r },
+		{ 0,				 0,			 1.f,			0				 },
 	};
 }
 
 matrix4x4 matrix4x4::look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up)
 {
-	const vector3 forward = (t_target - t_eye).get_normalized();
-	const vector3 right = vector3::cross(t_up, forward).get_normalized();
-	const vector3 up = vector3::cross(forward, right);
+	const vector3 x_axis = (t_target - t_eye).get_normalized();				// +X Forward
+	const vector3 y_axis = vector3::cross(t_up, x_axis).get_normalized();	// +Y Right
+	const vector3 z_axis = vector3::cross(y_axis, x_axis);					// +Z Up
 
-	const matrix4x4 orientation = {
-		{ forward.x, forward.y, forward.z,	0.f },
-		{ right.x,	 right.y,	right.z,	0.f },
-		{ t_up.x,	 t_up.y,	t_up.z,		0.f },
-		{ 0.f,		 0.f,		0.f,		1.f },
+	const matrix4x4 view_matrix = {
+		{ x_axis.x, y_axis.x, z_axis.x, -vector3::dot(x_axis, t_eye) },
+		{ x_axis.y, y_axis.y, z_axis.y, -vector3::dot(y_axis, t_eye) },
+		{ x_axis.z, y_axis.z, z_axis.z, -vector3::dot(z_axis, t_eye) },
+		{ 0.f,		0.f,	  0.f,		1.f							 },
 	};
 
-	const matrix4x4 translation = {
-		{ 1.f,		0.f,		0.f,	0.f },
-		{ 0.f,		1.f,		0.f,	0.f },
-		{ 0.f,		0.f,		1.f,	0.f },
-		{ -t_eye.x, -t_eye.y, -t_eye.z, 1.f },
-	};
+	// TODO: converting from OpenGL to YETE coordinates here, should probably not be hard-coded like this
+	/*const matrix4x4 view_matrix = {
+		{ x_axis.x, y_axis.x, z_axis.x, -vector3::dot(y_axis, t_eye) },
+		{ x_axis.y, y_axis.y, z_axis.y, -vector3::dot(-1 * z_axis, t_eye) },
+		{ x_axis.z, y_axis.z, z_axis.z, -vector3::dot(x_axis, t_eye) },
+		{ 0.f,		0.f,	  0.f,		1.f							 },
+	};*/
 
-	/* TODO: Optimize with
-	mat4 viewMatrix = {
-		vec4(      xaxis.x,            yaxis.x,            zaxis.x,       0 ),
-		vec4(      xaxis.y,            yaxis.y,            zaxis.y,       0 ),
-		vec4(      xaxis.z,            yaxis.z,            zaxis.z,       0 ),
-		vec4(-dot( xaxis, eye ), -dot( yaxis, eye ), -dot( zaxis, eye ),  1 )
-	};
-	*/
-
-	return orientation * translation;
+	return view_matrix;
 }
 
 matrix4x4 matrix4x4::transpose() const
