@@ -36,7 +36,11 @@ public:
 
 		const quaternion new_view_rotation = quaternion(vector3(0, 1, 0), m_view_rotation.x) * quaternion(vector3(1, 0, 0), m_view_rotation.y);
 
-		m_view_location += new_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
+		if (m_camera_movement.length() > 0)
+		{
+			m_view_location += new_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
+			log::info("test", "camera location: %s", m_view_location.to_string().c_str());
+		}
 
 		m_viewport->set_view_location(m_view_location);
 		m_viewport->set_view_rotation(new_view_rotation);

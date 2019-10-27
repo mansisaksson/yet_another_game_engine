@@ -6,7 +6,7 @@
 void entity::draw(const viewport* viewport)
 {
 	if (!static_mesh_ptr)
-		static_mesh_ptr = asset_ptr<static_mesh>("arrows_mesh");
+		static_mesh_ptr = asset_ptr<static_mesh>("debug_mesh");
 
 	if (static_mesh_ptr)
 		static_mesh_ptr->draw(transform, viewport);
