@@ -8,20 +8,10 @@ std::tuple<int, int> yete_to_gl_coordinates(int x, int y, int width, int height,
 
 void gl_viewport::make_current(int x, int y, int width, int height, int window_width, int widow_height)
 {
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	const auto gl_coordinates = yete_to_gl_coordinates(x, y, width, height, window_width, widow_height);
 	glViewport(std::get<0>(gl_coordinates), std::get<1>(gl_coordinates), width, height);
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-
-
-	/*const glm::mat4 yete_projection_matrix =
-	{
-		{ 1, 0, 0, 0},
-		{ 0,-1, 0, 0},
-		{ 0, 0, 1, 0},
-		{ 0, 0, 0, 1}
-	};
-	glLoadMatrixf(&yete_projection_matrix[0][0]);*/
-
 }

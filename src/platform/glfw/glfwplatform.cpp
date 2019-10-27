@@ -13,10 +13,6 @@ glfw_platform::glfw_platform()
 		log::error("glfw_platform", "Failed to initialize glfw");
 		exit(EXIT_FAILURE);
 	}
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
 }
 
 glfw_platform::~glfw_platform()
