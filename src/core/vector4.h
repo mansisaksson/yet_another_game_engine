@@ -1,5 +1,5 @@
 #pragma once
-#include "glm/glm.hpp"
+#include "string.h"
 
 class vector4
 {
@@ -57,6 +57,11 @@ public:
 	static float dot(const vector4& v1, const vector4& v2)
 	{
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
+	}
+
+	std::string to_string() const
+	{
+		return string_format::format_string("x: %f, y: %f, z: %f, w: %f", x, y, z, w);
 	}
 
 	/* Operators */
