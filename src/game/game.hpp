@@ -32,9 +32,10 @@ public:
 
 	void tick_game(float t_delta_time)
 	{
-		m_view_rotation = quaternion(vector3(0, 0, 1), m_camera_rot.x) * m_view_rotation;
-		m_view_rotation = quaternion(vector3(1, 0, 0), m_camera_rot.y) * m_view_rotation;
+		m_view_rotation = quaternion(vector3(0, 1, 0), m_camera_rot.x) * m_view_rotation;
+		//m_view_rotation = quaternion(vector3(1, 0, 0), m_camera_rot.y) * m_view_rotation;
 
+		//log::info("test", "forward: %s", m_view_rotation.get_forward().to_string().c_str());
 		m_view_location += m_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
 
 		m_viewport->set_view_location(m_view_location);
@@ -47,31 +48,31 @@ public:
 		{
 			if (t_input_event.key == key::w)
 			{
-				m_camera_movement.x = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.z = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 			if (t_input_event.key == key::s)
 			{
-				m_camera_movement.x = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.z = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 
 
 			if (t_input_event.key == key::d)
 			{
-				m_camera_movement.y = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.x = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 			if (t_input_event.key == key::a)
 			{
-				m_camera_movement.y = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.x = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 
 
 			if (t_input_event.key == key::space)
 			{
-				m_camera_movement.z = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.y = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 			if (t_input_event.key == key::left_control)
 			{
-				m_camera_movement.z = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.y = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 		}
 

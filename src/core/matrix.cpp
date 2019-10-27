@@ -158,26 +158,38 @@ matrix4x4 matrix4x4::perspective(float t_fov, float t_aspect, float t_z_near, fl
 
 matrix4x4 matrix4x4::look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up)
 {
-	const vector3 x_axis = (t_target - t_eye).get_normalized();				// +X Forward
-	const vector3 y_axis = vector3::cross(t_up, x_axis).get_normalized();	// +Y Right
-	const vector3 z_axis = vector3::cross(y_axis, x_axis);					// +Z Up
-
+	const vector3 z_axis = (t_target - t_eye).get_normalized();				// -Z Forward
+	const vector3 x_axis = vector3::cross(t_up, z_axis).get_normalized();	// +X Right
+	const vector3 y_axis = vector3::cross(z_axis, x_axis);					// +Y Up
+	
 	const matrix4x4 view_matrix = {
-		{ x_axis.x, y_axis.x, z_axis.x, -vector3::dot(x_axis, t_eye) },
-		{ x_axis.y, y_axis.y, z_axis.y, -vector3::dot(y_axis, t_eye) },
-		{ x_axis.z, y_axis.z, z_axis.z, -vector3::dot(z_axis, t_eye) },
+		{ x_axis.x, x_axis.y, x_axis.z, -vector3::dot(x_axis, t_eye) },
+		{ y_axis.x, y_axis.y, y_axis.z, -vector3::dot(y_axis, t_eye) },
+		{ z_axis.x, z_axis.y, z_axis.z, -vector3::dot(z_axis, t_eye) },
 		{ 0.f,		0.f,	  0.f,		1.f							 },
 	};
 
-	// TODO: converting from OpenGL to YETE coordinates here, should probably not be hard-coded like this
-	/*const matrix4x4 view_matrix = {
-		{ x_axis.x, y_axis.x, z_axis.x, -vector3::dot(y_axis, t_eye) },
-		{ x_axis.y, y_axis.y, z_axis.y, -vector3::dot(-1 * z_axis, t_eye) },
-		{ x_axis.z, y_axis.z, z_axis.z, -vector3::dot(x_axis, t_eye) },
-		{ 0.f,		0.f,	  0.f,		1.f							 },
-	};*/
-
 	return view_matrix;
+}
+
+matrix4x4 matrix4x4::fps_view(const vector3& t_eye, float t_pitch, float t_yaw)
+{
+	const float cos_pitch = cos(t_pitch);
+	const float sin_pitch = sin(t_pitch);
+	const float cos_yaw = cos(t_yaw);
+	const float sin_yaw = sin(t_yaw);
+
+	const vector3 x_axis = { cos_yaw, 0, -sin_yaw };
+	const vector3 y_axis = { sin_yaw * sin_pitch, cos_pitch, cos_yaw * sin_pitch };
+	const vector3 z_axis = { sin_yaw * cos_pitch, -sin_pitch, cos_pitch * cos_yaw };
+
+	// Create a 4x4 view matrix from the right, up, forward and eye position vectors
+	return {
+		{ x_axis.x, x_axis.y, x_axis.z, -vector3::dot(x_axis, t_eye) },
+		{ y_axis.x, y_axis.y, y_axis.z, -vector3::dot(y_axis, t_eye) },
+		{ z_axis.x, z_axis.y, z_axis.z, -vector3::dot(z_axis, t_eye) },
+		{ 0.f,		0.f,	  0.f,		1.f							 }
+	};
 }
 
 matrix4x4 matrix4x4::transpose() const
