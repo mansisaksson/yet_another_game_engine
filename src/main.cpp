@@ -13,41 +13,11 @@
 
 #include "game/game.hpp"
 
+#include "test.hpp"
+
 int main()
 {
-	// test matrix 3x3
-	// test compared to: https://www.wikihow.com/Find-the-Inverse-of-a-3x3-Matrix
-	/*{
-		log::info("main", "***** matrix3x3 *****");
-		matrix3x3 test3x3 = {
-			{ 1, 2, 3 },
-			{ 0, 1, 4 },
-			{ 5, 6, 0 },
-		};
-
-		test3x3.inverse();
-		log::info("main", "matrix: %s", test3x3.to_string().c_str());
-
-		log::info("main", "matrix determinant: %f", test3x3.determinant());
-
-		log::info("main", "inv_matrix: %s\n\n", test3x3.inverse().to_string().c_str());
-	}*/
-
-	// test matrix 4x4
-	// compared to: https://semath.info/src/inverse-cofactor-ex4.html
-	/*{
-		log::info("main", "***** matrix4x4 *****");
-		matrix4x4 test4x4 = {
-			{  1,  1,  1, -1 },
-			{  1,  1, -1,  1 },
-			{  1, -1,  1,  1 },
-			{ -1,  1,  1,  1 },
-		};
-
-		log::info("main", "matrix determinant: %f", test4x4.determinant());
-
-		log::info("main", "inv_matrix: %s\n\n", test4x4.inverse().to_string().c_str());
-	}*/
+	run_tests();
 
 	std::shared_ptr<scene> game_scene = std::make_shared<scene>();
 
