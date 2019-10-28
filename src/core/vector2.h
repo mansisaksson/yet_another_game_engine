@@ -1,19 +1,8 @@
 #pragma once
-#include "glm/glm.hpp"
+#include "string.h"
 
 class vector2
 {
-private:
-	vector2(const glm::vec2 &t_glm_vec)
-		: x(t_glm_vec.x)
-		, y(t_glm_vec.y)
-	{}
-
-	glm::vec2 to_glm() const
-	{
-		return glm::vec2(x, y);
-	}
-
 public:
 	float x, y;
 
@@ -43,14 +32,24 @@ public:
 
 	void normalize()
 	{
-		*this = vector2(glm::normalize(to_glm()));
+		*this = get_normalized();
 	}
 
-	vector2 get_normalized() const
+	inline vector2 get_normalized() const
 	{
-		return vector2(glm::normalize(to_glm()));
+		const auto v_length = length();
+		return { x / v_length, y / v_length };
 	}
 
+	inline float length() const
+	{
+		return sqrt(x * x + y * y);
+	}
+
+	inline std::string to_string() const
+	{
+		return string_format::format_string("x: %f, y: %f", x, y);
+	}
 
 	/* Operators */
 

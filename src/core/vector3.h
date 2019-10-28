@@ -71,7 +71,7 @@ public:
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
 
-	std::string to_string() const
+	inline std::string to_string() const
 	{
 		return string_format::format_string("x: %f, y: %f, z: %f", x, y, z);
 	}

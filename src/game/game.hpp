@@ -15,7 +15,7 @@ private:
 	float m_camera_movement_speed = 1.f;
 
 	vector2 m_camera_rot;
-	float m_camera_rot_speed = 0.01f;
+	float m_camera_rot_speed = 1.f;
 
 	viewport* m_viewport;
 	vector3 m_view_location;
@@ -32,14 +32,16 @@ public:
 
 	void tick_game(float t_delta_time)
 	{
-		m_view_rotation += m_camera_rot;
+		m_view_rotation += m_camera_rot * t_delta_time;
 
-		const quaternion new_view_rotation = quaternion(vector3(0, 1, 0), m_view_rotation.x) * quaternion(vector3(1, 0, 0), m_view_rotation.y);
+		const quaternion new_view_rotation = quaternion(vector3::up, m_view_rotation.x) * quaternion(vector3::right, m_view_rotation.y);
 
-		if (m_camera_movement.length() > 0)
+		if (m_camera_movement.length() > 0 || m_camera_rot.length() > 0)
 		{
 			m_view_location += new_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
-			log::info("test", "camera location: %s", m_view_location.to_string().c_str());
+			//log::info("test", "camera location: %s", m_view_location.to_string().c_str());
+			//log::info("test", "camera forward: %s", new_view_rotation.get_forward().to_string().c_str());
+			log::info("test", "m_view_rotation: %s", m_view_rotation.to_string().c_str());
 		}
 
 		m_viewport->set_view_location(m_view_location);
@@ -52,31 +54,31 @@ public:
 		{
 			if (t_input_event.key == key::w)
 			{
-				m_camera_movement.z = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.x = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 			if (t_input_event.key == key::s)
 			{
-				m_camera_movement.z = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.x = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 
 
 			if (t_input_event.key == key::d)
 			{
-				m_camera_movement.x = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.y = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 			if (t_input_event.key == key::a)
 			{
-				m_camera_movement.x = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.y = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 
 
 			if (t_input_event.key == key::space)
 			{
-				m_camera_movement.y = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.z = (t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 			if (t_input_event.key == key::left_control)
 			{
-				m_camera_movement.y = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
+				m_camera_movement.z = -(t_input_event.key_event != key_event::released ? m_camera_movement_speed : 0.f);
 			}
 		}
 

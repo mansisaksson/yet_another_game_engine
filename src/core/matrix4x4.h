@@ -40,11 +40,6 @@ public:
 
 	static matrix4x4 look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up);
 
-	/* Pitch must be in the range of [-90 ... 90] degrees and 
-	   yaw must be in the range of [0 ... 360] degrees.
-	   Pitch and yaw variables must be expressed in radians. */
-	static matrix4x4 fps_view(const vector3& t_eye, float t_pitch, float t_yaw);
-
 	inline matrix4x4 transpose() const;
 
 	inline float determinant() const;
