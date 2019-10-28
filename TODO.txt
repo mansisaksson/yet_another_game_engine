@@ -1,5 +1,8 @@
 [ ] control the camera
-	[ ] pipe the input from  the application to the camera so it can move
+	[x] pipe the input from  the application to the camera so it can move
+	[ ] add mouse input
+	
+[ ] Add axis import option to mesh (Should be able to swap the axes to align with the engine)
 
 [ ] Setup UI sizing system
 	[ ] Create primitive UI types
