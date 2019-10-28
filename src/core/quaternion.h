@@ -92,9 +92,9 @@ public:
 	inline quaternion& operator*=(const quaternion& rhs)
 	{
 		quaternion result;
-		result.x = x * rhs.w + y * rhs.z - z * rhs.y + w * rhs.x;
+		result.x =  x * rhs.w + y * rhs.z - z * rhs.y + w * rhs.x;
 		result.y = -x * rhs.z + y * rhs.w + z * rhs.x + w * rhs.y;
-		result.z = x * rhs.y - y * rhs.x + z * rhs.w + w * rhs.z;
+		result.z =  x * rhs.y - y * rhs.x + z * rhs.w + w * rhs.z;
 		result.w = -x * rhs.x - y * rhs.y - z * rhs.z + w * rhs.w;
 		*this = result;
 		return *this;

@@ -34,7 +34,7 @@ public:
 	{
 		m_view_rotation += m_camera_rot * t_delta_time;
 
-		const quaternion new_view_rotation = quaternion(vector3::up, m_view_rotation.x) * quaternion(vector3::right, m_view_rotation.y);
+		const quaternion new_view_rotation = quaternion(vector3::up, m_view_rotation.x) * quaternion(vector3::right, -m_view_rotation.y);
 
 		if (m_camera_movement.length() > 0 || m_camera_rot.length() > 0)
 		{
