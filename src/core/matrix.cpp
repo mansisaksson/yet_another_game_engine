@@ -121,7 +121,7 @@ matrix3x3 matrix3x3::inverse() const
 
 std::string matrix3x3::to_string() const
 {
-	return string_format::format_string("\n%f %f %f\n%f %f %f\n%f %f %f",
+	return yete_str::format_string("\n%f %f %f\n%f %f %f\n%f %f %f",
 		matrix[0][0], matrix[0][1], matrix[0][2],
 		matrix[1][0], matrix[1][1], matrix[1][2],
 		matrix[2][0], matrix[2][1], matrix[2][2]
@@ -337,7 +337,7 @@ matrix4x4 matrix4x4::inverse() const
 
 std::string matrix4x4::to_string() const
 {
-	return string_format::format_string("\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f",
+	return yete_str::format_string("\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f",
 		matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3],
 		matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3],
 		matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3],

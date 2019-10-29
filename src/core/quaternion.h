@@ -75,7 +75,7 @@ public:
 
 	std::string to_string() const
 	{
-		return string_format::format_string("x: %f, y: %f, z: %f, w: %f", z, y, z, w);
+		return yete_str::format_string("x: %f, y: %f, z: %f, w: %f", z, y, z, w);
 	}
 
 	/* Operators */

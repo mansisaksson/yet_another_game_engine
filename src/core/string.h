@@ -6,39 +6,25 @@
 
 struct yete_str
 {
+private:
+	yete_str() = delete;
+	yete_str(const yete_str&) = delete;
+	yete_str(yete_str&&) = delete;
+
+public:
+
 	/* Case insensitive string compare */
 	static bool iequals(const std::string& a, const std::string& b)
 	{
-		unsigned int sz = a.size();
+		const auto sz = a.size();
 		if (b.size() != sz)
 			return false;
-		for (unsigned int i = 0; i < sz; ++i)
+		for (size_t i = 0; i < sz; ++i)
 			if (tolower(a[i]) != tolower(b[i]))
 				return false;
 		return true;
 	}
-};
 
-struct string_format
-{
-public:
-	enum class log_severity
-	{
-		info,
-		warning,
-		error
-	};
-
-private:
-	string_format() = delete;
-	string_format(const string_format&) = delete;
-	string_format(string_format&&) = delete;
-
-	/*
-	* TODO: This is a pretty unsafe function with no compile time, or runt time, checks for correct parameter count and types
-	*/
-
-public:
 	static std::string format_string(const char* fmt...)
 	{
 		std::string out_str;
@@ -85,10 +71,9 @@ public:
 			out_str += fmt[i];
 			++i;
 		}
-		
+
 		va_end(args);
 
 		return out_str;
 	}
-
 };

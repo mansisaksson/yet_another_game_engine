@@ -36,7 +36,7 @@ private:
 
 		std::cout << "[" << category << "] - " << log_severity_str << ": ";
 
-		std::cout << string_format::format_string(fmt.c_str(), args...) << "\n";
+		std::cout << yete_str::format_string(fmt.c_str(), args...) << "\n";
 	}
 
 

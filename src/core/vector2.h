@@ -48,7 +48,7 @@ public:
 
 	inline std::string to_string() const
 	{
-		return string_format::format_string("x: %f, y: %f", x, y);
+		return yete_str::format_string("x: %f, y: %f", x, y);
 	}
 
 	/* Operators */
