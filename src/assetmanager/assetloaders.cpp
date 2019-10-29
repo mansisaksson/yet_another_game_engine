@@ -1,5 +1,6 @@
 #include "assetloaders.h"
 #include "core/paths.h"
+#include "core/string.h"
 #include "rendercore/staticmesh.h"
 #include "rendercore/texture.h"
 #include "rendercore/material.h"
@@ -80,8 +81,47 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 		log::error("asset_loader", "wrong asset_type: %s", asset_type.c_str());
 		return nullptr;
 	}
-	
-	indexed_model indexed_model;
+
+	struct axis_conversion
+	{
+		int from_axis = -1;
+		int to_axis = -1;
+		float multiplier = 1.f;
+	};
+
+	const std::array<axis_conversion, 3> axis_conversions = [&]()
+	{
+		std::array<axis_conversion, 3> out_axis_conversions = { axis_conversion(), axis_conversion(), axis_conversion() };
+		const auto axes_field = json_asset.find("axes");
+		if (axes_field != json_asset.end() && axes_field.value().is_object())
+		{
+			const auto str_to_axis_conversion = [](int axis, const std::string & str)->axis_conversion
+			{
+				if (str.empty())
+					return { -1, -1, 0 };
+
+				if (yete_str::iequals(str, "+X") || yete_str::iequals(str, "X"))
+					return { axis, 0, 1 };
+				if (yete_str::iequals(str, "+Y") || yete_str::iequals(str, "Y"))
+					return { axis, 1, 1 };
+				if (yete_str::iequals(str, "+Z") || yete_str::iequals(str, "Z"))
+					return { axis, 2, 1 };
+
+				if (yete_str::iequals(str, "-X"))
+					return { axis, 0, -1 };
+				if (yete_str::iequals(str, "-Y"))
+					return { axis, 1, -1 };
+				if (yete_str::iequals(str, "-Z"))
+					return { axis, 2, -1 };
+
+				return { -1, -1, 0 };
+			};
+			out_axis_conversions[0] = str_to_axis_conversion(0, local::parse_string(axes_field.value(), "forward"));
+			out_axis_conversions[1] = str_to_axis_conversion(1, local::parse_string(axes_field.value(), "right"));
+			out_axis_conversions[2] = str_to_axis_conversion(2, local::parse_string(axes_field.value(), "up"));
+		}
+		return out_axis_conversions;
+	}();
 
 	/*
 	TODO:
@@ -91,12 +131,30 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 	const std::string data_asset = local::parse_string(json_asset, "data_asset");
 	const std::string data_asset_path = paths::combine_paths(paths::content_dir(), data_asset);
 	const obj_model obj_model(data_asset_path);
-	indexed_model = obj_model.to_indexed_model();
+
+	indexed_model model = obj_model.to_indexed_model();
+
+	const auto convert_axes = [](indexed_model &model, const std::array<axis_conversion, 3> &axis_conversions)
+	{
+		vector3 tmp;
+		for (vector3 &position : model.positions)
+		{
+			tmp = position;
+
+			for (const auto &conversion : axis_conversions)
+			{
+				if (conversion.to_axis != -1 && conversion.from_axis != -1)
+					position[conversion.to_axis] = tmp[conversion.from_axis] * conversion.multiplier;
+			}
+		}
+	};
+
+	convert_axes(model, axis_conversions);
 
 	const std::vector<std::string> materials = local::parse_string_array(json_asset, "materials");
-	indexed_model.material_ref = materials.size() > 0 ? materials[0] : "basic_mat";
+	model.material_ref = materials.size() > 0 ? materials[0] : "basic_mat";
 
-	return static_mesh::create_mesh(indexed_model);
+	return static_mesh::create_mesh(model);
 }
 
 std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_asset_path)

@@ -1,6 +1,11 @@
 {
 	"asset_type": "static_mesh",
 	"data_asset": "/data/arrows.obj",
+	"axes": { 
+		"forward": 	"-Y",
+		"right": 	"-X",
+		"up":		"+Z"
+	},
 	"materials": [
 		"basic_mat"
 	]
