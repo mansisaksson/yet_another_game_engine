@@ -101,18 +101,18 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 					return { -1, -1, 0 };
 
 				if (yete_str::iequals(str, "+X") || yete_str::iequals(str, "X"))
-					return { axis, 0, 1 };
+					return { 0, axis, 1 };
 				if (yete_str::iequals(str, "+Y") || yete_str::iequals(str, "Y"))
-					return { axis, 1, 1 };
+					return { 1, axis, 1 };
 				if (yete_str::iequals(str, "+Z") || yete_str::iequals(str, "Z"))
-					return { axis, 2, 1 };
+					return { 2, axis, 1 };
 
 				if (yete_str::iequals(str, "-X"))
-					return { axis, 0, -1 };
+					return { 0, axis, -1 };
 				if (yete_str::iequals(str, "-Y"))
-					return { axis, 1, -1 };
+					return { 1, axis, -1 };
 				if (yete_str::iequals(str, "-Z"))
-					return { axis, 2, -1 };
+					return { 2, axis, -1 };
 
 				return { -1, -1, 0 };
 			};

@@ -1,10 +1,10 @@
 {
 	"asset_type": "static_mesh",
 	"data_asset": "/data/debug.obj",
-		"axes": { 
-		"forward": 	"X",
-		"right": 	"Y",
-		"up":		"Z"
+	"axes": { 
+		"forward": 	"-Z",
+		"right": 	"X",
+		"up":		"Y"
 	},
 	"materials": [
 		"basic_mat"
