@@ -137,14 +137,26 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 	const auto convert_axes = [](indexed_model &model, const std::array<axis_conversion, 3> &axis_conversions)
 	{
 		vector3 tmp;
+
+		// Convert positions
 		for (vector3 &position : model.positions)
 		{
 			tmp = position;
-
 			for (const auto &conversion : axis_conversions)
 			{
 				if (conversion.to_axis != -1 && conversion.from_axis != -1)
 					position[conversion.to_axis] = tmp[conversion.from_axis] * conversion.multiplier;
+			}
+		}
+
+		// Convert normals
+		for (vector3& normal : model.normals)
+		{
+			tmp = normal;
+			for (const auto& conversion : axis_conversions)
+			{
+				if (conversion.to_axis != -1 && conversion.from_axis != -1)
+					normal[conversion.to_axis] = tmp[conversion.from_axis] * conversion.multiplier;
 			}
 		}
 	};

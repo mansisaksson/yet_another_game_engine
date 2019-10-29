@@ -86,8 +86,7 @@ public:
 		const auto result = std::find(delegate_ids.begin(), delegate_ids.end(), delegate_id);
 		if (result != std::end(delegate_ids))
 		{
-			const int index = *result;
-			delegate_ids.erase(vec.begin() + 1);
+			delegate_ids.erase(result);
 		}
 	}
 

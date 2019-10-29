@@ -1,5 +1,6 @@
 #include "tavlawindow.h"
 #include "platform/platform.h"
+#include "platform/platforminput.h"
 #include "platform/platformwindow.h"
 
 void tavla_window::construct()
@@ -22,7 +23,10 @@ void tavla_window::destruct()
 
 void tavla_window::tick(float t_delta_time)
 {
-	
+	if (m_window)
+	{
+		m_cursor_location = platform::get_platform_input()->get_cursor_location(*m_window);
+	}
 }
 
 void tavla_window::draw()

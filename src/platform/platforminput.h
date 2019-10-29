@@ -3,6 +3,8 @@
 #include <functional>
 #include <memory>
 
+class platform_window;
+
 struct input_event
 {
 	key key;
@@ -14,13 +16,7 @@ class platform_input
 private:
 	std::vector<key> pressed_keys;
 
-	struct input_listener
-	{
-		guid id;
-		std::weak_ptr<void> owner;
-		std::function<void(const input_event&)> callback;
-	};
-	std::vector<input_listener> input_listeners;
+	multicast_delegate<const input_event&> on_input_event;
 
 public:
 
@@ -34,7 +30,7 @@ public:
 
 	// ~begin platform_input interface
 	virtual void update_input() = 0;
-	virtual std::tuple<int, int> get_cursor_location() = 0;
+	virtual std::tuple<int, int> get_cursor_location(const platform_window& t_window) = 0;
 	// ~end platform_input interface
 };
 

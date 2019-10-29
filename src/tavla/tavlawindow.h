@@ -28,6 +28,7 @@ public:
 
 private:
 	std::shared_ptr<platform_window> m_window;
+	std::tuple<int, int> m_cursor_location;
 
 public:
 	// ~begin tavla interface

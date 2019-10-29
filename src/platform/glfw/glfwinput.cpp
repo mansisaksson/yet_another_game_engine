@@ -27,9 +27,14 @@ void glfw_input::update_input()
 	}
 }
 
-std::tuple<int, int> glfw_input::get_cursor_location()
+std::tuple<int, int> glfw_input::get_cursor_location(const platform_window& t_window)
 {
-	return { 0, 0 };
+	const auto gl_window = dynamic_cast<const glfw_window&>(t_window).get_glfw_window();
+
+	double xpos, ypos;
+	glfwGetCursorPos(gl_window, &xpos, &ypos);
+
+	return { (int)xpos, (int)ypos };
 }
 
 void glfw_input::add_window(const std::weak_ptr<glfw_window> &t_window)
