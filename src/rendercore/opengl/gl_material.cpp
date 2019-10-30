@@ -1,7 +1,5 @@
 #include "gl_material.h"
 #include "rendercore/texture.h"
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 #include <GLFW/glfw3.h>
 
 gl_material::gl_material(const material_data& t_material_data)

@@ -1,5 +1,5 @@
 #pragma once
-#include "glm/glm.hpp"
+#include <cassert>
 #include "string.h"
 
 class vector3
