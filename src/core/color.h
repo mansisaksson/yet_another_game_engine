@@ -38,6 +38,7 @@ public:
 		r = rhs.r;
 		g = rhs.g;
 		b = rhs.b;
+		a = rhs.a;
 		return *this;
 	}
 
@@ -46,6 +47,7 @@ public:
 		r -= rhs.r;
 		g -= rhs.g;
 		b -= rhs.b;
+		a -= rhs.a;
 		return *this;
 	}
 
@@ -54,6 +56,7 @@ public:
 		r += rhs.r;
 		g += rhs.g;
 		b += rhs.b;
+		a += rhs.a;
 		return *this;
 	}
 
@@ -62,6 +65,7 @@ public:
 		r *= rhs.r;
 		g *= rhs.g;
 		b *= rhs.b;
+		a *= rhs.a;
 		return *this;
 	}
 
@@ -70,6 +74,7 @@ public:
 		r *= rhs.r;
 		g *= rhs.g;
 		b *= rhs.b;
+		a *= rhs.a;
 		return *this;
 	}
 
@@ -87,7 +92,7 @@ public:
 
 	uint8_t& operator[](int idx)
 	{
-		assert(idx > 0 && idx < 3 && "color - index out of range");
+		assert(idx > 0 && idx < 4 && "color - index out of range");
 
 		switch (idx)
 		{
@@ -97,12 +102,14 @@ public:
 			return g;
 		case 2:
 			return b;
+		case 3:
+			return a;
 		}
 	}
 
 	const uint8_t& operator[](int idx) const
 	{
-		assert(idx > 0 && idx < 3 && "color - index out of range");
+		assert(idx > 0 && idx < 4 && "color - index out of range");
 
 		switch (idx)
 		{
@@ -112,6 +119,8 @@ public:
 			return g;
 		case 2:
 			return b;
+		case 3:
+			return a;
 		}
 	}
 
