@@ -200,17 +200,6 @@ quaternion matrix4x4::to_quaternion() const
 	return quaternion::identity; // TODO
 }
 
-matrix4x4 matrix4x4::transpose() const
-{
-	return
-	{
-		{ matrix[0][0], matrix[1][0], matrix[2][0], matrix[3][0] },
-		{ matrix[0][1], matrix[1][1], matrix[2][1], matrix[3][1] },
-		{ matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2] },
-		{ matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3] },
-	};
-}
-
 float matrix4x4::determinant() const
 {
 	const matrix3x3 m_1 =
@@ -353,14 +342,4 @@ matrix4x4 matrix4x4::inverse() const
 	};
 
 	return (1.f / determinant()) * adj_matrix;
-}
-
-std::string matrix4x4::to_string() const
-{
-	return yete_str::format_string("\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f",
-		matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3],
-		matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3],
-		matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3],
-		matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]
-	);
 }
