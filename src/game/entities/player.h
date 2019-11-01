@@ -11,6 +11,7 @@ private:
 	std::shared_ptr<static_mesh> m_static_mesh_ptr;
 
 	vector2 m_movement_input;
+	float m_movement_speed = 2.f;
 
 public:
 

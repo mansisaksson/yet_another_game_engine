@@ -208,10 +208,10 @@ quaternion matrix4x4::to_quaternion() const
 	{
 		const int i = [&]() 
 		{
-			int v;
+			int v = 0;
 			if (matrix[1][1] > matrix[0][0])
 				v = 1;
-			if (matrix[2][2] > matrix[i][i])
+			if (matrix[2][2] > matrix[v][v])
 				v = 2;
 			return v;
 		}();

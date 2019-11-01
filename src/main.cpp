@@ -25,8 +25,8 @@ int main()
 		->set_property(&tavla_viewport::scene, std::weak_ptr<scene>(game_scene));
 
 	const auto game_window = std::make_shared<tavla_window>()
-		->set_property(&tavla_window::width, 1280)
-		->set_property(&tavla_window::height, 720)
+		->set_property(&tavla_window::width, 800)
+		->set_property(&tavla_window::height, 1000)
 		->add_slot()
 		->set_content
 		(
