@@ -2,29 +2,6 @@
 #include "core/core.h"
 #include <cassert>
 
-void test_matrix3x3_inverse()
-{
-	const matrix3x3 m = {
-		{ 1, 2, 3 },
-		{ 0, 1, 4 },
-		{ 5, 6, 0 },
-	};
-
-	const matrix3x3 result = {
-		{ -24, 18, 5 },
-		{ 20, -15, -4 },
-		{ -5, 4, 1 },
-	};
-
-	const float determinant = m.determinant();
-	assert(determinant == 1.f);
-
-	const auto m_i = m.inverse();
-	assert(m_i == result);
-
-	log::info("Testing", "matrix3x3 inverse success");
-}
-
 void test_matrix4x4_inverse()
 {
 	const matrix4x4 m = {
@@ -146,10 +123,50 @@ void test_matrix4x4_vector4_multiplication()
 	log::info("Testing", "matrix4x4 x vector4 success");
 }
 
+void test_make_rot_from()
+{
+	const matrix4x4 rot_result =
+	{
+		{ 1, 0, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 0, 0, 1 },
+	};
+
+	const matrix4x4 x_rot = matrix4x4::make_rot_matrix_from_x(vector3::forward);
+	const matrix4x4 y_rot = matrix4x4::make_rot_matrix_from_y(vector3::right);
+	const matrix4x4 z_rot = matrix4x4::make_rot_matrix_from_z(vector3::up);
+
+	assert(x_rot == rot_result);
+	assert(y_rot == rot_result);
+	assert(z_rot == rot_result);
+
+	const matrix4x4 xy_rot = matrix4x4::make_rot_matrix_from_xy(vector3::forward, vector3::right);
+	const matrix4x4 xz_rot = matrix4x4::make_rot_matrix_from_xz(vector3::forward, vector3::up);
+	
+	assert(xy_rot == rot_result);
+	assert(xz_rot == rot_result);
+
+	const matrix4x4 yx_rot = matrix4x4::make_rot_matrix_from_yx(vector3::right, vector3::forward);
+	const matrix4x4 yz_rot = matrix4x4::make_rot_matrix_from_yz(vector3::right, vector3::up);
+
+	assert(yx_rot == rot_result);
+	assert(yz_rot == rot_result);
+
+	const matrix4x4 zx_rot = matrix4x4::make_rot_matrix_from_zx(vector3::up, vector3::forward);
+	const matrix4x4 zy_rot = matrix4x4::make_rot_matrix_from_zy(vector3::up, vector3::right);
+
+	assert(zx_rot == rot_result);
+	assert(zy_rot == rot_result);
+
+	log::info("Testing", "matrix4x4 make_rot_from success");
+
+}
+
 void run_tests()
 {
-	test_matrix3x3_inverse();
 	test_matrix4x4_inverse();
 	test_matrix4x4_multiplication();
 	test_matrix4x4_vector4_multiplication();
+	test_make_rot_from();
 }

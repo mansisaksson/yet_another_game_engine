@@ -12,7 +12,6 @@
 #include "quaternion.h"
 #include "transform.h"
 
-#include "matrix3x3.h"
 #include "matrix4x4.h"
 
 #include "delegate.h"

@@ -11,13 +11,14 @@ private:
 
 public:
 	template<class T, class... Params>
-	inline std::weak_ptr<T> spawn_entity(const transform &t_transform, Params&... args)
+	inline std::weak_ptr<T> spawn_entity(Params&... args)
 	{
 		const auto entity_ptr = std::make_shared<T>(args ...);
-		entity_ptr->transform = t_transform;
 		entities.push_back(entity_ptr);
+		entity_ptr->begin_play();
 		return std::weak_ptr<T>(entity_ptr);
 	}
 
+	void tick_scene(float t_delta_time);
 	void draw_scene(const viewport* viewport);
 };

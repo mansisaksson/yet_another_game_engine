@@ -100,6 +100,32 @@ public:
 		return *this;
 	}
 
+	float& operator[](int idx)
+	{
+		assert(idx >= 0 && idx < 4 && "quaternion - index out of range");
+
+		switch (idx)
+		{
+		case 0: return x;
+		case 1: return y;
+		case 2: return z;
+		default: return w;
+		}
+	}
+
+	const float& operator[](int idx) const
+	{
+		assert(idx >= 0 && idx < 4 && "quaternion - index out of range");
+
+		switch (idx)
+		{
+		case 0: return x;
+		case 1: return y;
+		case 2: return z;
+		default: return w;
+		}
+	}
+
 };
 
 /* Comparison operators */

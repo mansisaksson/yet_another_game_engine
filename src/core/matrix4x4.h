@@ -1,7 +1,7 @@
 #pragma once
+#include "vector3.h"
 #include "vector4.h"
 #include "quaternion.h"
-#include "matrix3x3.h"
 #include <array>
 
 /*
@@ -41,7 +41,18 @@ public:
 
 	static matrix4x4 look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up);
 
-	static matrix4x4 make_rot_matrix_from_x(const vector3& x_vector);
+	static matrix4x4 make_rot_matrix_from_x(const vector3& vector);
+	static matrix4x4 make_rot_matrix_from_y(const vector3& vector);
+	static matrix4x4 make_rot_matrix_from_z(const vector3& vector);
+
+	static matrix4x4 make_rot_matrix_from_xy(const vector3& x_vector, const vector3& y_vector);
+	static matrix4x4 make_rot_matrix_from_xz(const vector3& x_vector, const vector3& z_vector);
+
+	static matrix4x4 make_rot_matrix_from_yx(const vector3& y_vector, const vector3& x_vector);
+	static matrix4x4 make_rot_matrix_from_yz(const vector3& y_vector, const vector3& z_vector);
+
+	static matrix4x4 make_rot_matrix_from_zx(const vector3& z_vector, const vector3& x_vector);
+	static matrix4x4 make_rot_matrix_from_zy(const vector3& z_vector, const vector3& y_vector);
 
 	quaternion to_quaternion() const;
 
@@ -58,9 +69,29 @@ public:
 
 	float determinant() const;
 
-	std::array<matrix3x3, 16> minor_matrices() const;
+	std::array<std::array<vector3, 3>, 16> minor_matrices() const;
 
 	matrix4x4 inverse() const;
+
+	inline vector3 get_scaled_axis_x() const
+	{
+		return vector3(matrix[0][0], matrix[0][1], matrix[0][2]);
+	}
+
+	inline vector3 get_scaled_axis_y() const
+	{
+		return vector3(matrix[1][0], matrix[1][1], matrix[1][2]);
+	}
+
+	inline vector3 get_scaled_axis_z() const
+	{
+		return vector3(matrix[2][0], matrix[2][1], matrix[2][2]);
+	}
+
+	inline vector3 get_origin() const
+	{
+		return vector3(matrix[3][0], matrix[3][1], matrix[3][2]);
+	}
 
 	inline std::string to_string() const
 	{

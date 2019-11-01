@@ -4,9 +4,9 @@
 #include "gameframework/entity.h"
 #include "platform/platforminput.h"
 #include "rendercore/viewport.h"
+#include "entities/player.h"
 
 class tavla_viewport;
-class scene;
 
 class game
 {
@@ -21,13 +21,18 @@ private:
 	vector3 m_view_location;
 	vector2 m_view_rotation;
 
+	std::weak_ptr<player_entity> player;
+
 public:
 
 	void start_game(scene* const game_scene, tavla_viewport* const game_viewport)
 	{
 		m_viewport = game_viewport->get_viewport();
 
-		game_scene->spawn_entity<entity>(transform(vector3(0, 0, 0), quaternion::identity, 1.f));
+		m_viewport->set_view_location(vector3(0, 0, 5));
+		m_viewport->set_view_rotation(matrix4x4::make_rot_matrix_from_xz(-vector3::up, vector3::forward).to_quaternion());
+
+		player = game_scene->spawn_entity<player_entity>();
 	}
 
 	void tick_game(float t_delta_time)
@@ -41,11 +46,11 @@ public:
 			m_view_location += new_view_rotation.rotate_vector(m_camera_movement * t_delta_time);
 			//log::info("test", "camera location: %s", m_view_location.to_string().c_str());
 			//log::info("test", "camera forward: %s", new_view_rotation.get_forward().to_string().c_str());
-			log::info("test", "m_view_rotation: %s", m_view_rotation.to_string().c_str());
+			//log::info("test", "m_view_rotation: %s", m_view_rotation.to_string().c_str());
 		}
 
-		m_viewport->set_view_location(m_view_location);
-		m_viewport->set_view_rotation(new_view_rotation);
+		/*m_viewport->set_view_location(m_view_location);
+		m_viewport->set_view_rotation(new_view_rotation);*/
 	}
 
 	void on_input_event(const input_event& t_input_event)

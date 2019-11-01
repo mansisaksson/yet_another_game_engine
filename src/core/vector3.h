@@ -1,6 +1,7 @@
 #pragma once
 #include <cassert>
 #include "string.h"
+#include "math.h"
 
 class vector3
 {
@@ -74,6 +75,11 @@ public:
 	inline std::string to_string() const
 	{
 		return yete_str::format_string("x: %f, y: %f, z: %f", x, y, z);
+	}
+
+	inline bool nearly_zero(float epsilon = 0.001f) const
+	{
+		return math::nearly_zero(x, epsilon) && math::nearly_zero(y, epsilon) && math::nearly_zero(z, epsilon);
 	}
 
 	/* Operators */

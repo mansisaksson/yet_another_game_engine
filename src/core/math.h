@@ -19,13 +19,13 @@ namespace math
 		return deg * (pi() / 180.f);
 	}
 
-	/*bool nearly_equals(float a, float b, float epsilon = 0.001)
+	inline bool nearly_equals(float a, float b, float epsilon = 0.001f)
 	{
 		return fabs(a - b) < epsilon;
-	}*/
+	}
 
-	/*bool nearly_equals(double a, double b, double epsilon = 0.001)
+	inline bool nearly_zero(float a, float epsilon = 0.001f)
 	{
-		return fabs(a - b) < epsilon;
-	}*/
+		return nearly_equals(a, 0.f, epsilon);
+	}
 }
