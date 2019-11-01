@@ -58,22 +58,22 @@ public:
 		return result;
 	}
 
-	vector3 get_up() const
+	inline vector3 get_up() const
 	{
 		return rotate_vector(vector3::up);
 	}
 
-	vector3 get_right() const
+	inline vector3 get_right() const
 	{
 		return rotate_vector(vector3::right);
 	}
 
-	vector3 get_forward() const
+	inline vector3 get_forward() const
 	{
 		return rotate_vector(vector3::forward);
 	}
 
-	std::string to_string() const
+	inline std::string to_string() const
 	{
 		return yete_str::format_string("x: %f, y: %f, z: %f, w: %f", z, y, z, w);
 	}
