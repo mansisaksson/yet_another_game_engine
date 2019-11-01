@@ -180,6 +180,26 @@ matrix4x4 matrix4x4::look_at(const vector3& t_eye, const vector3& t_target, cons
 	};
 }
 
+matrix4x4 matrix4x4::make_rot_matrix_from_x(const vector3& x_vector)
+{
+	const vector3 forward = x_vector.get_normalized();
+	const vector3 right = vector3::cross(vector3::up, forward).get_normalized();
+	const vector3 up = vector3::cross(forward, right);
+
+	return
+	{
+		{ forward.x,	forward.y,	forward.z,	0 },
+		{ right.x,		right.y,	right.z,	0 },
+		{ up.x,			up.y,		up.z,		0 },
+		{ 0,			0,			0,			1 }
+	};
+}
+
+quaternion matrix4x4::to_quaternion() const
+{
+	return quaternion::identity; // TODO
+}
+
 matrix4x4 matrix4x4::transpose() const
 {
 	return

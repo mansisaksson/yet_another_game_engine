@@ -1,5 +1,6 @@
 #pragma once
 #include "vector4.h"
+#include "quaternion.h"
 #include "matrix3x3.h"
 #include <array>
 
@@ -40,15 +41,36 @@ public:
 
 	static matrix4x4 look_at(const vector3& t_eye, const vector3& t_target, const vector3& t_up);
 
-	inline matrix4x4 transpose() const;
+	static matrix4x4 make_rot_matrix_from_x(const vector3& x_vector);
 
-	inline float determinant() const;
+	quaternion to_quaternion() const;
+
+	inline matrix4x4 transpose() const
+	{
+		return
+		{
+			{ matrix[0][0], matrix[1][0], matrix[2][0], matrix[3][0] },
+			{ matrix[0][1], matrix[1][1], matrix[2][1], matrix[3][1] },
+			{ matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2] },
+			{ matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3] },
+		};
+	}
+
+	float determinant() const;
 
 	std::array<matrix3x3, 16> minor_matrices() const;
 
 	matrix4x4 inverse() const;
 
-	std::string to_string() const;
+	inline std::string to_string() const
+	{
+		return yete_str::format_string("\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f",
+			matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3],
+			matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3],
+			matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3],
+			matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]
+		);
+	}
 
 	
 	/* Operators */
