@@ -26,7 +26,7 @@ public:
 		m_viewport->set_view_location(vector3(0, 0, 10));
 		m_viewport->set_view_rotation(matrix4x4::make_rot_matrix_from_xy(-vector3::up, vector3::right).to_quaternion());
 
-		player = game_scene->spawn_entity<player_entity>();
+		player = game_scene->spawn_entity<player_entity>(transform::identity);
 	}
 
 	void tick_game(float t_delta_time)
@@ -82,6 +82,14 @@ public:
 			else if (t_input_event.key_event == key_event::released)
 			{
 				m_movement_input.x += 1.f;
+			}
+		}
+
+		if (t_input_event.key == key::space)
+		{
+			if (t_input_event.key_event == key_event::pressed)
+			{
+				player.lock()->fire();
 			}
 		}
 	}

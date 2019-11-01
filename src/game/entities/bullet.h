@@ -4,23 +4,20 @@
 
 class static_mesh;
 
-class player_entity : public entity
+class bullet_entity : public entity
 {
 private:
-	std::shared_ptr<static_mesh> m_static_mesh_ptr;
-
-	vector2 m_movement_input;
-	float m_movement_speed = 2.f;
+	std::shared_ptr<static_mesh> m_bullet_mesh;
+	vector3 m_velocity;
+	float m_lifetime;
 
 public:
+	bullet_entity(const vector3& velocity, float lifetime);
+
+protected:
 
 	virtual void begin_play() override;
 	virtual void tick(float delta_time) override;
 	virtual void draw(const viewport* viewport) override;
-
-public:
-
-	void fire();
-	void set_movement_vector(const vector2& new_mvn_vector);
 
 };
