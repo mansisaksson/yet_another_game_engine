@@ -44,6 +44,20 @@ struct local
 		return {};
 	}
 
+	static std::unordered_map<std::string, std::string> parse_string_map(const json& json_object, const std::string& key)
+	{
+		const auto asset_type_field = json_object.find(key);
+		if (asset_type_field != json_object.end())
+		{
+			const auto asset_type_value = asset_type_field.value();
+			if (asset_type_value.is_object())
+			{
+				return asset_type_value.get<std::unordered_map<std::string, std::string>>();
+			}
+		}
+		return {};
+	}
+
 	static std::string load_file_as_string(const std::string& t_file_path)
 	{
 		std::ifstream t(t_file_path);
@@ -123,16 +137,10 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 		return out_axis_conversions;
 	}();
 
-	/*
-	TODO:
-		Simple .OBJ loader that I found on the internet
-		Is missing a whole lot of error checking and other features, such as multiple materials
-	*/
 	const std::string data_asset = local::parse_string(json_asset, "data_asset");
-	const std::string data_asset_path = paths::combine_paths(paths::content_dir(), data_asset);
-	const obj_model obj_model(data_asset_path);
-
-	indexed_model model = obj_model.to_indexed_model();
+	const std::string data_asset_path = paths::combine_paths(paths::data_asset_dir(), data_asset);
+	
+	std::vector<indexed_model> models = obj::obj_loader::load_obj(data_asset_path);
 
 	const auto convert_axes = [](indexed_model &model, const std::array<axis_conversion, 3> &axis_conversions)
 	{
@@ -161,12 +169,17 @@ std::shared_ptr<static_mesh> asset_loader<static_mesh>::load_asset(const std::st
 		}
 	};
 
-	convert_axes(model, axis_conversions);
+	const std::unordered_map<std::string, std::string> materials = local::parse_string_map(json_asset, "materials");
+	for (indexed_model & model : models)
+	{
+		convert_axes(model, axis_conversions);
 
-	const std::vector<std::string> materials = local::parse_string_array(json_asset, "materials");
-	model.material_ref = materials.size() > 0 ? materials[0] : "basic_mat";
+		const auto material_ref = materials.find(model.material_ref);
+		if (material_ref != materials.end())
+			model.material_ref = material_ref->second;
+	}
 
-	return static_mesh::create_mesh(model);
+	return static_mesh::create_mesh(models);
 }
 
 std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_asset_path)
@@ -191,7 +204,7 @@ std::shared_ptr<texture> asset_loader<texture>::load_asset(const std::string& t_
 	//const std::string data_format = local::parse_string(json_asset, "data_format");
 	//const std::string render_format = local::parse_string(json_asset, "render_format");
 
-	const std::string data_asset_path = paths::combine_paths(paths::content_dir(), data_asset);
+	const std::string data_asset_path = paths::combine_paths(paths::data_asset_dir(), data_asset);
 	
 	texture_data tex_data;
 	int num_comp;
@@ -256,10 +269,10 @@ std::shared_ptr<material> asset_loader<material>::load_asset(const std::string& 
 	material_data mat_data;
 
 	const std::string fragment_shader_asset = local::parse_string(json_asset, "fragment_shader");
-	mat_data.fragment_shader = local::load_file_as_string(paths::combine_paths(paths::content_dir(), fragment_shader_asset));
+	mat_data.fragment_shader = local::load_file_as_string(paths::combine_paths(paths::data_asset_dir(), fragment_shader_asset));
 
 	const std::string vertex_shader_asset = local::parse_string(json_asset, "vertex_shader");
-	mat_data.vertex_shader = local::load_file_as_string(paths::combine_paths(paths::content_dir(), vertex_shader_asset));
+	mat_data.vertex_shader = local::load_file_as_string(paths::combine_paths(paths::data_asset_dir(), vertex_shader_asset));
 
 	mat_data.textures = local::parse_string_array(json_asset, "textures");
 

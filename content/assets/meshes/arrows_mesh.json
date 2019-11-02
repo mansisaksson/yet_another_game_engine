@@ -1,6 +1,6 @@
 {
 	"asset_type": "static_mesh",
-	"data_asset": "/data/arrows.obj",
+	"data_asset": "/meshes/arrows.obj",
 	"axes": { 
 		"forward": 	"-Z",
 		"right": 	"X",

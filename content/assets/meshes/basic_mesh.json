@@ -1,6 +1,6 @@
 {
 	"asset_type": "static_mesh",
-	"data_asset": "/data/monkey3.obj",
+	"data_asset": "/meshes/monkey3.obj",
 	"axes": { 
 		"forward": 	"-Z",
 		"right": 	"X",

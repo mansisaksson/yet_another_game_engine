@@ -19,6 +19,8 @@
 #include "string.h"
 
 #include <vector>
+#include <map>
+#include <unordered_map>
 #include <stdlib.h>
 #include <memory>
 #include <functional>

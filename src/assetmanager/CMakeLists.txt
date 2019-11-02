@@ -1,12 +1,10 @@
+add_subdirectory(loaders)
+
 add_sources(
 	"assetmanager.h"
 	"assetmanager.cpp"
 	"assetptr.h"
 	"assetloaders.h"
 	"assetloaders.cpp"
-	"loaders/obj_loader.h"
-	"loaders/obj_loader.cpp"
-	"loaders/stb_image.h"
-	"loaders/stb_image.c"
     "CMakeLists.txt"
 )

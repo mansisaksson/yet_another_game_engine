@@ -1,0 +1,8 @@
+{
+	"asset_type": "material",
+	"fragment_shader": "/shaders/basicFragmentShader.glsl",
+	"vertex_shader": "/shaders/basicVertexShader.glsl",
+	"textures": [
+		"basic_texture"
+	]
+}

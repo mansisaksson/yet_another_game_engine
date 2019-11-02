@@ -1,6 +1,6 @@
 {
 	"asset_type": "static_mesh",
-	"data_asset": "/data/debug.obj",
+	"data_asset": "/meshes/debug.obj",
 	"axes": { 
 		"forward": 	"-Z",
 		"right": 	"X",

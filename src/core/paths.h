@@ -13,6 +13,11 @@ struct paths
 		return std::string(ENGINE_CONTENT_DIR) + "/assets";
 	}
 
+	static std::string data_asset_dir()
+	{
+		return std::string(ENGINE_CONTENT_DIR) + "/data";
+	}
+
 	template<class ... Args>
 	static std::string combine_paths(Args... args)
 	{

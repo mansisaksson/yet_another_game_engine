@@ -1,0 +1,5 @@
+{
+	"asset_type": "material",
+	"fragment_shader": "/shaders/white_frag.glsl",
+	"vertex_shader": "/shaders/default_vert.glsl"
+}

@@ -2,71 +2,81 @@
 #include "rendercore/material.h"
 #include "rendercore/viewport.h"
 
-gl_static_mesh::gl_static_mesh(const indexed_model& t_model)
-	: static_mesh(t_model)
+gl_static_mesh::gl_static_mesh(const std::vector<indexed_model>& t_models)
+	: static_mesh(t_models)
 {
-	m_drawCount = (int)t_model.indices.size();
-
-	glGenVertexArrays(1, &m_vertexArrayObject);
-	glBindVertexArray(m_vertexArrayObject);
-
-	glGenBuffers(NUM_BUFFERES, m_vertexArrayBuffers);
-
-	// Vertex buffer
+	gl_meshes_data.reserve(t_models.size());
+	for (const auto &model : t_models)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers[POSITION_VB]);
-		glBufferData(GL_ARRAY_BUFFER, t_model.positions.size() * sizeof(t_model.positions[0]), &t_model.positions[0], GL_STATIC_DRAW);
+		gl_mesh_data mesh_data;
+		mesh_data.draw_count = (int)model.indices.size();
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glGenVertexArrays(1, &mesh_data.vertex_array_object);
+		glBindVertexArray(mesh_data.vertex_array_object);
+
+		glGenBuffers(NUM_BUFFERES, mesh_data.vertex_array_buffers);
+
+		// Vertex buffer
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, mesh_data.vertex_array_buffers[POSITION_VB]);
+			glBufferData(GL_ARRAY_BUFFER, model.positions.size() * sizeof(model.positions[0]), &model.positions[0], GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
+		// TexCoords
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, mesh_data.vertex_array_buffers[TEXCOORD_VB]);
+			glBufferData(GL_ARRAY_BUFFER, model.positions.size() * sizeof(model.tex_coords[0]), &model.tex_coords[0], GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
+		// Normals
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, mesh_data.vertex_array_buffers[NORMAL_VB]);
+			glBufferData(GL_ARRAY_BUFFER, model.normals.size() * sizeof(model.normals[0]), &model.normals[0], GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
+		// Index buffer
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh_data.vertex_array_buffers[INDEX_VB]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, model.indices.size() * sizeof(model.indices[0]), &model.indices[0], GL_STATIC_DRAW);
+		}
+
+		glBindVertexArray(0);
+
+		gl_meshes_data.push_back(mesh_data);
 	}
-
-	// TexCoords
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers[TEXCOORD_VB]);
-		glBufferData(GL_ARRAY_BUFFER, t_model.positions.size() * sizeof(t_model.tex_coords[0]), &t_model.tex_coords[0], GL_STATIC_DRAW);
-
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	}
-
-	// Normals
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers[NORMAL_VB]);
-		glBufferData(GL_ARRAY_BUFFER, t_model.normals.size() * sizeof(t_model.normals[0]), &t_model.normals[0], GL_STATIC_DRAW);
-
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	}
-
-	// Index buffer
-	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexArrayBuffers[INDEX_VB]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, t_model.indices.size() * sizeof(t_model.indices[0]), &t_model.indices[0], GL_STATIC_DRAW);
-	}
-
-	glBindVertexArray(0);
 }
 
 gl_static_mesh::~gl_static_mesh()
 {
-	glDeleteVertexArrays(1, &m_vertexArrayObject);
+	for (const auto &mesh_data : gl_meshes_data)
+	{
+		glDeleteVertexArrays(1, &mesh_data.vertex_array_object);
+	}
 }
 
 void gl_static_mesh::draw(const transform& t_mesh_transform, const viewport* t_viewport)
 {
-	for (const auto &mat : m_materials)
+	for (size_t i = 0; i < gl_meshes_data.size(); i++)
 	{
+		const auto mat = m_materials[i];
+
 		if (mat)
 		{
 			mat->bind();
 			mat->update(t_mesh_transform, t_viewport->get_view_projection());
 		}
+
+		glBindVertexArray(gl_meshes_data[i].vertex_array_object);
+		glDrawElements(GL_TRIANGLES, gl_meshes_data[i].draw_count, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 	}
-
-	glBindVertexArray(m_vertexArrayObject);
-
-	glDrawElements(GL_TRIANGLES, m_drawCount, GL_UNSIGNED_INT, 0);
-
-	glBindVertexArray(0);
 }
