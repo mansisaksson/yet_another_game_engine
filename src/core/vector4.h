@@ -137,7 +137,6 @@ public:
 		case 2: return z;
 		default: return w;
 		}
-		return x;
 	}
 
 	const float& operator[](int idx) const
