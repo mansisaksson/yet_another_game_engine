@@ -11,7 +11,7 @@ bullet_entity::bullet_entity(const vector3& velocity, float lifetime)
 
 void bullet_entity::begin_play()
 {
-	m_bullet_mesh = asset_manager::get().load_asset<static_mesh>("/meshes/basic_mesh");
+	m_bullet_mesh = asset_manager::get().load_asset<static_mesh>("/meshes/bullet_mesh");
 }
 
 void bullet_entity::tick(float delta_time)
