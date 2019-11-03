@@ -71,8 +71,9 @@ void gl_static_mesh::draw(const transform& t_mesh_transform, const viewport* t_v
 
 		if (mat)
 		{
-			mat->bind();
-			mat->update(t_mesh_transform, t_viewport->get_view_projection());
+			mat->set_uniform_matrix4x4("view_transform", t_viewport->get_view_projection());
+			mat->set_uniform_matrix4x4("object_transform", t_mesh_transform.to_matrix());
+			mat->apply_material();
 		}
 
 		glBindVertexArray(gl_meshes_data[i].vertex_array_object);

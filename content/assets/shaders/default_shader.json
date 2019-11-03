@@ -1,0 +1,5 @@
+{
+	"asset_type": "shader",
+	"fragment_shader": "/shaders/default_frag.glsl",
+	"vertex_shader": "/shaders/default_vert.glsl"
+}

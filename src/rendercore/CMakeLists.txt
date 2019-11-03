@@ -9,6 +9,8 @@ add_sources(
 	"texture.cpp"
 	"material.h"
 	"material.cpp"
+	"shader.h"
+	"shader.cpp"
 	"viewport.h"
 	"viewport.cpp"
     "CMakeLists.txt"

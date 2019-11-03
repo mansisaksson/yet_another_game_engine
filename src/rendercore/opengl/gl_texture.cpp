@@ -52,3 +52,8 @@ void gl_texture::bind(uint32_t unit)
 	glActiveTexture(GL_TEXTURE0 + unit);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 }
+
+uint32_t gl_texture::get_texture_unit() const
+{
+	return m_unit;
+}

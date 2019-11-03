@@ -7,6 +7,7 @@ class gl_texture : public texture
 {
 private:
 	GLuint m_texture;
+	uint32_t m_unit;
 
 private:
 	gl_texture() = delete;
@@ -19,5 +20,6 @@ public:
 	~gl_texture();
 
 	virtual void bind(uint32_t unit) override;
+	virtual uint32_t get_texture_unit() const override;
 
 };

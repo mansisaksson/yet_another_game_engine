@@ -1,5 +1,7 @@
 {
 	"asset_type": "material",
-	"fragment_shader": "/shaders/black_frag.glsl",
-	"vertex_shader": "/shaders/default_vert.glsl"
+	"shader": "/shaders/default_shader",
+	"uniforms": {
+		"color": [ 0, 0, 0, 1 ]
+	}
 }

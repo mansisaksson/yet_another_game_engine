@@ -17,6 +17,7 @@
 #include "delegate.h"
 #include "log.h"
 #include "string.h"
+#include "paths.h"
 
 #include <vector>
 #include <map>
@@ -24,3 +25,4 @@
 #include <stdlib.h>
 #include <memory>
 #include <functional>
+#include <optional>

@@ -32,5 +32,6 @@ public:
 	static std::shared_ptr<texture> create_texture(const texture_data& t_texture_data);
 
 	virtual void bind(uint32_t unit) = 0;
+	virtual uint32_t get_texture_unit() const = 0;
 
 };
