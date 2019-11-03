@@ -42,7 +42,7 @@ public:
 
 		if (loaded_asset)
 		{
-			m_asset_table.insert(std::make_pair(t_asset_path, loaded_asset));
+			m_asset_table[t_asset_path] = loaded_asset;
 			m_ptr_cache = loaded_asset; // Prevent the shared ptr from getting return value destroyed
 			return loaded_asset;
 		}

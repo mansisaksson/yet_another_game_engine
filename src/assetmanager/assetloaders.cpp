@@ -349,7 +349,7 @@ std::shared_ptr<material> asset_loader<material>::load_asset(const std::string& 
 		return nullptr;
 	}
 
-	std::shared_ptr<shader> shader_ptr = asset_loader<shader>::load_asset(shader_ref.second);
+	std::shared_ptr<shader> shader_ptr = asset_manager::get().load_asset<shader>(shader_ref.second);
 
 	const unform_values material_uniforms = [&]()->unform_values 
 	{
