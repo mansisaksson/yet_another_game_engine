@@ -1,13 +1,12 @@
 {
 	"asset_type": "static_mesh",
-	"data_asset": "/meshes/ship.obj",
+	"data_asset": "/meshes/rock.obj",
 	"axes": { 
 		"forward": 	"-Z",
 		"right": 	"X",
 		"up":		"Y"
 	},
 	"materials": {
-		"Ship":		"/materials/basic_mat",
-		"Black": 	"/materials/black"
+		"Rock": 	"/materials/brown"
 	}
 }

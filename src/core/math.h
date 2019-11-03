@@ -8,6 +8,16 @@ namespace math
 		return rand() % INT_MAX;
 	}
 
+	inline float rand_float()
+	{
+		return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	}
+
+	inline float rand_float_range(float min, float max)
+	{
+		return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+	}
+
 	inline constexpr float pi()
 	{
 		return 3.14159265359f;

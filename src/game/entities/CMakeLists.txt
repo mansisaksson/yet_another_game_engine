@@ -3,5 +3,7 @@ add_sources(
     "player.cpp"
 	"bullet.h"
     "bullet.cpp"
+	"asteroid.h"
+    "asteroid.cpp"
     "CMakeLists.txt"
 )

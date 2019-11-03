@@ -1,0 +1,7 @@
+{
+	"asset_type": "material",
+	"shader": "/shaders/default_shader",
+	"uniforms": {
+		"color": [ 0.46, 0.07, 0, 1 ]
+	}
+}

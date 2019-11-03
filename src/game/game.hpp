@@ -5,6 +5,7 @@
 #include "platform/platforminput.h"
 #include "rendercore/viewport.h"
 #include "entities/player.h"
+#include "entities/asteroid.h"
 
 class tavla_viewport;
 
@@ -17,10 +18,15 @@ private:
 
 	std::weak_ptr<player_entity> player;
 
+	float m_asteroid_spawn_timer = 0.f;
+
+	scene* m_game_scene;
+
 public:
 
 	void start_game(scene* const game_scene, tavla_viewport* const game_viewport)
 	{
+		m_game_scene = game_scene;
 		m_viewport = game_viewport->get_viewport();
 
 		m_viewport->set_view_location(vector3(0, 0, 10));
@@ -32,6 +38,13 @@ public:
 	void tick_game(float t_delta_time)
 	{
 		player.lock()->set_movement_vector(m_movement_input);
+
+		m_asteroid_spawn_timer -= t_delta_time;
+		if (m_asteroid_spawn_timer <= 0.f)
+		{
+			m_game_scene->spawn_entity<asteroid_entity>(transform(vector3(10, math::rand_float_range(-5.f, 5.f), 0.f), quaternion::identity, 1.f), vector3::forward * -4.f, 5.f);
+			m_asteroid_spawn_timer = 2.f;
+		}
 	}
 
 	void on_input_event(const input_event& t_input_event)
