@@ -1,19 +1,16 @@
-[ ] control the camera
-	[x] pipe the input from  the application to the camera so it can move
-	[ ] add mouse input
-	
-[ ] Add axis import option to mesh (Should be able to swap the axes to align with the engine)
+[ ] Create a collision system
+	[ ] How do we structure the physics/collision scene? Do we want to pass over ownership of the entities to this scene, or let the entities own the collision objects?
 
-[ ] Setup UI sizing system
-	[ ] Create primitive UI types
-		[x] Vertical box
-		[x] Horizontal box
-		[ ] Grid
-		[ ] Overlay
-	[ ] Set fill mode on slots
+[ ] Add a line-renderer to improve debugging.
 
-[ ] Core types
-	[ ] Rectangle // Used for aligning ui elements, such as the viewport
+[ ] Create a proper renderer - Right now we do the worst kind of rendering (basically no kind), which is extreemly inefficient
+	[ ] Batch render commands
+	[ ] Sort by materials
+	[ ] Improve uniform system (We call set unform qute a bit, which can get expensive)
+
+============================ DONE ============================
+
+[x] Add axis import option to mesh (Should be able to swap the axes to align with the engine)
 
 [x] draw a scene of objects
 	[x] create a scene with multiple entities
@@ -36,3 +33,20 @@
 	
 [x] Add input
 	[x] Abstract the input
+	
+============================ BACKLOG ============================
+
+[ ] Improve mesh importer
+	[ ] Don't split the mesh by materials - Right now we create one mesh per material, this gives us copies of some vertices, 
+	we should instead have one vertex list, and two index lists.
+	[ ] Do some refactoring - The importer is a modified version of something found on the internet, it wasn't very good and basically needs a re-write.
+
+[ ] Setup UI sizing system
+	[ ] Create primitive UI types
+		[x] Vertical box
+		[x] Horizontal box
+		[ ] Grid
+		[ ] Overlay
+	[ ] Set fill mode on slots
+
+[ ] add mouse input
