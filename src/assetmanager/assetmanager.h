@@ -2,14 +2,14 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <any>
 #include "assetloaders.h"
 
 class asset_manager
 {
 private:
 
-    std::unordered_map<std::string, std::weak_ptr<void>> m_asset_table;
-	std::shared_ptr<void> m_ptr_cache;
+    std::unordered_map<std::string, std::any> m_asset_table;
 
 private:
 
@@ -30,20 +30,22 @@ public:
     std::shared_ptr<T> load_asset(const std::string &t_asset_path)
     {
         const auto asset_ptr = m_asset_table.find(t_asset_path);
-        if (asset_ptr != m_asset_table.end() && !(*asset_ptr).second.expired())
-        {
-			// TODO: since we're not using polymorfism, we cannot ensure that we're returning the proper type here.
 
-			m_ptr_cache = (*asset_ptr).second.lock(); // Prevent the shared ptr from getting return value destroyed
-            return std::static_pointer_cast<T>(m_ptr_cache);
+        if (asset_ptr != m_asset_table.end())
+        {
+			// TODO: this will throw if we encounter an incorrect type. This is however better than it just silently stepping through.
+			const std::weak_ptr<T> casted_ptr = std::any_cast<std::weak_ptr<T>>((*asset_ptr).second);
+			if (!casted_ptr.expired())
+			{
+				return casted_ptr.lock();
+			}
         }
 
         const std::shared_ptr<T> loaded_asset = asset_loader<T>::load_asset(t_asset_path);
 
 		if (loaded_asset)
 		{
-			m_asset_table[t_asset_path] = loaded_asset;
-			m_ptr_cache = loaded_asset; // Prevent the shared ptr from getting return value destroyed
+			m_asset_table[t_asset_path] = std::weak_ptr<T>(loaded_asset);
 			return loaded_asset;
 		}
 
