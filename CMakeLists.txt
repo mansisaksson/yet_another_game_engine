@@ -29,7 +29,6 @@ endmacro()
 add_compile_definitions(ENGINE_CONTENT_DIR="${CMAKE_CURRENT_LIST_DIR}/content")
 
 include_directories(third_party/nlohmannjson)
-include_directories(third_party/glm)
 include_directories(third_party/loaders)
 include_directories(src)
 
