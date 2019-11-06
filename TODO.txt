@@ -7,6 +7,8 @@
 	[ ] Batch render commands
 	[ ] Sort by materials
 	[ ] Improve uniform system (We call set unform qute a bit, which can get expensive)
+	
+[ ] Fix CMake Build All bug (For some reason, you now have to build the Buld All twice for the build not to fail, this was not always the case, figure out what changed!)
 
 ============================ DONE ============================
 
