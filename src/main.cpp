@@ -55,7 +55,6 @@ int main()
 
 	application->on_tick_application.bind(delegate<void, float>::create_function([&](float t_delta_time) {
 		game.tick_game(t_delta_time);
-		game_scene->tick_scene(t_delta_time);
 	}));
 
 	// TODO: Input should probably be received by the game_viewport

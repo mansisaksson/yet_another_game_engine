@@ -45,6 +45,8 @@ public:
 			m_game_scene->spawn_entity<asteroid_entity>(transform(vector3(10, math::rand_float_range(-5.f, 5.f), 0.f), quaternion::identity, 1.f), vector3::forward * -4.f, 5.f);
 			m_asteroid_spawn_timer = 2.f;
 		}
+
+		m_game_scene->tick_scene(t_delta_time);
 	}
 
 	void on_input_event(const input_event& t_input_event)
