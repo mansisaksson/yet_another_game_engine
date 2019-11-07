@@ -6,6 +6,7 @@ include(ExternalProject)
 
 find_package(OpenGL REQUIRED)
 
+set(old_args ${CMAKE_ARGS})
 # list(APPEND CMAKE_ARGS "-DBUILD_UTILS:BOOL=ON")
 # list(APPEND CMAKE_ARGS "-DGLEW_REGAL:BOOL=FALSE")
 # list(APPEND CMAKE_ARGS "-DGLEW_OSMESA:BOOL=FALSE")
@@ -30,6 +31,7 @@ ExternalProject_Add ( ${GLEW_PREFIX}
     LOG_DOWNLOAD 1
     LOG_BUILD 1
 )
+set(CMAKE_ARGS ${old_args})
 
 add_dependencies(${GLEW_PREFIX} ${GLEW_PREFIX}_download) # Ensure ${GLEW_PREFIX}_download is built first
 
