@@ -13,7 +13,6 @@ find_package(OpenGL REQUIRED)
 set(GLEW_PREFIX glew)
 set(GLEW_URL ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew.zip)
 
-
 ExternalProject_Add ( ${GLEW_PREFIX}_download
     PREFIX ${GLEW_PREFIX}
     SOURCE_DIR "${GLEW_PREFIX}/src/glew" # Explicitely set download dir
@@ -32,15 +31,7 @@ ExternalProject_Add ( ${GLEW_PREFIX}
     LOG_BUILD 1
 )
 
-# ExternalProject_Add(${GLEW_PREFIX}
-#     PREFIX ${GLEW_PREFIX}
-#     URL ${GLEW_URL}
-#     CMAKE_ARGS ${CMAKE_ARGS}
-#     #CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR><SOURCE_DIR>/build/cmake/ # Tell CMake to use subdirectory as source.
-#     SOURCE_DIR "build/cmake"
-#     LOG_DOWNLOAD 1
-#     LOG_BUILD 1
-# )
+add_dependencies(${GLEW_PREFIX} ${GLEW_PREFIX}_download) # Ensure ${GLEW_PREFIX}_download is built first
 
 # get the unpacked source/binary directory path
 ExternalProject_Get_Property(${GLEW_PREFIX} SOURCE_DIR)
@@ -71,7 +62,6 @@ message(STATUS "GLEW Binary directory ${GLEW_BINARY_DIRS}")
 include_directories(${GLEW_INCLUDE_DIRS})
 
 # link libraries
-
 link_directories(${GLEW_LIBRARY_DIRS})
 link_libraries(${GLEW_LIBS})
 

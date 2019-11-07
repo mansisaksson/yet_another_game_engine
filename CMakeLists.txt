@@ -1,15 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
-SET(CMAKE_BUILD_TYPE Debug)
-
-include(third_party/glfw.cmake)
-include(third_party/glew.cmake)
-
+set(CMAKE_BUILD_TYPE Debug)
 set(PROJECT_NAME YETE)
+set(CMAKE_CXX_STANDARD 17)
 
 project(${PROJECT_NAME})
-
-set(CMAKE_CXX_STANDARD 17)
 
 macro (add_sources)
     file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -26,7 +21,8 @@ macro (add_sources)
     endif()
 endmacro()
 
-add_compile_definitions(ENGINE_CONTENT_DIR="${CMAKE_CURRENT_LIST_DIR}/content")
+include(third_party/glfw.cmake)
+include(third_party/glew.cmake)
 
 include_directories(third_party/nlohmannjson)
 include_directories(third_party/loaders)
@@ -35,6 +31,11 @@ include_directories(src)
 add_subdirectory(third_party)
 add_subdirectory(src)
 
+add_compile_definitions(ENGINE_CONTENT_DIR="${CMAKE_CURRENT_LIST_DIR}/content")
+
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_LIST}) # build source tree for some IDEs
 
 add_executable(${PROJECT_NAME} ${SOURCE_LIST})
+
+add_dependencies(${PROJECT_NAME} glfw)
+add_dependencies(${PROJECT_NAME} glew)
