@@ -9,5 +9,6 @@ add_subdirectory(game)
 add_sources(
     "main.cpp"
 	"test.hpp"
+	"bullet_HelloWorld.hpp"
     "CMakeLists.txt"
 )

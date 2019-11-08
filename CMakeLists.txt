@@ -23,7 +23,7 @@ endmacro()
 
 include(third_party/glfw.cmake)
 include(third_party/glew.cmake)
-#include(third_party/bullet3.cmake)
+include(third_party/bullet3.cmake)
 
 include_directories(third_party/nlohmannjson)
 include_directories(src)
@@ -39,4 +39,4 @@ add_executable(${PROJECT_NAME} ${SOURCE_LIST})
 
 add_dependencies(${PROJECT_NAME} glfw)
 add_dependencies(${PROJECT_NAME} glew)
-#add_dependencies(${PROJECT_NAME} bullet3)
+add_dependencies(${PROJECT_NAME} bullet3)

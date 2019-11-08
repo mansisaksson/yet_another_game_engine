@@ -15,8 +15,12 @@
 
 #include "test.hpp"
 
+#include "bullet_HelloWorld.hpp"
+
 int main()
 {
+	run_bullet_hello_world();
+
 	run_tests();
 
 	std::shared_ptr<scene> game_scene = std::make_shared<scene>();
