@@ -1,4 +1,3 @@
-message("")
 message(STATUS "Configuring GLEW")
 
 include(ExternalProject)
@@ -31,28 +30,27 @@ ExternalProject_Add ( glew
 )
 
 # get the unpacked source/binary directory path
-ExternalProject_Get_Property(glew SOURCE_DIR)
-ExternalProject_Get_Property(glew BINARY_DIR)
-set (SOURCE_DIR ${SOURCE_DIR}/../..) # need to adjust for our CMakeLists.txt being in {SOURCE_DIR}/build/cmake
+ExternalProject_Get_Property(glew INSTALL_DIR)
 
-set(GLEW_INCLUDE_DIRS ${SOURCE_DIR}/include) # set the include directory variable and include it
+# set the include/lib/bin directory variables
+set(GLEW_INCLUDE_DIRS ${INSTALL_DIR}/include)
+set(GLEW_LIBRARY_DIRS ${INSTALL_DIR}/lib)
+set(GLEW_BINARY_DIRS ${INSTALL_DIR}/bin)
 
 # link the correct GLEW directory when the project is in Debug or Release mode
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	# in Debug mode
-	set(GLEW_LIBS glew32d libglew32d opengl32)
-    set(GLEW_LIBRARY_DIRS ${BINARY_DIR}/lib/Debug)
-    set(GLEW_BINARY_DIRS ${BINARY_DIR}/bin/Debug)
-else (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	# in Release mode
-	set(GLEW_LIBS glew32 libglew32 opengl32)
-    set(GLEW_LIBRARY_DIRS ${BINARY_DIR}/lib/Release)
-    set(GLEW_BINARY_DIRS ${BINARY_DIR}/bin/Release)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug") # in Debug mode
+    set(GLEW_LIBS 
+        glew32d 
+        libglew32d 
+        opengl32
+    )
+else (CMAKE_BUILD_TYPE STREQUAL "Debug") # in Release mode
+    set(GLEW_LIBS
+        glew32
+        libglew32
+        opengl32
+    )
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
-
-message(STATUS "GLEW Include directory ${GLFW_INCLUDE_DIRS}")
-message(STATUS "GLEW Library directory ${GLFW_LIBRARY_DIRS}")
-message(STATUS "GLEW Binary directory ${GLEW_BINARY_DIRS}")
 
 # set include dirs
 include_directories(${GLEW_INCLUDE_DIRS})
@@ -63,10 +61,11 @@ link_libraries(${GLEW_LIBS})
 
 # install .dll/.so
 set(GLEW_INSTALL_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
+
 if (UNIX)
-	install(DIRECTORY ${GLEW_BINARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN "*.so*")
+	set(BIN_FILE_PATTERN "*.so*")
 else (UNIX)
-	install(DIRECTORY ${GLEW_BINARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} FILES_MATCHING PATTERN "*.dll*")
+	set(BIN_FILE_PATTERN "*.dll*")
 endif (UNIX)
 
-message("")
+install(DIRECTORY ${GLEW_BINARY_DIRS}/ DESTINATION ${GLEW_INSTALL_DIR} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN ${BIN_FILE_PATTERN})

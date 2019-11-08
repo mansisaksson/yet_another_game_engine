@@ -1,4 +1,3 @@
-message("")
 message(STATUS "Configuring GLFW")
 
 include(ExternalProject)
@@ -21,32 +20,19 @@ ExternalProject_Add(glfw
 )
 
 # get the unpacked source/binary directory path
-ExternalProject_Get_Property(glfw SOURCE_DIR)
-ExternalProject_Get_Property(glfw BINARY_DIR)
+ExternalProject_Get_Property(glfw INSTALL_DIR)
 
-# set the include directory variable and include it
-set(GLFW_INCLUDE_DIRS ${SOURCE_DIR}/include)
+# set the include/lib/bin directory variables
+set(GLFW_INCLUDE_DIRS ${INSTALL_DIR}/include)
+set(GLFW_LIBRARY_DIRS ${INSTALL_DIR}/lib)
+set(GLFW_BINARY_DIRS ${INSTALL_DIR}/bin)
 
 # link the correct GLFW directory when the project is in Debug or Release mode
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	# in Debug mode
-	set(GLFW_DEBUG_DIR ${BINARY_DIR}/src/Debug)
-
 	set(GLFW_LIBS glfw3dll)
-	set(GLFW_LIBRARY_DIRS ${GLFW_DEBUG_DIR})
-	set(GLFW_BINARY_DIRS ${GLFW_DEBUG_DIR})
 else (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	# in Release mode
-	set(GLFW_RELEASE_DIR ${BINARY_DIR}/src/Release)
-
 	set(GLFW_LIBS glfw3dll)
-	set(GLFW_LIBRARY_DIRS ${GLFW_RELEASE_DIR})
-	set(GLFW_BINARY_DIRS ${GLFW_RELEASE_DIR})
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
-
-message(STATUS "GLFW Include directory ${GLFW_INCLUDE_DIRS}")
-message(STATUS "GLFW Library directory ${GLFW_LIBRARY_DIRS}")
-message(STATUS "GLFW Binary directory ${GLFW_BINARY_DIRS}")
 
 # set include dirs
 include_directories(${GLFW_INCLUDE_DIRS})
@@ -57,10 +43,11 @@ link_libraries(${GLFW_LIBS})
 
 # install .dll/.so
 set(GLFW_INSTALL_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
+
 if (UNIX)
-	install(DIRECTORY ${GLFW_BINARY_DIRS}/ DESTINATION ${GLFW_INSTALL_DIR} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN "*.so*")
+	set(BIN_FILE_PATTERN "*.so*")
 else (UNIX)
-	install(DIRECTORY ${GLFW_BINARY_DIRS}/ DESTINATION ${GLFW_INSTALL_DIR} FILES_MATCHING PATTERN "*.dll*")
+	set(BIN_FILE_PATTERN "*.dll*")
 endif (UNIX)
 
-message("")
+install(DIRECTORY ${GLFW_BINARY_DIRS}/ DESTINATION ${GLFW_INSTALL_DIR} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN ${BIN_FILE_PATTERN})
