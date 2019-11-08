@@ -11,7 +11,8 @@ ExternalProject_Add(bullet3
     LOG_DOWNLOAD 1
     LOG_BUILD 1
     CMAKE_ARGS
-        -DBUILD_SHARED_LIBS=OFF
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DBUILD_SHARED_LIBS=ON
         -DINSTALL_LIBS=ON
         -DINSTALL_CMAKE_FILES=OFF
 
@@ -19,7 +20,7 @@ ExternalProject_Add(bullet3
         -DUSE_DOUBLE_PRECISION=OFF
         -DUSE_GRAPHICAL_BENCHMARK=OFF
         -DBULLET2_MULTITHREADING=OFF
-        -DUSE_MSVC_INCREMENTAL_LINKING=OFF
+        -DUSE_MSVC_INCREMENTAL_LINKING=ON
         -DUSE_CUSTOM_VECTOR_MATH=OFF
         -DBUILD_CPU_DEMOS=OFF
         -DUSE_GLUT=OFF
@@ -30,7 +31,6 @@ ExternalProject_Add(bullet3
         -DBUILD_BULLET2_DEMOS=OFF
         -DBUILD_EXTRAS=OFF
         -DBUILD_UNIT_TESTS=OFF
-        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 )
 
 # get the unpacked source/binary directory path
@@ -71,3 +71,21 @@ else (CMAKE_BUILD_TYPE STREQUAL "Debug") # in Release mode
         LinearMath
     )
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+# set include dirs
+include_directories(${BULLET_INCLUDE_DIRS})
+
+# link libraries
+link_directories(${BULLET_LIBRARY_DIRS})
+link_libraries(${BULLET_LIBS})
+
+# install .dll/.so
+set(BULLET_BINARY_DIRS ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
+
+if (UNIX)
+	set(BIN_FILE_PATTERN "*.so*")
+else (UNIX)
+	set(BIN_FILE_PATTERN "*.dll*")
+endif (UNIX)
+
+install(DIRECTORY ${BULLET_BINARY_DIRS}/ DESTINATION ${BULLET_BINARY_DIRS} USE_SOURCE_PERMISSIONS FILES_MATCHING PATTERN ${BIN_FILE_PATTERN})
