@@ -1,32 +1,28 @@
 message("")
-
 message(STATUS "Configuring GLFW")
 
 include(ExternalProject)
 
-set(old_args ${CMAKE_ARGS})
-list(APPEND CMAKE_ARGS "-DBUILD_SHARED_LIBS:BOOL=ON")
-list(APPEND CMAKE_ARGS "-DGLFW_BUILD_EXAMPLES:BOOL=FALSE")
-list(APPEND CMAKE_ARGS "-DGLFW_BUILD_TESTS:BOOL=FALSE")
-list(APPEND CMAKE_ARGS "-DGLFW_BUILD_DOCS:BOOL=FALSE")
-list(APPEND CMAKE_ARGS "-DGLFW_INSTALL:BOOL=ON")
-list(APPEND CMAKE_ARGS "-DGLFW_VULKAN_STATIC:BOOL=FALSE")
-
 set(GLFW_PREFIX glfw)
-set(GLFW_URL ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw.zip)
 
-ExternalProject_Add(${GLFW_PREFIX}
+ExternalProject_Add(glfw
     PREFIX ${GLFW_PREFIX}
-    URL ${GLFW_URL}
-	CMAKE_ARGS ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw.zip
     LOG_DOWNLOAD 1
-    LOG_BUILD 1
+	LOG_BUILD 1
+	CMAKE_ARGS
+		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+		-DBUILD_SHARED_LIBS:BOOL=ON
+		-DGLFW_BUILD_EXAMPLES:BOOL=FALSE
+		-DGLFW_BUILD_TESTS:BOOL=FALSE
+		-DGLFW_BUILD_DOCS:BOOL=FALSE
+		-DGLFW_INSTALL:BOOL=ON
+		-DGLFW_VULKAN_STATIC:BOOL=FALSE
 )
-set(CMAKE_ARGS ${old_args})
 
 # get the unpacked source/binary directory path
-ExternalProject_Get_Property(${GLFW_PREFIX} SOURCE_DIR)
-ExternalProject_Get_Property(${GLFW_PREFIX} BINARY_DIR)
+ExternalProject_Get_Property(glfw SOURCE_DIR)
+ExternalProject_Get_Property(glfw BINARY_DIR)
 
 # set the include directory variable and include it
 set(GLFW_INCLUDE_DIRS ${SOURCE_DIR}/include)

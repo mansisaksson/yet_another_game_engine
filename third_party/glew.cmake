@@ -1,47 +1,41 @@
 message("")
-
 message(STATUS "Configuring GLEW")
 
 include(ExternalProject)
 
 find_package(OpenGL REQUIRED)
 
-set(old_args ${CMAKE_ARGS})
-# list(APPEND CMAKE_ARGS "-DBUILD_UTILS:BOOL=ON")
-# list(APPEND CMAKE_ARGS "-DGLEW_REGAL:BOOL=FALSE")
-# list(APPEND CMAKE_ARGS "-DGLEW_OSMESA:BOOL=FALSE")
-
 set(GLEW_PREFIX glew)
-set(GLEW_URL ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew.zip)
 
-ExternalProject_Add ( ${GLEW_PREFIX}_download
+ExternalProject_Add ( glew_download
     PREFIX ${GLEW_PREFIX}
     SOURCE_DIR "${GLEW_PREFIX}/src/glew" # Explicitely set download dir
-    URL ${GLEW_URL}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew.zip
     CONFIGURE_COMMAND "" # Disable all other steps
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
 )
 
-ExternalProject_Add ( ${GLEW_PREFIX}
+ExternalProject_Add ( glew
     PREFIX ${GLEW_PREFIX}
     DOWNLOAD_COMMAND "" # Disable download step
     SOURCE_DIR "${GLEW_PREFIX}/src/glew/build/cmake" # Source dir for configuration
-    CMAKE_CACHE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     LOG_DOWNLOAD 1
     LOG_BUILD 1
+    DEPENDS glew_download
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DBUILD_UTILS:BOOL=ON
+        -DGLEW_REGAL:BOOL=FALSE
+        -DGLEW_OSMESA:BOOL=FALSE
 )
-set(CMAKE_ARGS ${old_args})
-
-add_dependencies(${GLEW_PREFIX} ${GLEW_PREFIX}_download) # Ensure ${GLEW_PREFIX}_download is built first
 
 # get the unpacked source/binary directory path
-ExternalProject_Get_Property(${GLEW_PREFIX} SOURCE_DIR)
-ExternalProject_Get_Property(${GLEW_PREFIX} BINARY_DIR)
+ExternalProject_Get_Property(glew SOURCE_DIR)
+ExternalProject_Get_Property(glew BINARY_DIR)
 set (SOURCE_DIR ${SOURCE_DIR}/../..) # need to adjust for our CMakeLists.txt being in {SOURCE_DIR}/build/cmake
 
-# set the include directory variable and include it
-set(GLEW_INCLUDE_DIRS ${SOURCE_DIR}/include)
+set(GLEW_INCLUDE_DIRS ${SOURCE_DIR}/include) # set the include directory variable and include it
 
 # link the correct GLEW directory when the project is in Debug or Release mode
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
