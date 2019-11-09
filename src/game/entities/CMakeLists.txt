@@ -5,5 +5,7 @@ add_sources(
     "bullet.cpp"
 	"asteroid.h"
     "asteroid.cpp"
+	"physicscube.h"
+	"physicscube.cpp"
     "CMakeLists.txt"
 )

@@ -16,7 +16,7 @@ public:
 		, scale(1.f)
 	{}
 
-	transform(const vector3& t_location, const quaternion &rotation, float scale)
+	transform(const vector3& t_location, const quaternion &rotation = quaternion::identity, float scale = 1.f)
 		: location(t_location)
 		, rotation(rotation)
 		, scale(scale)

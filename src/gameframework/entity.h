@@ -16,7 +16,10 @@ protected:
 
 public:
 	virtual void begin_play() {}
+	virtual void removed_from_scene(scene* scene) {}
+
 	virtual void tick(float delta_time) {}
+	virtual void post_physics_tick() {}
 	virtual void draw(const viewport* viewport) {}
 
 public:

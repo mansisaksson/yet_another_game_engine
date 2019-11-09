@@ -12,15 +12,12 @@
 #include "gameframework/entity.h"
 
 #include "game/game.hpp"
+#include "game/physics_test_game.hpp"
 
 #include "test.hpp"
 
-#include "bullet_HelloWorld.hpp"
-
 int main()
 {
-	run_bullet_hello_world();
-
 	run_tests();
 
 	std::shared_ptr<scene> game_scene = std::make_shared<scene>();
@@ -54,7 +51,8 @@ int main()
 
 	tavla::construct_tavla_tree(application);
 
-	game game;
+	//game game;
+	physics_game game;
 	game.start_game(game_scene.get(), game_viewport.get());
 
 	application->on_tick_application.bind(delegate<void, float>::create_function([&](float t_delta_time) {
