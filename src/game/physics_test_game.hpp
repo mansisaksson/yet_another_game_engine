@@ -13,7 +13,7 @@ class physics_game
 {
 private:
 	vector3 m_camera_movement;
-	float m_camera_movement_speed = 1.f;
+	float m_camera_movement_speed = 5.f;
 
 	vector2 m_camera_rot;
 	float m_camera_rot_speed = 1.f;
@@ -21,9 +21,6 @@ private:
 	viewport* m_viewport;
 	vector3 m_view_location = vector3(-12, 0, 0);
 	vector2 m_view_rotation;
-
-	std::weak_ptr<physics_cube_entity> cube;
-	std::weak_ptr<physics_cube_entity> cube2;
 
 	scene* game_scene;
 
@@ -34,8 +31,23 @@ public:
 		game_scene = t_game_scene;
 		m_viewport = game_viewport->get_viewport();
 
-		cube = game_scene->spawn_entity<physics_cube_entity>(transform::identity, true, 100.f);
-		cube2 = game_scene->spawn_entity<physics_cube_entity>(transform(vector3(0, 0, -6)), false, 0.f);
+		
+		game_scene->spawn_entity<physics_cube_entity>(transform(vector3(0, 0, -35)), 20.f, false, 1.f);
+
+		const int num_cubes = 4;
+		for (int z = 0; z < num_cubes; z++)
+		{
+			for (int y = 0; y < num_cubes; y++)
+			{
+				for (int x = 0; x < num_cubes; x++)
+				{
+					const int cube_size = 1.f;
+					const auto cube_location = vector3(cube_size * x, cube_size * y, cube_size * z);
+
+					game_scene->spawn_entity<physics_cube_entity>(cube_location, cube_size / 2.f, true, 1.f);
+				}
+			}
+		}
 	}
 
 	void tick_game(float t_delta_time)

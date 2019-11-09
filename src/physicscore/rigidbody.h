@@ -13,6 +13,7 @@ private:
 
 	class btRigidBody* m_bt_rigid_body;
 	class btCompoundShape* m_bt_collision_shape;
+	//class btCollisionShape* m_bt_collision_shape;
 	std::vector<class btCollisionShape*> m_child_shapes;
 
 public:

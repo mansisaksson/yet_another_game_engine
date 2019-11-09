@@ -16,6 +16,11 @@ namespace bt_helpers
 		return btVector3(vector.y, vector.z, -vector.x);
 	}
 
+	inline btVector3 yete_to_bt_vector3_abs(const vector3& vector)
+	{
+		return btVector3(abs(vector.y), abs(vector.z), abs(vector.x));
+	}
+
 	inline btTransform yete_to_bt_transform(const transform& transform)
 	{
 		return btTransform(yete_to_bt_quaternion(transform.rotation), yete_to_bt_vector3(transform.location));

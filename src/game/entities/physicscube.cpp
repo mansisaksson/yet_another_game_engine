@@ -9,7 +9,9 @@ void physics_cube_entity::begin_play()
 {
 	m_static_mesh_ptr = asset_manager::get().load_asset<static_mesh>("/meshes/cube_mesh");
 
-	const box_shape box_collision(vector3(5.f, 5.f, 5.f));
+	transform.scale = m_cube_size;
+
+	const box_shape box_collision(vector3(m_cube_size, m_cube_size, m_cube_size));
 	const std::vector<rigid_body::rb_collision> collision_shapes = {
 		{ &box_collision, transform::identity }
 	};

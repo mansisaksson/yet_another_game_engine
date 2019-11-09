@@ -24,7 +24,7 @@ rigid_body::rigid_body(const construction_info& t_construction_info)
 			if (yete_shape->is_box())
 			{
 				const box_shape* box = static_cast<const box_shape*>(yete_shape);
-				return new btBoxShape(bt_helpers::yete_to_bt_vector3(box->get_box_half_extent()));
+				return new btBoxShape(bt_helpers::yete_to_bt_vector3_abs(box->get_box_half_extent()));
 			}
 			else if (yete_shape->is_sphere())
 			{
@@ -42,6 +42,7 @@ rigid_body::rigid_body(const construction_info& t_construction_info)
 		{
 			m_child_shapes.push_back(bt_collision_shape);
 			m_bt_collision_shape->addChildShape(bt_helpers::yete_to_bt_transform(shape_transform), bt_collision_shape);
+			//m_bt_collision_shape = bt_collision_shape;
 		}
 		else
 		{

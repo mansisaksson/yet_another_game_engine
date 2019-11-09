@@ -11,13 +11,15 @@ private:
 	std::shared_ptr<static_mesh> m_static_mesh_ptr;
 	std::shared_ptr<rigid_body> m_rigid_body;
 
+	float m_cube_size;
 	bool m_simulate_physics;
 	float m_mass;
 
 public:
 
-	physics_cube_entity(bool simulate_physics, float mass)
-		: m_simulate_physics(simulate_physics)
+	physics_cube_entity(float cube_size, bool simulate_physics, float mass)
+		: m_cube_size(cube_size)
+		, m_simulate_physics(simulate_physics)
 		, m_mass(mass)
 	{}
 
