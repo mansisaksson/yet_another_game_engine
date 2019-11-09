@@ -145,6 +145,56 @@ void rigid_body::add_sphere_shape(const sphere_shape& sphere, const transform& s
 	m_bt_rigid_body->updateInertiaTensor();
 }
 
+float rigid_body::get_simulating_physics() const
+{
+	return m_simulate_physics;
+}
+
+float rigid_body::get_mass() const
+{
+	return m_simulate_physics ? m_mass : 0.f;
+}
+
+float rigid_body::get_friction() const
+{
+	return m_friction;
+}
+
+float rigid_body::get_linear_damping() const
+{
+	return m_linear_damping;
+}
+
+float rigid_body::get_angular_damping() const
+{
+	return m_angular_damping;
+}
+
+float rigid_body::get_rolling_friction() const
+{
+	return m_rolling_friction;
+}
+
+float rigid_body::get_spinning_friction() const
+{
+	return m_spinning_friction;
+}
+
+float rigid_body::get_restitution() const
+{
+	return m_restitution;
+}
+
+float rigid_body::get_linear_sleeping_threshold() const
+{
+	return m_linear_sleeping_threshold;
+}
+
+float rigid_body::get_angular_sleeping_threshold() const
+{
+	return m_angular_sleeping_threshold;
+}
+
 vector3 rigid_body::get_rigid_body_location() const
 {
 	return bt_helpers::bt_to_yete_vector3(m_bt_rigid_body->getWorldTransform().getOrigin());
@@ -153,4 +203,71 @@ vector3 rigid_body::get_rigid_body_location() const
 quaternion rigid_body::get_rigid_body_rotation() const
 {
 	return bt_helpers::bt_to_yete_quaternion(m_bt_rigid_body->getWorldTransform().getRotation());
+}
+
+vector3 rigid_body::get_linear_velocity() const
+{
+	return bt_helpers::bt_to_yete_vector3(m_bt_rigid_body->getLinearVelocity());
+}
+
+vector3 rigid_body::get_angular_velocity() const
+{
+	return bt_helpers::bt_to_yete_vector3(m_bt_rigid_body->getAngularVelocity());
+}
+
+vector3 rigid_body::get_velocity_at_point(const vector3& t_location) const
+{
+	const auto rel_location = world_to_relative_loc(t_location);
+	return m_bt_rigid_body->getVelocityInLocalPoint(bt_helpers::yete_to_bt_vector3(rel_location));
+}
+
+vector3 rigid_body::world_to_relative_loc(const vector3& t_location) const
+{
+	// TODO: Is this correct? There is no way of testing right now, need to come back to this
+	const auto location = get_rigid_body_location();
+	const auto rotation = get_rigid_body_rotation();
+	const auto rel_location = rotation.unrotate_vector(location - t_location);
+	return rel_location;
+}
+
+void rigid_body::add_force(const vector3& t_force)
+{
+	m_bt_rigid_body->applyCentralForce(bt_helpers::yete_to_bt_vector3(t_force));
+}
+
+void rigid_body::add_force_at_location(const vector3& t_force, const vector3& t_location)
+{
+	const auto rel_location = world_to_relative_loc(t_location);
+	m_bt_rigid_body->applyForce(bt_helpers::yete_to_bt_vector3(t_force), bt_helpers::yete_to_bt_vector3(rel_location));
+}
+
+void rigid_body::add_impulse(const vector3& t_impulse)
+{
+	m_bt_rigid_body->applyCentralImpulse(bt_helpers::yete_to_bt_vector3(t_impulse));
+}
+
+void rigid_body::add_impulse_at_location(const vector3& t_impulse, const vector3& t_location)
+{
+	const auto rel_location = world_to_relative_loc(t_location);
+	m_bt_rigid_body->applyImpulse(bt_helpers::yete_to_bt_vector3(t_impulse), bt_helpers::yete_to_bt_vector3(t_location));
+}
+
+void rigid_body::add_torque(const vector3& t_torque)
+{
+	m_bt_rigid_body->applyTorque(bt_helpers::yete_to_bt_vector3(t_torque));
+}
+
+void rigid_body::add_torque_impulse(const vector3& t_torque_impulse)
+{
+	m_bt_rigid_body->applyTorqueImpulse(bt_helpers::yete_to_bt_vector3(t_torque_impulse));
+}
+
+void rigid_body::set_linear_velocity(const vector3& t_linear_velocity)
+{
+	m_bt_rigid_body->setLinearVelocity(bt_helpers::yete_to_bt_vector3(t_linear_velocity));
+}
+
+void rigid_body::set_angular_velocity(const vector3& t_angular_velocity)
+{
+	m_bt_rigid_body->setAngularVelocity(bt_helpers::yete_to_bt_vector3(t_angular_velocity));
 }

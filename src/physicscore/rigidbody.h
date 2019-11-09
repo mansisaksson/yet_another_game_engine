@@ -23,7 +23,7 @@ private:
 	float m_angular_damping = 0.01f;
 	float m_rolling_friction = 0.0f;
 	float m_spinning_friction = 0.0f;		// torsional friction around contact normal
-	float m_restitution = 0.0f;			// best simulation results using zero restitution.
+	float m_restitution = 0.0f;				// best simulation results using zero restitution.
 	float m_linear_sleeping_threshold = 0.8f;
 	float m_angular_sleeping_threshold = 1.0f;
 
@@ -50,7 +50,36 @@ public:
 	void add_capsue_shape(const capsule_shape& capsule, const transform& shape_transform);
 	void add_sphere_shape(const sphere_shape& sphere, const transform& shape_transform);
 
+	float get_simulating_physics() const;
+	float get_mass() const;
+	float get_friction() const;
+	float get_linear_damping() const;
+	float get_angular_damping() const;
+	float get_rolling_friction() const;
+	float get_spinning_friction() const;
+	float get_restitution() const;
+	float get_linear_sleeping_threshold() const;
+	float get_angular_sleeping_threshold() const;
+
 	vector3 get_rigid_body_location() const;
 	quaternion get_rigid_body_rotation() const;
+
+	vector3 get_linear_velocity() const;
+	vector3 get_angular_velocity() const;
+	vector3 get_velocity_at_point(const vector3& t_location) const;
+
+	vector3 world_to_relative_loc(const vector3& t_location) const;
+
+	void add_force(const vector3& t_force);
+	void add_force_at_location(const vector3& t_force, const vector3 &t_location);
+
+	void add_impulse(const vector3& t_impulse);
+	void add_impulse_at_location(const vector3& t_impulse, const vector3& t_location);
+
+	void add_torque(const vector3& t_torque);
+	void add_torque_impulse(const vector3& t_torque_impulse);
+
+	void set_linear_velocity(const vector3& t_linear_velocity);
+	void set_angular_velocity(const vector3& t_angular_velocity);
 
 };
