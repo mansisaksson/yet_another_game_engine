@@ -12,18 +12,16 @@ void physics_cube_entity::begin_play()
 	transform.scale = m_cube_size;
 
 	const box_shape box_collision(vector3(m_cube_size / 2.f, m_cube_size / 2.f, m_cube_size / 2.f));
-	const std::vector<rigid_body::rb_collision> collision_shapes = {
-		{ &box_collision, transform::identity }
-	};
 
-	auto rigid_body_construction_info = rigid_body::construction_info();
-	rigid_body_construction_info.start_world_transform = transform;
-	rigid_body_construction_info.simulate_physics = m_simulate_physics;
-	rigid_body_construction_info.mass = m_mass;
-	rigid_body_construction_info.collision_shapes = collision_shapes;
-
-	m_rigid_body = std::make_shared<rigid_body>(rigid_body_construction_info);
+	m_rigid_body = std::make_shared<rigid_body>();
+	m_rigid_body->set_mass(m_mass);
+	m_rigid_body->add_box_shape(box_collision, transform::identity);
+	m_rigid_body->set_simulate_physics(m_simulate_physics);
 	
+	// TODO: should have a btSyncScene thing here
+	m_rigid_body->set_world_location(transform.location);
+	m_rigid_body->set_world_rotation(transform.rotation);
+
 	get_scene()->get_physics_scene()->add_rigid_body(*m_rigid_body.get());
 }
 

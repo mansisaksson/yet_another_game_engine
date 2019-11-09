@@ -18,7 +18,7 @@ public:
 		, m_half_extent(half_extent)
 	{}
 
-	const vector3 &get_box_half_extent() const
+	inline const vector3 &get_box_half_extent() const
 	{
 		return m_half_extent;
 	}

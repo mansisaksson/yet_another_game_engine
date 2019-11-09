@@ -1,12 +1,8 @@
 add_sources(
 	"collisionshapes.h"
 	"collisionshape.h"
-	"collisionshape.cpp"
 	"boxshape.h"
-	"boxshape.cpp"
 	"sphereshape.h"
-	"sphereshape.cpp"
 	"capsuleshape.h"
-	"capsuleshape.cpp"
     "CMakeLists.txt"
 )
