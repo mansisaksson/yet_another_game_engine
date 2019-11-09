@@ -1,5 +1,7 @@
 [ ] Create a collision system
-	[ ] How do we structure the physics/collision scene? Do we want to pass over ownership of the entities to this scene, or let the entities own the collision objects?
+	[ ] Implement btMotionState
+	[ ] Implement collision dispatcher callbacks
+	[ ] re-use shapes
 
 [ ] Add a line-renderer to improve debugging.
 
