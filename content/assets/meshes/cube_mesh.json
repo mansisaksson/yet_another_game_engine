@@ -1,0 +1,12 @@
+{
+	"asset_type": "static_mesh",
+	"data_asset": "/meshes/cube.obj",
+	"axes": { 
+		"forward": 	"-Z",
+		"right": 	"X",
+		"up":		"Y"
+	},
+	"materials": {
+		"Material":	"/materials/basic_mat"
+	}
+}
