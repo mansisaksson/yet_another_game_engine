@@ -4,6 +4,7 @@
 #include "gameframework/entity.h"
 #include "platform/platforminput.h"
 #include "rendercore/viewport.h"
+#include "entities/sky.h"
 
 #include "entities/physicscube.h"
 
@@ -19,8 +20,8 @@ private:
 	float m_camera_rot_speed = 1.f;
 
 	viewport* m_viewport;
-	vector3 m_view_location = vector3(-12, 0, 0);
-	vector2 m_view_rotation;
+	vector3 m_view_location = vector3(12, 3, 0);
+	vector2 m_view_rotation = vector2(math::pi(), -0.5f);
 
 	scene* game_scene;
 
@@ -31,6 +32,7 @@ public:
 		game_scene = t_game_scene;
 		m_viewport = game_viewport->get_viewport();
 
+		game_scene->spawn_entity<sky_entity>(transform(vector3::zero, quaternion(vector3(1, 0, 0), math::pi()), 200.f));
 		
 		game_scene->spawn_entity<physics_cube_entity>(transform(vector3(0, 0, -35)), 20.f, false, 1.f);
 

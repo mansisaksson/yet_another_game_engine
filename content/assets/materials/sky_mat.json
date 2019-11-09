@@ -1,0 +1,7 @@
+{
+	"asset_type": "material",
+	"shader": "/shaders/basic_shader",
+	"uniforms": {
+		"diffuse": "/textures/sky_texture"
+	}
+}

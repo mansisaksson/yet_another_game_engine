@@ -1,4 +1,6 @@
 add_sources(
+	"sky.h"
+	"sky.cpp"
 	"player.h"
     "player.cpp"
 	"bullet.h"

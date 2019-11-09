@@ -1,12 +1,12 @@
 {
 	"asset_type": "static_mesh",
-	"data_asset": "/meshes/debug.obj",
+	"data_asset": "/meshes/sky_sphere.obj",
 	"axes": { 
 		"forward": 	"-Z",
 		"right": 	"X",
 		"up":		"Y"
 	},
 	"materials": {
-		"Material":	"/materials/basic_mat"
+		"Material":	"/materials/sky_mat"
 	}
 }

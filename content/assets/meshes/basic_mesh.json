@@ -6,7 +6,7 @@
 		"right": 	"X",
 		"up":		"Y"
 	},
-	"materials": [
-		"basic_mat"
-	]
+	"materials": {
+		"Material":	"/materials/basic_mat"
+	}
 }
