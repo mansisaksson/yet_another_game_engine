@@ -1,0 +1,1 @@
+cmake . %0/../. -B build
