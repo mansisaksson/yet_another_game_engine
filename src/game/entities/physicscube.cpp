@@ -11,7 +11,7 @@ void physics_cube_entity::begin_play()
 
 	transform.scale = m_cube_size;
 
-	const box_shape box_collision(vector3(m_cube_size, m_cube_size, m_cube_size));
+	const box_shape box_collision(vector3(m_cube_size / 2.f, m_cube_size / 2.f, m_cube_size / 2.f));
 	const std::vector<rigid_body::rb_collision> collision_shapes = {
 		{ &box_collision, transform::identity }
 	};
