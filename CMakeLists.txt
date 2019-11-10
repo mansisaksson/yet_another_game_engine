@@ -40,3 +40,8 @@ add_executable(${PROJECT_NAME} ${SOURCE_LIST})
 add_dependencies(${PROJECT_NAME} glfw)
 add_dependencies(${PROJECT_NAME} glew)
 add_dependencies(${PROJECT_NAME} bullet3)
+
+# MSVC 2017: Properly sets the value of __cplusplus
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PUBLIC "/Zc:__cplusplus")
+endif()
