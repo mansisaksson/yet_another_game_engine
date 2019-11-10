@@ -12,5 +12,5 @@ void sky_entity::begin_play()
 void sky_entity::draw(const viewport* viewport)
 {
 	if (m_static_mesh_ptr)
-		m_static_mesh_ptr->draw(transform, viewport);
+		m_static_mesh_ptr->draw(entity_transform, viewport);
 }

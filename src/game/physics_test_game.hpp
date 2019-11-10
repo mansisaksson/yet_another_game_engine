@@ -43,7 +43,7 @@ public:
 			{
 				for (int x = 0; x < num_cubes; x++)
 				{
-					const int cube_size = 1.f;
+					const float cube_size = 1.f;
 					const auto cube_location = vector3(cube_size * x, cube_size * y, cube_size * z);
 
 					game_scene->spawn_entity<physics_cube_entity>(cube_location, cube_size, true, 1.f);

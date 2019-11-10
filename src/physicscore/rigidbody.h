@@ -10,9 +10,11 @@ class rigid_body
 {
 private:
 	friend class physics_scene;
+	friend class bt_yete_motion_state;
 
 	class btRigidBody* m_bt_rigid_body;
 	class btCompoundShape* m_bt_collision_shape;
+	class bt_yete_motion_state* m_bt_motion_state;
 	std::vector<class btCollisionShape*> m_child_shapes;
 
 private:
@@ -26,10 +28,11 @@ private:
 	float m_restitution = 0.0f;				// best simulation results using zero restitution.
 	float m_linear_sleeping_threshold = 0.8f;
 	float m_angular_sleeping_threshold = 1.0f;
+	vector3 m_center_of_mass_offset;
 
 public:
 
-	rigid_body();
+	rigid_body(const transform &t_start_transform, const vector3 &t_com_offset = vector3::zero);
 	virtual ~rigid_body();
 
 	void set_simulate_physics(bool t_simulate_physics);
@@ -45,6 +48,8 @@ public:
 
 	void set_world_location(const vector3& t_location);
 	void set_world_rotation(const quaternion& t_rotation);
+
+	void set_center_of_mass_offset(const vector3& t_com_offset);
 
 	void add_box_shape(const box_shape& box, const transform& shape_transform);
 	void add_capsue_shape(const capsule_shape& capsule, const transform& shape_transform);
@@ -63,6 +68,9 @@ public:
 
 	vector3 get_rigid_body_location() const;
 	quaternion get_rigid_body_rotation() const;
+	transform get_rigid_body_transform() const;
+
+	vector3 get_center_of_mass_offset() const;
 
 	vector3 get_linear_velocity() const;
 	vector3 get_angular_velocity() const;
@@ -81,5 +89,9 @@ public:
 
 	void set_linear_velocity(const vector3& t_linear_velocity);
 	void set_angular_velocity(const vector3& t_angular_velocity);
+
+	typedef delegate<void, const vector3&, const quaternion&> sync_transform_delegate;
+
+	multicast_delegate<const vector3&, const quaternion&> on_synchronize_transform;
 
 };

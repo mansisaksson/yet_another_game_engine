@@ -8,7 +8,7 @@ class physics_scene
 private:
 	class btDefaultCollisionConfiguration* m_bt_collision_configuration;
 	class btCollisionDispatcher* m_bt_dispatcher;
-	class btDbvtBroadphase* m_bt_broadphase;
+	struct btDbvtBroadphase* m_bt_broadphase;
 	class btSequentialImpulseConstraintSolver* m_bt_solver;
 	class btDiscreteDynamicsWorld* m_bt_dynamics_world;
 

@@ -25,8 +25,6 @@ public:
 
 	virtual void begin_play() override;
 	virtual void removed_from_scene(scene* scene) override;
-	virtual void tick(float delta_time) override;
-	virtual void post_physics_tick() override;
 	virtual void draw(const viewport* viewport) override;
 
 };

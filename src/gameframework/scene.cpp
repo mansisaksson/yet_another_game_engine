@@ -10,7 +10,7 @@ scene::scene()
 void scene::add_entity(const transform& transform, const std::shared_ptr<entity>& t_entity)
 {
 	t_entity->current_scene = this;
-	t_entity->transform = transform;
+	t_entity->entity_transform = transform;
 	m_entities.push_back(t_entity);
 	t_entity->begin_play();
 }

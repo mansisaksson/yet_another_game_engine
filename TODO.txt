@@ -1,5 +1,5 @@
 [ ] Create a collision system
-	[ ] Implement btMotionState
+	[x] Implement btMotionState
 	[ ] Implement collision dispatcher callbacks
 	[ ] re-use shapes
 

@@ -16,7 +16,7 @@ void asteroid_entity::begin_play()
 
 void asteroid_entity::tick(float delta_time)
 {
-	transform.location += m_velocity * delta_time;
+	entity_transform.location += m_velocity * delta_time;
 	m_lifetime -= delta_time;
 	if (m_lifetime < 0.f)
 		remove_from_scene();
@@ -25,5 +25,5 @@ void asteroid_entity::tick(float delta_time)
 void asteroid_entity::draw(const viewport* viewport)
 {
 	if (m_asteroid_mesh)
-		m_asteroid_mesh->draw(transform, viewport);
+		m_asteroid_mesh->draw(entity_transform, viewport);
 }

@@ -3,24 +3,62 @@
 #include "bt_helpers.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/LinearMath/btMotionState.h>
 
-rigid_body::rigid_body()
+ATTRIBUTE_ALIGNED16(struct)
+bt_yete_motion_state : public btMotionState
+{
+	rigid_body* m_rigid_body;
+	//void* m_userPointer;
+
+	BT_DECLARE_ALIGNED_ALLOCATOR();
+
+	bt_yete_motion_state(rigid_body* t_rigid_body)
+		: m_rigid_body(t_rigid_body)
+	{
+	}
+
+	// Synchronizes world transform from user to physics
+	virtual void getWorldTransform(btTransform& centerOfMassWorldTrans) const
+	{
+		// TODO: Should check for scale changes here.
+
+		const auto com_offset = bt_helpers::yete_to_bt_vector3(m_rigid_body->get_center_of_mass_offset());
+		centerOfMassWorldTrans = m_rigid_body->m_bt_rigid_body->getWorldTransform() * btTransform(btQuaternion::getIdentity(), com_offset).inverse();
+	}
+
+	// Synchronizes world transform from physics to user
+	// Bullet only calls the update of worldtransform for active objects
+	virtual void setWorldTransform(const btTransform& centerOfMassWorldTrans)
+	{
+		const auto com_offset_transform = btTransform(btQuaternion::getIdentity(), bt_helpers::yete_to_bt_vector3(m_rigid_body->get_center_of_mass_offset()));
+		const auto graphics_world_trans = bt_helpers::bt_to_yete_transform(centerOfMassWorldTrans * com_offset_transform);
+		m_rigid_body->on_synchronize_transform.broadcast(graphics_world_trans.location, graphics_world_trans.rotation);
+	}
+};
+
+rigid_body::rigid_body(const transform& t_start_transform, const vector3& t_com_offset)
+	: m_center_of_mass_offset(t_com_offset)
 {
 	m_bt_collision_shape = new btCompoundShape();
 
 	btRigidBody::btRigidBodyConstructionInfo bt_construction_info(m_simulate_physics ? m_mass : 0.f, nullptr, m_bt_collision_shape);
-	
-	bt_construction_info.m_linearDamping = m_linear_damping;
-	bt_construction_info.m_angularDamping = m_angular_damping;
-	bt_construction_info.m_friction = m_friction;
-	bt_construction_info.m_rollingFriction = m_rolling_friction;
-	bt_construction_info.m_spinningFriction = m_spinning_friction;
-	bt_construction_info.m_restitution = m_restitution;
-	bt_construction_info.m_linearSleepingThreshold = m_linear_sleeping_threshold;
-	bt_construction_info.m_angularSleepingThreshold = m_angular_sleeping_threshold;
+	bt_construction_info.m_startWorldTransform			= bt_helpers::yete_to_bt_transform(t_start_transform);
+	bt_construction_info.m_linearDamping				= m_linear_damping;
+	bt_construction_info.m_angularDamping				= m_angular_damping;
+	bt_construction_info.m_friction						= m_friction;
+	bt_construction_info.m_rollingFriction				= m_rolling_friction;
+	bt_construction_info.m_spinningFriction				= m_spinning_friction;
+	bt_construction_info.m_restitution					= m_restitution;
+	bt_construction_info.m_linearSleepingThreshold		= m_linear_sleeping_threshold;
+	bt_construction_info.m_angularSleepingThreshold		= m_angular_sleeping_threshold;
 
 	m_bt_rigid_body = new btRigidBody(bt_construction_info);
 	m_bt_rigid_body->setUserIndex(-1);
+
+	// Defer the creation of the motion state until we have a valid btRigidBody
+	m_bt_motion_state = new bt_yete_motion_state(this);
+	m_bt_rigid_body->setMotionState(m_bt_motion_state);
 }
 
 rigid_body::~rigid_body()
@@ -31,6 +69,7 @@ rigid_body::~rigid_body()
 		delete shape;
 	
 	delete m_bt_collision_shape;
+	delete m_bt_motion_state;
 	delete m_bt_rigid_body;
 }
 
@@ -109,13 +148,18 @@ void rigid_body::set_angular_sleeping_threshold(float t_angular_sleeping_thresho
 void rigid_body::set_world_location(const vector3& t_location)
 {
 	const auto current_transform = m_bt_rigid_body->getWorldTransform();
-	m_bt_rigid_body->setWorldTransform(btTransform(current_transform.getRotation(), bt_helpers::yete_to_bt_vector3(t_location)));
+	//m_bt_rigid_body->setWorldTransform(btTransform(current_transform.getRotation(), bt_helpers::yete_to_bt_vector3(t_location)));
 }
 
 void rigid_body::set_world_rotation(const quaternion& t_rotation)
 {
 	const auto current_transform = m_bt_rigid_body->getWorldTransform();
 	m_bt_rigid_body->setWorldTransform(btTransform(bt_helpers::yete_to_bt_quaternion(t_rotation), current_transform.getOrigin()));
+}
+
+void rigid_body::set_center_of_mass_offset(const vector3& t_com_offset)
+{
+	m_center_of_mass_offset = t_com_offset;
 }
 
 void rigid_body::add_box_shape(const box_shape& box, const transform& shape_transform)
@@ -203,6 +247,16 @@ vector3 rigid_body::get_rigid_body_location() const
 quaternion rigid_body::get_rigid_body_rotation() const
 {
 	return bt_helpers::bt_to_yete_quaternion(m_bt_rigid_body->getWorldTransform().getRotation());
+}
+
+transform rigid_body::get_rigid_body_transform() const
+{
+	return bt_helpers::bt_to_yete_transform(m_bt_rigid_body->getWorldTransform());
+}
+
+vector3 rigid_body::get_center_of_mass_offset() const
+{
+	return m_center_of_mass_offset;
 }
 
 vector3 rigid_body::get_linear_velocity() const

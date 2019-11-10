@@ -12,7 +12,7 @@ private:
 	scene* current_scene;
 
 protected:
-	transform transform;
+	transform entity_transform;
 
 public:
 	virtual void begin_play() {}
