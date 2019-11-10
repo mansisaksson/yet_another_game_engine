@@ -148,13 +148,18 @@ void rigid_body::set_angular_sleeping_threshold(float t_angular_sleeping_thresho
 void rigid_body::set_world_location(const vector3& t_location)
 {
 	const auto current_transform = m_bt_rigid_body->getWorldTransform();
-	//m_bt_rigid_body->setWorldTransform(btTransform(current_transform.getRotation(), bt_helpers::yete_to_bt_vector3(t_location)));
+	m_bt_rigid_body->setWorldTransform(btTransform(current_transform.getRotation(), bt_helpers::yete_to_bt_vector3(t_location)));
 }
 
 void rigid_body::set_world_rotation(const quaternion& t_rotation)
 {
 	const auto current_transform = m_bt_rigid_body->getWorldTransform();
 	m_bt_rigid_body->setWorldTransform(btTransform(bt_helpers::yete_to_bt_quaternion(t_rotation), current_transform.getOrigin()));
+}
+
+void rigid_body::set_world_transform(const transform& t_transform)
+{
+	m_bt_rigid_body->setWorldTransform(bt_helpers::yete_to_bt_transform(t_transform));
 }
 
 void rigid_body::set_center_of_mass_offset(const vector3& t_com_offset)
@@ -271,8 +276,8 @@ vector3 rigid_body::get_angular_velocity() const
 
 vector3 rigid_body::get_velocity_at_point(const vector3& t_location) const
 {
-	const auto rel_location = world_to_relative_loc(t_location);
-	return m_bt_rigid_body->getVelocityInLocalPoint(bt_helpers::yete_to_bt_vector3(rel_location));
+	const auto rel_bt_location = bt_helpers::yete_to_bt_vector3(world_to_relative_loc(t_location));
+	return bt_helpers::bt_to_yete_vector3(m_bt_rigid_body->getVelocityInLocalPoint(rel_bt_location));
 }
 
 vector3 rigid_body::world_to_relative_loc(const vector3& t_location) const

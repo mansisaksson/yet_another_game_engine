@@ -10,11 +10,11 @@ class rigid_body
 {
 private:
 	friend class physics_scene;
-	friend class bt_yete_motion_state;
+	friend struct bt_yete_motion_state;
 
 	class btRigidBody* m_bt_rigid_body;
 	class btCompoundShape* m_bt_collision_shape;
-	class bt_yete_motion_state* m_bt_motion_state;
+	struct bt_yete_motion_state* m_bt_motion_state;
 	std::vector<class btCollisionShape*> m_child_shapes;
 
 private:
@@ -48,6 +48,7 @@ public:
 
 	void set_world_location(const vector3& t_location);
 	void set_world_rotation(const quaternion& t_rotation);
+	void set_world_transform(const transform& t_transform);
 
 	void set_center_of_mass_offset(const vector3& t_com_offset);
 
