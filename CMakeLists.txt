@@ -42,6 +42,6 @@ add_dependencies(${PROJECT_NAME} glew)
 add_dependencies(${PROJECT_NAME} bullet3)
 
 # MSVC 2017: Properly sets the value of __cplusplus
-if(MSVC)
+if(NOT (MSVC_VERSION LESS 1914))
 	target_compile_options(${PROJECT_NAME} PUBLIC "/Zc:__cplusplus")
 endif()
