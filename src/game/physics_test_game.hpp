@@ -36,7 +36,7 @@ public:
 		
 		game_scene->spawn_entity<physics_cube_entity>(transform(vector3(0, 0, -35)), 20.f, false, 1.f);
 
-		const int num_cubes = 4;
+		const int num_cubes = 1;
 		for (int z = 0; z < num_cubes; z++)
 		{
 			for (int y = 0; y < num_cubes; y++)

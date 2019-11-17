@@ -13,17 +13,11 @@ void physics_cube_entity::begin_play()
 
 	const box_shape box_collision(vector3(m_cube_size / 2.f, m_cube_size / 2.f, m_cube_size / 2.f));
 
-	m_rigid_body = std::make_shared<rigid_body>(entity_transform);
+	m_rigid_body = std::make_shared<rigid_body>(&entity_transform);
 	m_rigid_body->set_mass(m_mass);
 	m_rigid_body->add_box_shape(box_collision, transform::identity);
-	m_rigid_body->set_simulate_physics(m_simulate_physics);
-	
-	const auto sync_transform_delegate = rigid_body::sync_transform_delegate::create_function([&](const vector3& t_location, const quaternion& t_rotation) 
-	{
-		entity_transform.location = t_location;
-		entity_transform.rotation = t_rotation;
-	});
-	m_rigid_body->on_synchronize_transform.bind(sync_transform_delegate);
+	m_rigid_body->set_collision_type(m_simulate_physics ? collision_type::simulated : collision_type::world_static);
+	m_rigid_body->set_collision_channel(collision_channel::channel_2);
 
 	get_scene()->get_physics_scene()->add_rigid_body(*m_rigid_body.get());
 }

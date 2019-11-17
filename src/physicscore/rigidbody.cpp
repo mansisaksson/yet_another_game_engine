@@ -24,7 +24,10 @@ bt_yete_motion_state : public btMotionState
 		// TODO: Should check for scale changes here.
 
 		const auto com_offset = bt_helpers::yete_to_bt_vector3(m_rigid_body->get_center_of_mass_offset());
-		centerOfMassWorldTrans = m_rigid_body->m_bt_rigid_body->getWorldTransform() * btTransform(btQuaternion::getIdentity(), com_offset).inverse();
+		if (m_rigid_body->m_shared_transform)
+			centerOfMassWorldTrans = bt_helpers::yete_to_bt_transform(*m_rigid_body->m_shared_transform) * btTransform(btQuaternion::getIdentity(), com_offset).inverse();
+		else
+			centerOfMassWorldTrans = m_rigid_body->m_bt_rigid_body->getWorldTransform() * btTransform(btQuaternion::getIdentity(), com_offset).inverse();
 	}
 
 	// Synchronizes world transform from physics to user
@@ -34,16 +37,23 @@ bt_yete_motion_state : public btMotionState
 		const auto com_offset_transform = btTransform(btQuaternion::getIdentity(), bt_helpers::yete_to_bt_vector3(m_rigid_body->get_center_of_mass_offset()));
 		const auto graphics_world_trans = bt_helpers::bt_to_yete_transform(centerOfMassWorldTrans * com_offset_transform);
 		m_rigid_body->on_synchronize_transform.broadcast(graphics_world_trans.location, graphics_world_trans.rotation);
+
+		if (m_rigid_body->m_shared_transform)
+		{
+			m_rigid_body->m_shared_transform->location = graphics_world_trans.location;
+			m_rigid_body->m_shared_transform->rotation = graphics_world_trans.rotation;
+		}
 	}
 };
 
-rigid_body::rigid_body(const transform& t_start_transform, const vector3& t_com_offset)
-	: m_center_of_mass_offset(t_com_offset)
+rigid_body::rigid_body(transform* t_transform, const vector3& t_com_offset)
+	: m_shared_transform(t_transform)
+	, m_center_of_mass_offset(t_com_offset)
 {
 	m_bt_collision_shape = new btCompoundShape();
 
-	btRigidBody::btRigidBodyConstructionInfo bt_construction_info(m_simulate_physics ? m_mass : 0.f, nullptr, m_bt_collision_shape);
-	bt_construction_info.m_startWorldTransform			= bt_helpers::yete_to_bt_transform(t_start_transform);
+	btRigidBody::btRigidBodyConstructionInfo bt_construction_info(m_collision_type == collision_type::world_static ? 0.f : m_mass, nullptr, m_bt_collision_shape);
+	bt_construction_info.m_startWorldTransform			= t_transform ? bt_helpers::yete_to_bt_transform(*t_transform) : btTransform();
 	bt_construction_info.m_linearDamping				= m_linear_damping;
 	bt_construction_info.m_angularDamping				= m_angular_damping;
 	bt_construction_info.m_friction						= m_friction;
@@ -55,6 +65,7 @@ rigid_body::rigid_body(const transform& t_start_transform, const vector3& t_com_
 
 	m_bt_rigid_body = new btRigidBody(bt_construction_info);
 	m_bt_rigid_body->setUserIndex(-1);
+	get_bt_to_yete_rigid_body_table()[m_bt_rigid_body] = this;
 
 	// Defer the creation of the motion state until we have a valid btRigidBody
 	m_bt_motion_state = new bt_yete_motion_state(this);
@@ -63,7 +74,7 @@ rigid_body::rigid_body(const transform& t_start_transform, const vector3& t_com_
 
 rigid_body::~rigid_body()
 {
-	// TODO: What cleanup is needed by bullet?
+	get_bt_to_yete_rigid_body_table().erase(m_bt_rigid_body);
 
 	for (auto* shape : m_child_shapes)
 		delete shape;
@@ -73,15 +84,50 @@ rigid_body::~rigid_body()
 	delete m_bt_rigid_body;
 }
 
-void rigid_body::set_simulate_physics(bool t_simulate_physics)
+void rigid_body::set_collision_type(collision_type t_collision_type)
 {
-	m_simulate_physics = t_simulate_physics;
+	m_collision_type = t_collision_type;
 
-	btVector3 local_inertia(0, 0, 0);
-	if (m_simulate_physics)
-		m_bt_collision_shape->calculateLocalInertia(m_mass, local_inertia);
+	auto set_flag = [](int& flags, int flag) { flags |= flag; };
+	auto clear_flag = [](int& flags, int flag) { flags &= ~(flag); };
 
-	m_bt_rigid_body->setMassProps(m_simulate_physics ? m_mass : 0.f, local_inertia);
+	int flags = m_bt_rigid_body->getCollisionFlags();
+	clear_flag(flags, btCollisionObject::CF_KINEMATIC_OBJECT | btCollisionObject::CF_STATIC_OBJECT);
+
+	if (t_collision_type == collision_type::kinematic)
+		set_flag(flags, btCollisionObject::CF_KINEMATIC_OBJECT);
+	
+	if (t_collision_type == collision_type::world_static)
+		set_flag(flags, btCollisionObject::CF_STATIC_OBJECT);
+
+	m_bt_rigid_body->setCollisionFlags(flags);
+
+	set_mass(m_mass);
+}
+
+void rigid_body::set_collision_response_to_channel(collision_channel channel, collision_response response)
+{
+	if (response == collision_response::block || response == collision_response::block_and_overlap)
+		m_blocking_mask |= (uint32_t)channel;
+	else
+		m_blocking_mask &= ~((uint32_t)channel);
+
+	if (m_bt_rigid_body->getBroadphaseHandle())
+		m_bt_rigid_body->getBroadphaseHandle()->m_collisionFilterMask = m_blocking_mask;
+
+	if (response == collision_response::overlap || response == collision_response::block_and_overlap)
+		m_overlap_mask |= (uint32_t)channel;
+	else
+		m_overlap_mask &= ~((uint32_t)channel);
+}
+
+void rigid_body::set_collision_channel(collision_channel channel)
+{
+	m_blocking_group = (uint32_t)channel;
+	m_overlap_group = (uint32_t)channel;
+
+	if (m_bt_rigid_body->getBroadphaseHandle())
+		m_bt_rigid_body->getBroadphaseHandle()->m_collisionFilterGroup = m_blocking_group;
 }
 
 void rigid_body::set_mass(float t_mass)
@@ -91,10 +137,10 @@ void rigid_body::set_mass(float t_mass)
 	m_mass = t_mass;
 
 	btVector3 local_inertia(0, 0, 0);
-	if (m_simulate_physics)
+	if (m_collision_type == collision_type::simulated)
 		m_bt_collision_shape->calculateLocalInertia(m_mass, local_inertia);
 
-	m_bt_rigid_body->setMassProps(m_simulate_physics ? m_mass : 0.f, local_inertia);
+	m_bt_rigid_body->setMassProps(m_collision_type == collision_type::simulated ? m_mass : 0.f, local_inertia);
 }
 
 void rigid_body::set_friction(float t_friction)
@@ -196,12 +242,12 @@ void rigid_body::add_sphere_shape(const sphere_shape& sphere, const transform& s
 
 float rigid_body::get_simulating_physics() const
 {
-	return m_simulate_physics;
+	return m_collision_type == collision_type::simulated;
 }
 
 float rigid_body::get_mass() const
 {
-	return m_simulate_physics ? m_mass : 0.f;
+	return m_mass;
 }
 
 float rigid_body::get_friction() const
@@ -329,4 +375,25 @@ void rigid_body::set_linear_velocity(const vector3& t_linear_velocity)
 void rigid_body::set_angular_velocity(const vector3& t_angular_velocity)
 {
 	m_bt_rigid_body->setAngularVelocity(bt_helpers::yete_to_bt_vector3(t_angular_velocity));
+}
+
+std::unordered_map<const btRigidBody*, rigid_body*> &rigid_body::get_bt_to_yete_rigid_body_table()
+{
+	static bool initialized = false;
+	static std::unordered_map<const btRigidBody*, rigid_body*> bt_to_yete_rigid_body_table;
+	if (!initialized)
+	{
+		bt_to_yete_rigid_body_table.reserve(1000);
+		initialized = true;
+	}
+	return bt_to_yete_rigid_body_table;
+}
+
+rigid_body* rigid_body::bt_to_yete_rigid_body(const btRigidBody* bt_rigid_body)
+{
+	auto result = get_bt_to_yete_rigid_body_table().find(bt_rigid_body);
+	if (result != get_bt_to_yete_rigid_body_table().end())
+		return (*result).second;
+
+	return nullptr;
 }
