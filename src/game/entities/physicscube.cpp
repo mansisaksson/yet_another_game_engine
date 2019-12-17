@@ -17,7 +17,7 @@ void physics_cube_entity::begin_play()
 	m_rigid_body->set_mass(m_mass);
 	m_rigid_body->add_box_shape(box_collision, transform::identity);
 	m_rigid_body->set_collision_type(m_simulate_physics ? collision_type::simulated : collision_type::world_static);
-	m_rigid_body->set_collision_channel(collision_channel::channel_2);
+	m_rigid_body->set_collision_channel(collision_channel::channel_1);
 
 	get_scene()->get_physics_scene()->add_rigid_body(*m_rigid_body.get());
 }
