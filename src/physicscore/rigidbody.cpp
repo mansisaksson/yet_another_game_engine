@@ -65,7 +65,7 @@ rigid_body::rigid_body(transform* t_transform, const vector3& t_com_offset)
 
 	m_bt_rigid_body = new btRigidBody(bt_construction_info);
 	m_bt_rigid_body->setUserIndex(-1);
-	get_bt_to_yete_rigid_body_table()[m_bt_rigid_body] = this;
+	m_bt_rigid_body->setUserPointer(this);
 
 	// Defer the creation of the motion state until we have a valid btRigidBody
 	m_bt_motion_state = new bt_yete_motion_state(this);
@@ -74,8 +74,6 @@ rigid_body::rigid_body(transform* t_transform, const vector3& t_com_offset)
 
 rigid_body::~rigid_body()
 {
-	get_bt_to_yete_rigid_body_table().erase(m_bt_rigid_body);
-
 	for (auto* shape : m_child_shapes)
 		delete shape;
 	
@@ -377,23 +375,7 @@ void rigid_body::set_angular_velocity(const vector3& t_angular_velocity)
 	m_bt_rigid_body->setAngularVelocity(bt_helpers::yete_to_bt_vector3(t_angular_velocity));
 }
 
-std::unordered_map<const btRigidBody*, rigid_body*> &rigid_body::get_bt_to_yete_rigid_body_table()
-{
-	static bool initialized = false;
-	static std::unordered_map<const btRigidBody*, rigid_body*> bt_to_yete_rigid_body_table;
-	if (!initialized)
-	{
-		bt_to_yete_rigid_body_table.reserve(1000);
-		initialized = true;
-	}
-	return bt_to_yete_rigid_body_table;
-}
-
 rigid_body* rigid_body::bt_to_yete_rigid_body(const btRigidBody* bt_rigid_body)
 {
-	auto result = get_bt_to_yete_rigid_body_table().find(bt_rigid_body);
-	if (result != get_bt_to_yete_rigid_body_table().end())
-		return (*result).second;
-
-	return nullptr;
+	return static_cast<rigid_body*>(bt_rigid_body->getUserPointer());
 }

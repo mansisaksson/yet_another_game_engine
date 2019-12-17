@@ -172,7 +172,6 @@ public:
 	//multicast_delegate<rigid_body*> on_end_overlap;
 
 private:
-	static std::unordered_map<const btRigidBody*, rigid_body*> &get_bt_to_yete_rigid_body_table();
 	static rigid_body* bt_to_yete_rigid_body(const class btRigidBody* bt_rigid_body);
 
 };
