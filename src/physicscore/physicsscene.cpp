@@ -1,6 +1,7 @@
 #include "physicsscene.h"
 #include "rigidbody.h"
 #include "bt_helpers.h"
+#include "bullet/BulletCollision/CollisionDispatch/btCollisionWorld.h"
 
 physics_scene::physics_scene()
 	: physics_scene(vector3(0, 0, -10))
@@ -41,6 +42,21 @@ physics_scene::physics_scene(const vector3& gravity)
 void physics_scene::simulate(float time)
 {
 	m_bt_dynamics_world->stepSimulation(time, 1, 1.f / 60.f);
+
+	// TODO: This: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11635
+	//for (rigid_body* body1 : dirty_bodies)
+	//{
+	//	m_bt_dynamics_world->contactTest();
+	//	for (rigid_body* body2 : dirty_bodies)
+	//	{
+	//		if (body1 != body2 && body1->m_overlap_group & body2->m_overlap_mask)
+	//		{
+	//			btCollisionWorld::ContactResultCallback bt_contact_result_callback;
+	//			//m_bt_dynamics_world->contactPairTest(body1->m_bt_rigid_body, body2->m_bt_rigid_body, )
+	//			//body1->m_bt_rigid_body
+	//		}
+	//	}
+	//}
 }
 
 void physics_scene::add_rigid_body(const rigid_body& rigid_body)
