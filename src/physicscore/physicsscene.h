@@ -1,22 +1,19 @@
 #pragma once
 #include "core/core.h"
-
-class rigid_body;
+#include "physicstypes.h"
 
 class physics_scene
 {
 private:
-	struct world_user_info
-	{
-		physics_scene* yete_phys_scene;
-	};
+	friend struct bt_yete_motion_state;
 
 	class btDefaultCollisionConfiguration* m_bt_collision_configuration;
 	class btCollisionDispatcher* m_bt_dispatcher;
 	struct btDbvtBroadphase* m_bt_broadphase;
 	class btSequentialImpulseConstraintSolver* m_bt_solver;
 	class btDiscreteDynamicsWorld* m_bt_dynamics_world;
-	world_user_info* m_world_user_info;
+
+	std::vector<rigid_body*> m_dirty_bodies;
 
 public:
 	physics_scene();
@@ -31,6 +28,8 @@ public:
 	void remove_rigid_body(const rigid_body& rigid_body);
 
 private:
+
+	void process_overlaps();
 
 	static void bt_phys_scene_tick(class btDynamicsWorld* world, float timeStep);
 

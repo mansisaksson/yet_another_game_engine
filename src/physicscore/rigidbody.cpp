@@ -1,4 +1,5 @@
 #include "rigidbody.h"
+#include "physicsscene.h"
 #include "collisionshapes/collisionshapes.h"
 #include "bt_helpers.h"
 
@@ -9,10 +10,8 @@ ATTRIBUTE_ALIGNED16(struct)
 bt_yete_motion_state : public btMotionState
 {
 	rigid_body* m_rigid_body;
-	//void* m_userPointer;
 
 	BT_DECLARE_ALIGNED_ALLOCATOR();
-
 	bt_yete_motion_state(rigid_body* t_rigid_body)
 		: m_rigid_body(t_rigid_body)
 	{

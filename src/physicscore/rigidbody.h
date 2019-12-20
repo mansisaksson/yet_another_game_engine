@@ -1,68 +1,11 @@
 #pragma once
 #include "core/core.h"
+#include "physicstypes.h"
 
 class collision_shape;
 class box_shape;
 class sphere_shape;
 class capsule_shape;
-
-struct hit_result
-{
-	class rigid_body* other_body;
-	vector3 hit_location;
-	vector3 hit_normal;
-};
-
-enum class collision_type
-{
-	world_static,
-	kinematic,
-	simulated
-};
-
-enum class collision_channel : uint32_t
-{
-	channel_1		= 0x1,
-	channel_2		= 0x2,
-	channel_3		= 0x4,
-	channel_4		= 0x8,
-	channel_5		= 0x10,
-	channel_6		= 0x20,
-	channel_7		= 0x40,
-	channel_8		= 0x80,
-	channel_9		= 0x100,
-	channel_10		= 0x200,
-	channel_11		= 0x400,
-	channel_12		= 0x800,
-	channel_13		= 0x1000,
-	channel_14		= 0x2000,
-	channel_15		= 0x4000,
-	channel_16		= 0x8000,
-	channel_17		= 0x10000,
-	channel_18		= 0x20000,
-	channel_19		= 0x40000,
-	channel_20		= 0x80000,
-	channel_21		= 0x100000,
-	channel_22		= 0x200000,
-	channel_23		= 0x400000,
-	channel_24		= 0x800000,
-	channel_25		= 0x1000000,
-	channel_26		= 0x2000000,
-	channel_27		= 0x4000000,
-	channel_28		= 0x8000000,
-	channel_29		= 0x10000000,
-	channel_30		= 0x20000000,
-	channel_31		= 0x40000000,
-	channel_32		= 0x80000000,
-};
-
-enum class collision_response
-{
-	ignore,
-	block,
-	overlap,
-	block_and_overlap,
-};
 
 class rigid_body
 {
@@ -81,8 +24,8 @@ private:
 	uint32_t m_blocking_group = (uint32_t)collision_channel::channel_1;
 	uint32_t m_blocking_mask = (uint32_t)collision_channel::channel_1;
 
-	uint32_t m_overlap_group = (uint32_t)collision_channel::channel_1;
-	uint32_t m_overlap_mask = (uint32_t)collision_channel::channel_1;
+	uint32_t m_overlap_group = 0;
+	uint32_t m_overlap_mask = 0;
 
 	float m_mass = 100.f;
 	float m_friction = 0.5f;
@@ -96,6 +39,8 @@ private:
 	vector3 m_center_of_mass_offset;
 
 	transform* m_shared_transform = nullptr;
+
+	std::vector<rigid_body*> m_overlapping_bodies;
 
 public:
 
@@ -164,12 +109,12 @@ public:
 	typedef delegate<void, const vector3&, const quaternion&> sync_transform_delegate;
 	multicast_delegate<const vector3&, const quaternion&> on_synchronize_transform;
 
-	//typedef delegate<void, const std::vector<hit_result>&> on_hit_delegate;
-	//multicast_delegate<const std::vector<hit_result>&> on_hit;
-	//
-	//typedef delegate<void, rigid_body*> on_overlap_delegate;
-	//multicast_delegate<rigid_body*> on_begin_overlap;
-	//multicast_delegate<rigid_body*> on_end_overlap;
+	typedef delegate<void, const std::vector<hit_result>&> on_hit_delegate;
+	multicast_delegate<const std::vector<hit_result>&> on_hit;
+	
+	typedef delegate<void, rigid_body&> on_overlap_delegate;
+	multicast_delegate<rigid_body&> on_begin_overlap;
+	multicast_delegate<rigid_body&> on_end_overlap;
 
 private:
 	static rigid_body* bt_to_yete_rigid_body(const class btRigidBody* bt_rigid_body);

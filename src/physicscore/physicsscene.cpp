@@ -16,7 +16,6 @@ physics_scene::~physics_scene()
 	delete m_bt_broadphase;
 	delete m_bt_solver;
 	delete m_bt_dynamics_world;
-	delete m_world_user_info;
 }
 
 physics_scene::physics_scene(const vector3& gravity)
@@ -34,29 +33,13 @@ physics_scene::physics_scene(const vector3& gravity)
 	
 	m_bt_dynamics_world = new btDiscreteDynamicsWorld(m_bt_dispatcher, m_bt_broadphase, m_bt_solver, m_bt_collision_configuration);
 	m_bt_dynamics_world->setGravity(bt_helpers::yete_to_bt_vector3(gravity));
-
-	m_world_user_info = new world_user_info{ this };
-	m_bt_dynamics_world->setInternalTickCallback(physics_scene::bt_phys_scene_tick, m_world_user_info, false);
+	m_bt_dynamics_world->setInternalTickCallback(physics_scene::bt_phys_scene_tick, this, false);
 }
 
 void physics_scene::simulate(float time)
 {
 	m_bt_dynamics_world->stepSimulation(time, 1, 1.f / 60.f);
-
-	// TODO: This: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11635
-	//for (rigid_body* body1 : dirty_bodies)
-	//{
-	//	m_bt_dynamics_world->contactTest();
-	//	for (rigid_body* body2 : dirty_bodies)
-	//	{
-	//		if (body1 != body2 && body1->m_overlap_group & body2->m_overlap_mask)
-	//		{
-	//			btCollisionWorld::ContactResultCallback bt_contact_result_callback;
-	//			//m_bt_dynamics_world->contactPairTest(body1->m_bt_rigid_body, body2->m_bt_rigid_body, )
-	//			//body1->m_bt_rigid_body
-	//		}
-	//	}
-	//}
+	process_overlaps();
 }
 
 void physics_scene::add_rigid_body(const rigid_body& rigid_body)
@@ -69,10 +52,76 @@ void physics_scene::remove_rigid_body(const rigid_body& rigid_body)
 	m_bt_dynamics_world->removeRigidBody(rigid_body.m_bt_rigid_body);
 }
 
+void physics_scene::process_overlaps()
+{
+	struct yete_contact_result_callback : public btCollisionWorld::ContactResultCallback
+	{
+		std::vector<rigid_body*> m_overlapping_bodies;
+
+		yete_contact_result_callback(uint32_t t_overlap_group, uint32_t t_overlap_mask)
+		{
+			m_collisionFilterGroup = t_overlap_group;
+			m_collisionFilterMask = t_overlap_mask;
+			m_closestDistanceThreshold = 0;
+		}
+
+		bool needsCollision(btBroadphaseProxy* proxy0) const override
+		{
+			btCollisionObject* collision_obj = static_cast<btCollisionObject*>(proxy0->m_clientObject);
+			const auto other_overlap_group = static_cast<rigid_body*>(collision_obj->getUserPointer())->m_overlap_group;
+			const auto other_overlap_mask = static_cast<rigid_body*>(collision_obj->getUserPointer())->m_overlap_mask;
+			return ((other_overlap_group & m_collisionFilterMask) != 0) && ((m_collisionFilterGroup & other_overlap_mask) != 0);
+		}
+
+		btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)  override
+		{
+			if (cp.getDistance() < 0)
+			{
+				m_overlapping_bodies.push_back(static_cast<rigid_body*>(colObj1Wrap->getCollisionObject()->getUserPointer()));
+				return cp.getDistance();
+			}
+			return 0;
+		}
+	};
+
+	// TODO: Looping over all bodies in the scene, ideally we would only loop over those that has moved
+	for (int i = 0; i< m_bt_dynamics_world->getCollisionObjectArray().size(); i++)
+	{
+		btCollisionObject* collision_object = m_bt_dynamics_world->getCollisionObjectArray()[i];
+		rigid_body* body = static_cast<rigid_body*>(collision_object->getUserPointer());
+
+		yete_contact_result_callback bt_contact_result_callback(body->m_overlap_group, body->m_overlap_mask);
+		m_bt_dynamics_world->contactTest(body->m_bt_rigid_body, bt_contact_result_callback);
+
+		const auto &old_overlapping_bodies = body->m_overlapping_bodies;
+		const auto &new_overlapping_bodies = bt_contact_result_callback.m_overlapping_bodies;
+		
+		std::vector<rigid_body*> begin_overlaps;
+		std::set_difference(
+			old_overlapping_bodies.begin(), old_overlapping_bodies.end(),
+			new_overlapping_bodies.begin(), new_overlapping_bodies.end(),
+			std::inserter(begin_overlaps, begin_overlaps.begin())
+		);
+
+		std::vector<rigid_body*> end_overlaps;
+		std::set_difference(
+			new_overlapping_bodies.begin(), new_overlapping_bodies.end(),
+			old_overlapping_bodies.begin(), old_overlapping_bodies.end(),
+			std::inserter(end_overlaps, end_overlaps.begin())
+		);
+
+		body->m_overlapping_bodies = new_overlapping_bodies;
+
+		for (rigid_body* new_overlapping_body : begin_overlaps)
+			body->on_begin_overlap.broadcast(*new_overlapping_body);
+
+		for (rigid_body* end_overlapping_body : begin_overlaps)
+			body->on_end_overlap.broadcast(*end_overlapping_body);
+	}
+}
+
 void physics_scene::bt_phys_scene_tick(class btDynamicsWorld* world, float timeStep)
 {
-	const world_user_info* user_info = static_cast<const world_user_info*>(world->getWorldUserInfo());
-
 	const int numManifolds = world->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
 	{
@@ -100,6 +149,7 @@ void physics_scene::bt_phys_scene_tick(class btDynamicsWorld* world, float timeS
 			{
 				hit_results_a.push_back(hit_result
 				{
+					rigid_body_a,
 					rigid_body_b,
 					bt_helpers::bt_to_yete_vector3(pt.getPositionWorldOnA()),
 					bt_helpers::bt_to_yete_vector3(pt.m_normalWorldOnB)
@@ -107,6 +157,7 @@ void physics_scene::bt_phys_scene_tick(class btDynamicsWorld* world, float timeS
 
 				hit_results_b.push_back(hit_result
 				{
+					rigid_body_b,
 					rigid_body_a,
 					bt_helpers::bt_to_yete_vector3(pt.getPositionWorldOnB()),
 					bt_helpers::bt_to_yete_vector3(pt.m_normalWorldOnB)
@@ -114,7 +165,7 @@ void physics_scene::bt_phys_scene_tick(class btDynamicsWorld* world, float timeS
 			}
 		}
 
-		//rigid_body_a->on_hit.broadcast(hit_results_a);
-		//rigid_body_b->on_hit.broadcast(hit_results_b);
+		rigid_body_a->on_hit.broadcast(hit_results_a);
+		rigid_body_b->on_hit.broadcast(hit_results_b);
 	}
 }
