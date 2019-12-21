@@ -56,7 +56,7 @@ void physics_scene::process_overlaps()
 {
 	struct yete_contact_result_callback : public btCollisionWorld::ContactResultCallback
 	{
-		std::vector<rigid_body*> m_overlapping_bodies;
+		std::set<rigid_body*> m_overlapping_bodies;
 
 		yete_contact_result_callback(uint32_t t_overlap_group, uint32_t t_overlap_mask)
 		{
@@ -73,13 +73,11 @@ void physics_scene::process_overlaps()
 			return ((other_overlap_group & m_collisionFilterMask) != 0) && ((m_collisionFilterGroup & other_overlap_mask) != 0);
 		}
 
-		btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)  override
+		btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1) override
 		{
-			if (cp.getDistance() < 0)
-			{
-				m_overlapping_bodies.push_back(static_cast<rigid_body*>(colObj1Wrap->getCollisionObject()->getUserPointer()));
-				return cp.getDistance();
-			}
+			rigid_body* other_body = static_cast<rigid_body*>(colObj1Wrap->getCollisionObject()->getUserPointer());
+			if (std::find(m_overlapping_bodies.begin(), m_overlapping_bodies.end(), other_body) == m_overlapping_bodies.end())
+				m_overlapping_bodies.insert(other_body);
 			return 0;
 		}
 	};
@@ -96,26 +94,26 @@ void physics_scene::process_overlaps()
 		const auto &old_overlapping_bodies = body->m_overlapping_bodies;
 		const auto &new_overlapping_bodies = bt_contact_result_callback.m_overlapping_bodies;
 		
-		std::vector<rigid_body*> begin_overlaps;
+		std::set<rigid_body*> begin_overlaps;
 		std::set_difference(
-			old_overlapping_bodies.begin(), old_overlapping_bodies.end(),
 			new_overlapping_bodies.begin(), new_overlapping_bodies.end(),
+			old_overlapping_bodies.begin(), old_overlapping_bodies.end(),
 			std::inserter(begin_overlaps, begin_overlaps.begin())
 		);
 
-		std::vector<rigid_body*> end_overlaps;
+		std::set<rigid_body*> end_overlaps;
 		std::set_difference(
-			new_overlapping_bodies.begin(), new_overlapping_bodies.end(),
 			old_overlapping_bodies.begin(), old_overlapping_bodies.end(),
+			new_overlapping_bodies.begin(), new_overlapping_bodies.end(),
 			std::inserter(end_overlaps, end_overlaps.begin())
 		);
-
+		
 		body->m_overlapping_bodies = new_overlapping_bodies;
 
 		for (rigid_body* new_overlapping_body : begin_overlaps)
 			body->on_begin_overlap.broadcast(*new_overlapping_body);
 
-		for (rigid_body* end_overlapping_body : begin_overlaps)
+		for (rigid_body* end_overlapping_body : end_overlaps)
 			body->on_end_overlap.broadcast(*end_overlapping_body);
 	}
 }

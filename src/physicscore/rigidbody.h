@@ -40,7 +40,7 @@ private:
 
 	transform* m_shared_transform = nullptr;
 
-	std::vector<rigid_body*> m_overlapping_bodies;
+	std::set<rigid_body*> m_overlapping_bodies;
 
 public:
 

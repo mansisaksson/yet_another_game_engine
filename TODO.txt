@@ -1,6 +1,6 @@
 [ ] Create a collision system
 	[x] Implement btMotionState
-	[ ] Implement collision dispatcher callbacks
+	[x] Implement collision dispatcher callbacks
 	[ ] re-use shapes
 
 [ ] Add a line-renderer to improve debugging.
@@ -9,6 +9,7 @@
 	[ ] Batch render commands
 	[ ] Sort by materials
 	[ ] Improve uniform system (We call set unform qute a bit, which can get expensive)
+	[ ] Maybe implement component system for easier scene rendering
 
 [ ] Test building on Linux/Mac
 	

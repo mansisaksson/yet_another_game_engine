@@ -13,8 +13,6 @@ private:
 	class btSequentialImpulseConstraintSolver* m_bt_solver;
 	class btDiscreteDynamicsWorld* m_bt_dynamics_world;
 
-	std::vector<rigid_body*> m_dirty_bodies;
-
 public:
 	physics_scene();
 	virtual ~physics_scene();
